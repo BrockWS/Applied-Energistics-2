@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
- 
+ /*
 task wrapper(type: Wrapper) {
     gradleVersion = "2.14"
 }
@@ -23,7 +23,7 @@ task wrapper(type: Wrapper) {
 // HWYLA
 task installHwyla(type: Copy, dependsOn: "deinstallHwyla") {
     from { configurations.mods }
-    include "**/*Hwyla*.jar"
+    include "** /*Hwyla*.jar"
     into file(minecraft.runDir + "/mods")
 }
 
@@ -34,7 +34,7 @@ task deinstallHwyla(type: Delete) {
 // IC2
 task installIC2(type: Copy, dependsOn: "deinstallIC2") {
     from { configurations.mods }
-    include "**/*industrialcraft-2*.jar"
+    include "** /*industrialcraft-2*.jar"
     into file(minecraft.runDir + "/mods")
 }
 
@@ -45,11 +45,11 @@ task deinstallIC2(type: Delete) {
 // TOP
 task installTop(type: Copy, dependsOn: ["deinstallTop"]) {
     from { configurations.mods }
-    include "**/*TheOneProbe*.jar"
+    include "** /*TheOneProbe*.jar"
     into file(minecraft.runDir + "/mods")
 }
 
 task deinstallTop(type: Delete) {
     delete fileTree(dir: minecraft.runDir + "/mods", include: "*TheOneProbe*.jar")
 }
-
+*/

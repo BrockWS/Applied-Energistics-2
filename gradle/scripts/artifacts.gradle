@@ -23,6 +23,20 @@ allprojects {
 	}
 }
 
+jar {
+	manifest {
+		attributes([
+				"Specification-Title": "appliedenergistics2",
+				"Specification-Vendor": "aeteam",
+				"Specification-Version": "1", // We are version 1 of ourselves
+				"Implementation-Title": project.name,
+				"Implementation-Version": "${version}",
+				"Implementation-Vendor" :"aeteam",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
+}
+
 javadoc {
 	options.encoding = 'UTF-8'
 	options.charSet = 'UTF-8'
@@ -34,7 +48,7 @@ task javadocs(type: Javadoc) {
 
 	// Due to ForgeGradle having to be a special snowflake,
 	// we have to add some custom configurations to the normal compile configuration and hope it does not break.
-	classpath = configurations.compile + configurations.forgeGradleMc + configurations.forgeGradleMcDeps 
+	//classpath = configurations.compile + configurations.forgeGradleMc + configurations.forgeGradleMcDeps
 }
 
 task javadocJar(type: Jar, dependsOn: javadocs) {
