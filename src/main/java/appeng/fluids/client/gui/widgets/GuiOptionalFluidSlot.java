@@ -2,7 +2,7 @@
 package appeng.fluids.client.gui.widgets;
 
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.container.slot.IOptionalSlotHost;

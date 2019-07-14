@@ -21,14 +21,14 @@ package appeng.client.render.tesr;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -67,7 +67,7 @@ public class CrankTESR extends TileEntitySpecialRenderer<TileCrank>
 			GlStateManager.shadeModel( GL11.GL_FLAT );
 		}
 
-		IBlockState blockState = te.getWorld().getBlockState( te.getPos() );
+		BlockState blockState = te.getWorld().getBlockState( te.getPos() );
 
 		BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
 		IBakedModel model = dispatcher.getModelForState( blockState );

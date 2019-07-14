@@ -25,10 +25,10 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.config.Settings;
@@ -57,7 +57,7 @@ public class GuiNetworkStatus extends AEBaseGui implements ISortSource
 	private GuiImgButton units;
 	private int tooltip = -1;
 
-	public GuiNetworkStatus( final InventoryPlayer inventoryPlayer, final INetworkTool te )
+	public GuiNetworkStatus( final PlayerInventory inventoryPlayer, final INetworkTool te )
 	{
 		super( new ContainerNetworkStatus( inventoryPlayer, te ) );
 		final GuiScrollbar scrollbar = new GuiScrollbar();

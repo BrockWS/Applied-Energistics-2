@@ -31,14 +31,14 @@ import javax.annotation.Nullable;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -66,13 +66,13 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	private int renderFragment = 0;
 	@Nullable
 	private String customName;
-	private EnumFacing forward = null;
-	private EnumFacing up = null;
-	private IBlockState state;
+	private Direction forward = null;
+	private Direction up = null;
+	private BlockState state;
 	private boolean markDirtyQueued = false;
 
 	@Override
-	public boolean shouldRefresh( final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newSate )
+	public boolean shouldRefresh( final World world, final BlockPos pos, final BlockState oldState, final BlockState newSate )
 	{
 		return newSate.getBlock() != oldState.getBlock(); // state doesn't change tile entities in AE2.
 	}
@@ -111,7 +111,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Nonnull
-	public IBlockState getBlockState()
+	public BlockState getBlockState()
 	{
 		if( this.state == null )
 		{
@@ -121,7 +121,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Override
-	public void readFromNBT( final NBTTagCompound data )
+	public void readFromNBT( final CompoundNBT data )
 	{
 		super.readFromNBT( data );
 
@@ -138,8 +138,8 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		{
 			if( this.canBeRotated() )
 			{
-				this.forward = EnumFacing.valueOf( data.getString( "forward" ) );
-				this.up = EnumFacing.valueOf( data.getString( "up" ) );
+				this.forward = Direction.valueOf( data.getString( "forward" ) );
+				this.up = Direction.valueOf( data.getString( "up" ) );
 			}
 		}
 		catch( final IllegalArgumentException ignored )
@@ -148,7 +148,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT( final NBTTagCompound data )
+	public CompoundNBT writeToNBT( final CompoundNBT data )
 	{
 		super.writeToNBT( data );
 
@@ -190,9 +190,9 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	 * This builds a tag with the actual data that should be sent to the client for update syncs.
 	 * If the tile entity doesn't need update syncs, it returns null.
 	 */
-	private NBTTagCompound writeUpdateData()
+	private CompoundNBT writeUpdateData()
 	{
-		final NBTTagCompound data = new NBTTagCompound();
+		final CompoundNBT data = new CompoundNBT();
 
 		final ByteBuf stream = Unpooled.buffer();
 
@@ -242,13 +242,13 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	 * Handles tile entites that are being sent to the client as part of a full chunk.
 	 */
 	@Override
-	public NBTTagCompound getUpdateTag()
+	public CompoundNBT getUpdateTag()
 	{
-		final NBTTagCompound data = this.writeUpdateData();
+		final CompoundNBT data = this.writeUpdateData();
 
 		if( data == null )
 		{
-			return new NBTTagCompound();
+			return new CompoundNBT();
 		}
 
 		data.setInteger( "x", this.pos.getX() );
@@ -261,7 +261,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	 * Handles tile entites that are being received by the client as part of a full chunk.
 	 */
 	@Override
-	public void handleUpdateTag( NBTTagCompound tag )
+	public void handleUpdateTag( CompoundNBT tag )
 	{
 		final ByteBuf stream = Unpooled.copiedBuffer( tag.getByteArray( "X" ) );
 
@@ -275,12 +275,12 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	{
 		if( this.canBeRotated() )
 		{
-			final EnumFacing old_Forward = this.forward;
-			final EnumFacing old_Up = this.up;
+			final Direction old_Forward = this.forward;
+			final Direction old_Up = this.up;
 
 			final byte orientation = data.readByte();
-			this.forward = EnumFacing.VALUES[orientation & 0x7];
-			this.up = EnumFacing.VALUES[orientation >> 3];
+			this.forward = Direction.VALUES[orientation & 0x7];
+			this.up = Direction.VALUES[orientation >> 3];
 
 			return this.forward != old_Forward || this.up != old_Up;
 		}
@@ -325,27 +325,27 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Override
-	public EnumFacing getForward()
+	public Direction getForward()
 	{
 		if( this.forward == null )
 		{
-			return EnumFacing.NORTH;
+			return Direction.NORTH;
 		}
 		return this.forward;
 	}
 
 	@Override
-	public EnumFacing getUp()
+	public Direction getUp()
 	{
 		if( this.up == null )
 		{
-			return EnumFacing.UP;
+			return Direction.UP;
 		}
 		return this.up;
 	}
 
 	@Override
-	public void setOrientation( final EnumFacing inForward, final EnumFacing inUp )
+	public void setOrientation( final Direction inForward, final Direction inUp )
 	{
 		this.forward = inForward;
 		this.up = inUp;
@@ -353,7 +353,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		Platform.notifyBlocksOfNeighbors( this.world, this.pos );
 	}
 
-	public void onPlacement( final ItemStack stack, final EntityPlayer player, final EnumFacing side )
+	public void onPlacement( final ItemStack stack, final PlayerEntity player, final Direction side )
 	{
 		if( stack.hasTagCompound() )
 		{
@@ -367,7 +367,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	 * @param from source of settings
 	 * @param compound compound of source
 	 */
-	public void uploadSettings( final SettingsFrom from, final NBTTagCompound compound )
+	public void uploadSettings( final SettingsFrom from, final CompoundNBT compound )
 	{
 		if( compound != null && this instanceof IConfigurableObject )
 		{
@@ -427,13 +427,13 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	 *
 	 * @return compound of source
 	 */
-	public NBTTagCompound downloadSettings( final SettingsFrom from )
+	public CompoundNBT downloadSettings( final SettingsFrom from )
 	{
-		final NBTTagCompound output = new NBTTagCompound();
+		final CompoundNBT output = new CompoundNBT();
 
 		if( this.hasCustomInventoryName() )
 		{
-			final NBTTagCompound dsp = new NBTTagCompound();
+			final CompoundNBT dsp = new CompoundNBT();
 			dsp.setString( "Name", this.getCustomInventoryName() );
 			output.setTag( "display", dsp );
 		}

@@ -20,8 +20,8 @@ package appeng.container.implementations;
 
 
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
@@ -53,7 +53,7 @@ public class ContainerLevelEmitter extends ContainerUpgradeable
 	@GuiSync( 4 )
 	public YesNo cmType;
 
-	public ContainerLevelEmitter( final InventoryPlayer ip, final PartLevelEmitter te )
+	public ContainerLevelEmitter( final PlayerInventory ip, final PartLevelEmitter te )
 	{
 		super( ip, te );
 		this.lvlEmitter = te;
@@ -66,7 +66,7 @@ public class ContainerLevelEmitter extends ContainerUpgradeable
 		this.textField.setText( String.valueOf( this.EmitterValue ) );
 	}
 
-	public void setLevel( final long l, final EntityPlayer player )
+	public void setLevel( final long l, final PlayerEntity player )
 	{
 		this.lvlEmitter.setReportingValue( l );
 		this.EmitterValue = l;

@@ -25,15 +25,15 @@ import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -42,7 +42,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import appeng.api.AEApi;
@@ -71,18 +71,18 @@ public class PartPlacement
 	private final ThreadLocal<Object> placing = new ThreadLocal<>();
 	private boolean wasCanceled = false;
 
-	public static EnumActionResult place( final ItemStack held, final BlockPos pos, EnumFacing side, final EntityPlayer player, final EnumHand hand, final World world, PlaceType pass, final int depth )
+	public static ActionResultType place( final ItemStack held, final BlockPos pos, Direction side, final PlayerEntity player, final Hand hand, final World world, PlaceType pass, final int depth )
 	{
 		if( depth > 3 )
 		{
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 
 		if( !held.isEmpty() && Platform.isWrench( player, held, pos ) && player.isSneaking() )
 		{
 			if( !Platform.hasPermissions( new DimensionalCoord( world, pos ), player ) )
 			{
-				return EnumActionResult.FAIL;
+				return ActionResultType.FAIL;
 			}
 
 			final Block block = world.getBlockState( pos ).getBlock();
@@ -137,10 +137,10 @@ public class PartPlacement
 					player.swingArm( hand );
 					NetworkHandler.instance().sendToServer( new PacketPartPlacement( pos, side, getEyeOffset( player ), hand ) );
 				}
-				return EnumActionResult.SUCCESS;
+				return ActionResultType.SUCCESS;
 			}
 
-			return EnumActionResult.PASS;
+			return ActionResultType.PASS;
 		}
 
 		TileEntity tile = world.getTileEntity( pos );
@@ -162,7 +162,7 @@ public class PartPlacement
 					{
 						if( host.getPart( AEPartLocation.INTERNAL ) == null )
 						{
-							return EnumActionResult.FAIL;
+							return ActionResultType.FAIL;
 						}
 
 						if( host.canAddPart( held, AEPartLocation.fromFacing( side ) ) )
@@ -181,7 +181,7 @@ public class PartPlacement
 										MinecraftForge.EVENT_BUS.post( new PlayerDestroyItemEvent( player, held, hand ) );
 									}
 								}
-								return EnumActionResult.SUCCESS;
+								return ActionResultType.SUCCESS;
 							}
 						}
 					}
@@ -189,10 +189,10 @@ public class PartPlacement
 					{
 						player.swingArm( hand );
 						NetworkHandler.instance().sendToServer( new PacketPartPlacement( pos, side, getEyeOffset( player ), hand ) );
-						return EnumActionResult.SUCCESS;
+						return ActionResultType.SUCCESS;
 					}
 				}
-				return EnumActionResult.FAIL;
+				return ActionResultType.FAIL;
 			}
 		}
 
@@ -216,7 +216,7 @@ public class PartPlacement
 							{
 								NetworkHandler.instance().sendToServer( new PacketPartPlacement( pos, side, getEyeOffset( player ), hand ) );
 							}
-							return EnumActionResult.SUCCESS;
+							return ActionResultType.SUCCESS;
 						}
 					}
 				}
@@ -225,7 +225,7 @@ public class PartPlacement
 
 		if( held.isEmpty() || !( held.getItem() instanceof IPartItem ) )
 		{
-			return EnumActionResult.PASS;
+			return ActionResultType.PASS;
 		}
 
 		BlockPos te_pos = pos;
@@ -233,7 +233,7 @@ public class PartPlacement
 		final IBlockDefinition multiPart = AEApi.instance().definitions().blocks().multiPart();
 		if( host == null && pass == PlaceType.PLACE_ITEM )
 		{
-			EnumFacing offset = null;
+			Direction offset = null;
 
 			final Block blkID = world.getBlockState( pos ).getBlock();
 			if( blkID != null && !blkID.isReplaceable( world, pos ) )
@@ -255,13 +255,13 @@ public class PartPlacement
 
 			final Optional<ItemStack> maybeMultiPartStack = multiPart.maybeStack( 1 );
 			final Optional<Block> maybeMultiPartBlock = multiPart.maybeBlock();
-			final Optional<ItemBlock> maybeMultiPartItemBlock = multiPart.maybeItemBlock();
+			final Optional<BlockItem> maybeMultiPartBlockItem = multiPart.maybeBlockItem();
 
 			final boolean hostIsNotPresent = host == null;
-			final boolean multiPartPresent = maybeMultiPartBlock.isPresent() && maybeMultiPartStack.isPresent() && maybeMultiPartItemBlock.isPresent();
+			final boolean multiPartPresent = maybeMultiPartBlock.isPresent() && maybeMultiPartStack.isPresent() && maybeMultiPartBlockItem.isPresent();
 			final boolean canMultiPartBePlaced = maybeMultiPartBlock.get().canPlaceBlockAt( world, te_pos );
 
-			if( hostIsNotPresent && multiPartPresent && canMultiPartBePlaced && maybeMultiPartItemBlock.get()
+			if( hostIsNotPresent && multiPartPresent && canMultiPartBePlaced && maybeMultiPartBlockItem.get()
 					.placeBlockAt( maybeMultiPartStack.get(), player,
 							world, te_pos, side, 0.5f, 0.5f, 0.5f, maybeMultiPartBlock.get().getDefaultState() ) )
 			{
@@ -280,18 +280,18 @@ public class PartPlacement
 				{
 					player.swingArm( hand );
 					NetworkHandler.instance().sendToServer( new PacketPartPlacement( pos, side, getEyeOffset( player ), hand ) );
-					return EnumActionResult.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			}
 			else if( host != null && !host.canAddPart( held, AEPartLocation.fromFacing( side ) ) )
 			{
-				return EnumActionResult.FAIL;
+				return ActionResultType.FAIL;
 			}
 		}
 
 		if( host == null )
 		{
-			return EnumActionResult.PASS;
+			return ActionResultType.PASS;
 		}
 
 		if( !host.canAddPart( held, AEPartLocation.fromFacing( side ) ) )
@@ -308,12 +308,12 @@ public class PartPlacement
 							pass == PlaceType.INTERACT_FIRST_PASS ? PlaceType.INTERACT_SECOND_PASS : PlaceType.PLACE_ITEM, depth + 1 );
 				}
 			}
-			return EnumActionResult.PASS;
+			return ActionResultType.PASS;
 		}
 
 		if( !world.isRemote )
 		{
-			final IBlockState state = world.getBlockState( pos );
+			final BlockState state = world.getBlockState( pos );
 			final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
 			final RayTraceResult mop = state.getBlock().collisionRayTrace( state, world, pos, dir.getA(), dir.getB() );
 
@@ -326,7 +326,7 @@ public class PartPlacement
 				{
 					if( !player.isSneaking() && sp.part.onActivate( player, hand, mop.hitVec ) )
 					{
-						return EnumActionResult.FAIL;
+						return ActionResultType.FAIL;
 					}
 				}
 			}
@@ -334,7 +334,7 @@ public class PartPlacement
 			final DimensionalCoord dc = host.getLocation();
 			if( !Platform.hasPermissions( dc, player ) )
 			{
-				return EnumActionResult.FAIL;
+				return ActionResultType.FAIL;
 			}
 
 			final AEPartLocation mySide = host.addPart( held, AEPartLocation.fromFacing( side ), player, hand );
@@ -362,10 +362,10 @@ public class PartPlacement
 		{
 			player.swingArm( hand );
 		}
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
-	private static float getEyeOffset( final EntityPlayer p )
+	private static float getEyeOffset( final PlayerEntity p )
 	{
 		if( p.world.isRemote )
 		{
@@ -375,7 +375,7 @@ public class PartPlacement
 		return getEyeHeight();
 	}
 
-	private static SelectedPart selectPart( final EntityPlayer player, final IPartHost host, final Vec3d pos )
+	private static SelectedPart selectPart( final PlayerEntity player, final IPartHost host, final Vec3d pos )
 	{
 		AppEng.proxy.updateRenderMode( player );
 		final SelectedPart sp = host.selectPart( pos );
@@ -404,7 +404,7 @@ public class PartPlacement
 	public void playerInteract( final PlayerInteractEvent event )
 	{
 		// Only handle the main hand event
-		if( event.getHand() != EnumHand.MAIN_HAND )
+		if( event.getHand() != Hand.MAIN_HAND )
 		{
 			return;
 		}
@@ -453,7 +453,7 @@ public class PartPlacement
 
 			final ItemStack held = event.getEntityPlayer().getHeldItem( event.getHand() );
 			if( place( held, event.getPos(), event.getFace(), event.getEntityPlayer(), event.getHand(), event.getEntityPlayer().world,
-					PlaceType.INTERACT_FIRST_PASS, 0 ) == EnumActionResult.SUCCESS )
+					PlaceType.INTERACT_FIRST_PASS, 0 ) == ActionResultType.SUCCESS )
 			{
 				event.setCanceled( true );
 				this.wasCanceled = true;

@@ -19,11 +19,11 @@
 package appeng.facade;
 
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -139,7 +139,7 @@ public class FacadePart implements IFacadePart, IBoxProvider
 	}
 
 	@Override
-	public IBlockState getBlockState()
+	public BlockState getBlockState()
 	{
 		final Item maybeFacade = this.facade.getItem();
 

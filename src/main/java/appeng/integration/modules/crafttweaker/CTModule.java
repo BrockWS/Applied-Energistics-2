@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -86,7 +86,7 @@ public class CTModule implements ICraftTweaker
 			if( !is.isItemStackDamageable() && is.getItemDamage() == OreDictionary.WILDCARD_VALUE )
 			{
 				NonNullList<ItemStack> ret = NonNullList.create();
-				is.getItem().getSubItems( CreativeTabs.SEARCH, ret );
+				is.getItem().getSubItems( ItemGroup.SEARCH, ret );
 				return ret.stream().map( i -> new ItemStack( i.getItem(), iStack.getAmount(), i.getItemDamage() ) ).collect( Collectors.toList() );
 			}
 			else

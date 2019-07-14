@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -82,10 +82,10 @@ public class CraftingCubeRendering extends BlockRenderingCustomizer
 
 	}
 
-	private Map<IBlockState, ModelResourceLocation> mapState( Block block, ModelResourceLocation defaultModel, ModelResourceLocation formedModel )
+	private Map<BlockState, ModelResourceLocation> mapState( Block block, ModelResourceLocation defaultModel, ModelResourceLocation formedModel )
 	{
-		Map<IBlockState, ModelResourceLocation> result = new HashMap<>();
-		for( IBlockState state : block.getBlockState().getValidStates() )
+		Map<BlockState, ModelResourceLocation> result = new HashMap<>();
+		for( BlockState state : block.getBlockState().getValidStates() )
 		{
 			if( state.getValue( BlockCraftingUnit.FORMED ) )
 			{

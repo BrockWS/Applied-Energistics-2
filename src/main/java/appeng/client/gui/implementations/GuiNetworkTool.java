@@ -22,7 +22,7 @@ package appeng.client.gui.implementations;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.implementations.guiobjects.INetworkTool;
 import appeng.client.gui.AEBaseGui;
@@ -39,7 +39,7 @@ public class GuiNetworkTool extends AEBaseGui
 
 	private GuiToggleButton tFacades;
 
-	public GuiNetworkTool( final InventoryPlayer inventoryPlayer, final INetworkTool te )
+	public GuiNetworkTool( final PlayerInventory inventoryPlayer, final INetworkTool te )
 	{
 		super( new ContainerNetworkTool( inventoryPlayer, te ) );
 		this.ySize = 166;

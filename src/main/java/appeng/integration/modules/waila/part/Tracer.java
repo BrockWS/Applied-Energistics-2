@@ -19,9 +19,9 @@
 package appeng.integration.modules.waila.part;
 
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -47,9 +47,9 @@ public final class Tracer
 	 *
 	 * @return trace movement. Can be null
 	 */
-	public RayTraceResult retraceBlock( final World world, final EntityPlayerMP player, BlockPos pos )
+	public RayTraceResult retraceBlock( final World world, final ServerPlayerEntity player, BlockPos pos )
 	{
-		IBlockState blockState = world.getBlockState( pos );
+		BlockState blockState = world.getBlockState( pos );
 
 		final Vec3d headVec = this.getCorrectedHeadVec( player );
 		final Vec3d lookVec = player.getLook( 1.0F );
@@ -66,7 +66,7 @@ public final class Tracer
 	 *
 	 * @return view point of player
 	 */
-	private Vec3d getCorrectedHeadVec( final EntityPlayer player )
+	private Vec3d getCorrectedHeadVec( final PlayerEntity player )
 	{
 		double x = player.posX;
 		double y = player.posY;
@@ -80,7 +80,7 @@ public final class Tracer
 		else
 		{
 			y += player.getEyeHeight();
-			if( player instanceof EntityPlayerMP && player.isSneaking() )
+			if( player instanceof ServerPlayerEntity && player.isSneaking() )
 			{
 				y -= 0.08;
 			}
@@ -93,7 +93,7 @@ public final class Tracer
 	 *
 	 * @return block reach distance of player
 	 */
-	private double getBlockReachDistance_server( final EntityPlayerMP player )
+	private double getBlockReachDistance_server( final ServerPlayerEntity player )
 	{
 		return player.interactionManager.getBlockReachDistance();
 	}

@@ -34,16 +34,16 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -99,7 +99,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 
 		if( mt == MaterialType.NAME_PRESS )
 		{
-			final NBTTagCompound c = Platform.openNbtData( stack );
+			final CompoundNBT c = Platform.openNbtData( stack );
 			lines.add( c.getString( "InscribeName" ) );
 		}
 
@@ -225,7 +225,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 	}
 
 	@Override
-	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		final List<MaterialType> types = Arrays.asList( MaterialType.values() );
 		Collections.sort( types, ( o1, o2 ) -> o1.name().compareTo( o2.name() ) );
@@ -240,7 +240,7 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst( final EntityPlayer player, final World world, final BlockPos pos, final EnumFacing side, final float hitX, final float hitY, final float hitZ, final EnumHand hand )
+	public ActionResultType onItemUseFirst( final PlayerEntity player, final World world, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ, final Hand hand )
 	{
 		if( player.isSneaking() )
 		{
@@ -269,12 +269,12 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 				{
 					if( player.world.isRemote )
 					{
-						return EnumActionResult.PASS;
+						return ActionResultType.PASS;
 					}
 
 					final InventoryAdaptor ad = new AdaptorItemHandler( upgrades );
 					player.setHeldItem( hand, ad.addItems( player.getHeldItem( hand ) ) );
-					return EnumActionResult.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			}
 		}
@@ -309,9 +309,9 @@ public final class ItemMaterial extends AEBaseItem implements IStorageComponent,
 		eqi.motionY = location.motionY;
 		eqi.motionZ = location.motionZ;
 
-		if( location instanceof EntityItem && eqi instanceof EntityItem )
+		if( location instanceof ItemEntity && eqi instanceof ItemEntity )
 		{
-			( (EntityItem) eqi ).setDefaultPickupDelay();
+			( (ItemEntity) eqi ).setDefaultPickupDelay();
 		}
 
 		return eqi;

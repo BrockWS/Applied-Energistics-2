@@ -19,7 +19,7 @@
 package appeng.client.gui.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.implementations.guiobjects.IPortableCell;
 import appeng.container.implementations.ContainerMEPortableCell;
@@ -28,7 +28,7 @@ import appeng.container.implementations.ContainerMEPortableCell;
 public class GuiMEPortableCell extends GuiMEMonitorable
 {
 
-	public GuiMEPortableCell( final InventoryPlayer inventoryPlayer, final IPortableCell te )
+	public GuiMEPortableCell( final PlayerInventory inventoryPlayer, final IPortableCell te )
 	{
 		super( inventoryPlayer, te, new ContainerMEPortableCell( inventoryPlayer, te ) );
 	}

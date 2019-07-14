@@ -23,13 +23,13 @@ import java.util.Random;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,7 +46,7 @@ import appeng.util.Platform;
 public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock implements IOrientableBlock
 {
 
-	private static final PropertyBool POWERED = PropertyBool.create( "powered" );
+	private static final BooleanProperty POWERED = BooleanProperty.create( "powered" );
 
 	public BlockQuartzGrowthAccelerator()
 	{
@@ -56,7 +56,7 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock implements IOr
 	}
 
 	@Override
-	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
+	public BlockState getActualState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
 	{
 		TileQuartzGrowthAccelerator te = this.getTileEntity( world, pos );
 		boolean powered = te != null && te.isPowered();
@@ -73,7 +73,7 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock implements IOr
 
 	@SideOnly( Side.CLIENT )
 	@Override
-	public void randomDisplayTick( final IBlockState state, final World w, final BlockPos pos, final Random r )
+	public void randomDisplayTick( final BlockState state, final World w, final BlockPos pos, final Random r )
 	{
 		if( !AEConfig.instance().isEnableEffects() )
 		{
@@ -87,9 +87,9 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock implements IOr
 			final double d0 = r.nextFloat() - 0.5F;
 			final double d1 = r.nextFloat() - 0.5F;
 
-			final EnumFacing up = cga.getUp();
-			final EnumFacing forward = cga.getForward();
-			final EnumFacing west = Platform.crossProduct( forward, up );
+			final Direction up = cga.getUp();
+			final Direction forward = cga.getForward();
+			final Direction west = Platform.crossProduct( forward, up );
 
 			double rx = 0.5 + pos.getX();
 			double ry = 0.5 + pos.getY();

@@ -24,10 +24,10 @@ import java.util.Optional;
 
 import io.netty.buffer.ByteBuf;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -90,7 +90,7 @@ public class TileCraftingMonitorTile extends TileCraftingTile implements IColora
 	}
 
 	@Override
-	public void readFromNBT( final NBTTagCompound data )
+	public void readFromNBT( final CompoundNBT data )
 	{
 		super.readFromNBT( data );
 		if( data.hasKey( "paintedColor" ) )
@@ -100,7 +100,7 @@ public class TileCraftingMonitorTile extends TileCraftingTile implements IColora
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT( final NBTTagCompound data )
+	public CompoundNBT writeToNBT( final CompoundNBT data )
 	{
 		super.writeToNBT( data );
 		data.setByte( "paintedColor", (byte) this.paintedColor.ordinal() );
@@ -154,7 +154,7 @@ public class TileCraftingMonitorTile extends TileCraftingTile implements IColora
 	}
 
 	@Override
-	public boolean recolourBlock( final EnumFacing side, final AEColor newPaintedColor, final EntityPlayer who )
+	public boolean recolourBlock( final Direction side, final AEColor newPaintedColor, final PlayerEntity who )
 	{
 		if( this.paintedColor == newPaintedColor )
 		{

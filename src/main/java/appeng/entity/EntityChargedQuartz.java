@@ -22,10 +22,10 @@ package appeng.entity;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -81,7 +81,7 @@ public final class EntityChargedQuartz extends AEBaseEntityItem
 		final int i = MathHelper.floor( ( this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY ) / 2.0D );
 		final int k = MathHelper.floor( this.posZ );
 
-		IBlockState state = this.world.getBlockState( new BlockPos( j, i, k ) );
+		BlockState state = this.world.getBlockState( new BlockPos( j, i, k ) );
 		final Material mat = state.getMaterial();
 
 		if( Platform.isServer() && mat.isLiquid() )
@@ -111,24 +111,24 @@ public final class EntityChargedQuartz extends AEBaseEntityItem
 			final AxisAlignedBB region = new AxisAlignedBB( this.posX - 1, this.posY - 1, this.posZ - 1, this.posX + 1, this.posY + 1, this.posZ + 1 );
 			final List<Entity> l = this.getCheckedEntitiesWithinAABBExcludingEntity( region );
 
-			EntityItem redstone = null;
-			EntityItem netherQuartz = null;
+			ItemEntity redstone = null;
+			ItemEntity netherQuartz = null;
 
 			for( final Entity e : l )
 			{
-				if( e instanceof EntityItem && !e.isDead )
+				if( e instanceof ItemEntity && !e.isDead )
 				{
-					final ItemStack other = ( (EntityItem) e ).getItem();
+					final ItemStack other = ( (ItemEntity) e ).getItem();
 					if( !other.isEmpty() )
 					{
 						if( ItemStack.areItemsEqual( other, new ItemStack( Items.REDSTONE ) ) )
 						{
-							redstone = (EntityItem) e;
+							redstone = (ItemEntity) e;
 						}
 
 						if( ItemStack.areItemsEqual( other, new ItemStack( Items.QUARTZ ) ) )
 						{
-							netherQuartz = (EntityItem) e;
+							netherQuartz = (ItemEntity) e;
 						}
 					}
 				}
@@ -157,7 +157,7 @@ public final class EntityChargedQuartz extends AEBaseEntityItem
 
 				materials.fluixCrystal().maybeStack( 2 ).ifPresent( is ->
 				{
-					final EntityItem entity = new EntityItem( this.world, this.posX, this.posY, this.posZ, is );
+					final ItemEntity entity = new ItemEntity( this.world, this.posX, this.posY, this.posZ, is );
 
 					this.world.spawnEntity( entity );
 				} );

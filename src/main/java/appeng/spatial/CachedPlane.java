@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -62,7 +62,7 @@ public class CachedPlane
 	private final IMovableRegistry reg = AEApi.instance().registries().movable();
 	private final List<WorldCoord> updates = new ArrayList<>();
 	private int verticalBits;
-	private final IBlockState matrixBlockState;
+	private final BlockState matrixBlockState;
 
 	public CachedPlane( final World w, final int minX, final int minY, final int minZ, final int maxX, final int maxY, final int maxZ )
 	{
@@ -392,7 +392,7 @@ public class CachedPlane
 
 	private static class BlockStorageData
 	{
-		public IBlockState state;
+		public BlockState state;
 		public int light;
 	}
 

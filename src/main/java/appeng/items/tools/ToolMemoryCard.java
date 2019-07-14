@@ -22,17 +22,17 @@ package appeng.items.tools;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,7 +65,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	{
 		lines.add( this.getLocalizedName( this.getSettingsName( stack ) + ".name", this.getSettingsName( stack ) ) );
 
-		final NBTTagCompound data = this.getData( stack );
+		final CompoundNBT data = this.getData( stack );
 		if( data.hasKey( "tooltip" ) )
 		{
 			lines.add( I18n.translateToLocal( this.getLocalizedName( data.getString( "tooltip" ) + ".name", data.getString( "tooltip" ) ) ) );
@@ -107,9 +107,9 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	}
 
 	@Override
-	public void setMemoryCardContents( final ItemStack is, final String settingsName, final NBTTagCompound data )
+	public void setMemoryCardContents( final ItemStack is, final String settingsName, final CompoundNBT data )
 	{
-		final NBTTagCompound c = Platform.openNbtData( is );
+		final CompoundNBT c = Platform.openNbtData( is );
 		c.setString( "Config", settingsName );
 		c.setTag( "Data", data );
 	}
@@ -117,19 +117,19 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	@Override
 	public String getSettingsName( final ItemStack is )
 	{
-		final NBTTagCompound c = Platform.openNbtData( is );
+		final CompoundNBT c = Platform.openNbtData( is );
 		final String name = c.getString( "Config" );
 		return name == null || name.isEmpty() ? GuiText.Blank.getUnlocalized() : name;
 	}
 
 	@Override
-	public NBTTagCompound getData( final ItemStack is )
+	public CompoundNBT getData( final ItemStack is )
 	{
-		final NBTTagCompound c = Platform.openNbtData( is );
-		NBTTagCompound o = c.getCompoundTag( "Data" );
+		final CompoundNBT c = Platform.openNbtData( is );
+		CompoundNBT o = c.getCompoundTag( "Data" );
 		if( o == null )
 		{
-			o = new NBTTagCompound();
+			o = new CompoundNBT();
 		}
 		return o.copy();
 	}
@@ -137,7 +137,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	@Override
 	public AEColor[] getColorCode( ItemStack is )
 	{
-		final NBTTagCompound tag = this.getData( is );
+		final CompoundNBT tag = this.getData( is );
 
 		if( tag.hasKey( "colorCode" ) )
 		{
@@ -154,7 +154,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	}
 
 	@Override
-	public void notifyUser( final EntityPlayer player, final MemoryCardMessages msg )
+	public void notifyUser( final PlayerEntity player, final MemoryCardMessages msg )
 	{
 		if( Platform.isClient() )
 		{
@@ -183,7 +183,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	}
 
 	@Override
-	public EnumActionResult onItemUse( final EntityPlayer player, final World w, final BlockPos pos, final EnumHand hand, final EnumFacing side, final float hx, final float hy, final float hz )
+	public ActionResultType onItemUse( final PlayerEntity player, final World w, final BlockPos pos, final Hand hand, final Direction side, final float hx, final float hy, final float hz )
 	{
 		if( player.isSneaking() )
 		{
@@ -191,7 +191,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 			{
 				this.clearCard( player, w, hand );
 			}
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 		else
 		{
@@ -200,7 +200,7 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick( World w, EntityPlayer player, EnumHand hand )
+	public ActionResult<ItemStack> onItemRightClick( World w, PlayerEntity player, Hand hand )
 	{
 		if( player.isSneaking() )
 		{
@@ -215,12 +215,12 @@ public class ToolMemoryCard extends AEBaseItem implements IMemoryCard
 	}
 
 	@Override
-	public boolean doesSneakBypassUse( final ItemStack itemstack, final IBlockAccess world, final BlockPos pos, final EntityPlayer player )
+	public boolean doesSneakBypassUse( final ItemStack itemstack, final IEnviromentBlockReader world, final BlockPos pos, final PlayerEntity player )
 	{
 		return true;
 	}
 
-	private void clearCard( final EntityPlayer player, final World w, final EnumHand hand )
+	private void clearCard( final PlayerEntity player, final World w, final Hand hand )
 	{
 		final IMemoryCard mem = (IMemoryCard) player.getHeldItem( hand ).getItem();
 		mem.notifyUser( player, MemoryCardMessages.SETTINGS_CLEARED );

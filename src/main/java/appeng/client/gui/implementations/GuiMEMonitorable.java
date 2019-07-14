@@ -26,8 +26,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.config.SearchBoxMode;
@@ -101,12 +101,12 @@ public class GuiMEMonitorable extends AEBaseMEGui implements ISortSource, IConfi
 	private int currentMouseX = 0;
 	private int currentMouseY = 0;
 
-	public GuiMEMonitorable( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
+	public GuiMEMonitorable( final PlayerInventory inventoryPlayer, final ITerminalHost te )
 	{
 		this( inventoryPlayer, te, new ContainerMEMonitorable( inventoryPlayer, te ) );
 	}
 
-	public GuiMEMonitorable( final InventoryPlayer inventoryPlayer, final ITerminalHost te, final ContainerMEMonitorable c )
+	public GuiMEMonitorable( final PlayerInventory inventoryPlayer, final ITerminalHost te, final ContainerMEMonitorable c )
 	{
 
 		super( c );

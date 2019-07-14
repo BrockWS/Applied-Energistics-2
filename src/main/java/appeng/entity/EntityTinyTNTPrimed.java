@@ -25,11 +25,11 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -97,7 +97,7 @@ public final class EntityTinyTNTPrimed extends EntityTNTPrimed implements IEntit
 		{
 			AEApi.instance().definitions().blocks().tinyTNT().maybeStack( 1 ).ifPresent( tntStack ->
 			{
-				final EntityItem item = new EntityItem( this.world, this.posX, this.posY, this.posZ, tntStack );
+				final ItemEntity item = new ItemEntity( this.world, this.posX, this.posY, this.posZ, tntStack );
 
 				item.motionX = this.motionX;
 				item.motionY = this.motionY;
@@ -160,7 +160,7 @@ public final class EntityTinyTNTPrimed extends EntityTNTPrimed implements IEntit
 					for( int z = (int) ( this.posZ - 2 ); z <= this.posZ + 2; z++ )
 					{
 						final BlockPos point = new BlockPos( x, y, z );
-						final IBlockState state = this.world.getBlockState( point );
+						final BlockState state = this.world.getBlockState( point );
 						final Block block = state.getBlock();
 
 						if( block != null && !block.isAir( state, this.world, point ) )

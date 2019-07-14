@@ -20,7 +20,7 @@ package appeng.worldgen.meteorite;
 
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -39,7 +39,7 @@ public class ChunkOnly extends StandardWorld
 	public ChunkOnly( final World w, final int cx, final int cz )
 	{
 		super( w );
-		this.target = w.getChunkFromChunkCoords( cx, cz );
+		this.target = w.getChunk( cx, cz );
 		this.cx = cx;
 		this.cz = cz;
 	}
@@ -73,7 +73,7 @@ public class ChunkOnly extends StandardWorld
 	{
 		if( this.range( x, y, z ) )
 		{
-			return this.target.getBlockState( x, y, z ).getBlock();
+			return this.target.getBlockState( new BlockPos(x, y, z) ).getBlock();
 		}
 		return Platform.AIR_BLOCK;
 	}
@@ -89,7 +89,7 @@ public class ChunkOnly extends StandardWorld
 	}
 
 	@Override
-	public void setBlock( final int x, final int y, final int z, final IBlockState state, final int flags )
+	public void setBlock( final int x, final int y, final int z, final BlockState state, final int flags )
 	{
 		if( this.range( x, y, z ) )
 		{

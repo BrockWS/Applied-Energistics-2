@@ -22,7 +22,7 @@ package appeng.client.gui.implementations;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.client.gui.AEBaseGui;
 import appeng.client.gui.widgets.GuiTabButton;
@@ -39,7 +39,7 @@ public class GuiChest extends AEBaseGui
 
 	private GuiTabButton priority;
 
-	public GuiChest( final InventoryPlayer inventoryPlayer, final TileChest te )
+	public GuiChest( final PlayerInventory inventoryPlayer, final TileChest te )
 	{
 		super( new ContainerChest( inventoryPlayer, te ) );
 		this.ySize = 166;

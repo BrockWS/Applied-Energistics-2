@@ -24,8 +24,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,7 +49,7 @@ public class SpatialPylonRendering extends BlockRenderingCustomizer
 		rendering.stateMapper( this::mapState );
 	}
 
-	private Map<IBlockState, ModelResourceLocation> mapState( Block block )
+	private Map<BlockState, ModelResourceLocation> mapState( Block block )
 	{
 		return ImmutableMap.of( block.getDefaultState(), new ModelResourceLocation( MODEL_ID, "normal" ) );
 	}

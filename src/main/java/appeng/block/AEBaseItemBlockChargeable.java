@@ -25,7 +25,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,10 +40,10 @@ import appeng.core.localization.GuiText;
 import appeng.util.Platform;
 
 
-public class AEBaseItemBlockChargeable extends AEBaseItemBlock implements IAEItemPowerStorage
+public class AEBaseBlockItemChargeable extends AEBaseBlockItem implements IAEItemPowerStorage
 {
 
-	public AEBaseItemBlockChargeable( final Block id )
+	public AEBaseBlockItemChargeable( final Block id )
 	{
 		super( id );
 	}
@@ -52,7 +52,7 @@ public class AEBaseItemBlockChargeable extends AEBaseItemBlock implements IAEIte
 	@SideOnly( Side.CLIENT )
 	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag advancedTooltips )
 	{
-		final NBTTagCompound tag = stack.getTagCompound();
+		final CompoundNBT tag = stack.getTagCompound();
 		double internalCurrentPower = 0;
 		final double internalMaxPower = this.getMaxEnergyCapacity();
 
@@ -143,13 +143,13 @@ public class AEBaseItemBlockChargeable extends AEBaseItemBlock implements IAEIte
 
 	private double getInternal( final ItemStack is )
 	{
-		final NBTTagCompound nbt = Platform.openNbtData( is );
+		final CompoundNBT nbt = Platform.openNbtData( is );
 		return nbt.getDouble( "internalCurrentPower" );
 	}
 
 	private void setInternal( final ItemStack is, final double amt )
 	{
-		final NBTTagCompound nbt = Platform.openNbtData( is );
+		final CompoundNBT nbt = Platform.openNbtData( is );
 		nbt.setDouble( "internalCurrentPower", amt );
 	}
 }

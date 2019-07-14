@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.Settings;
@@ -46,7 +46,7 @@ public class GuiFormationPlane extends GuiUpgradeable
 	private GuiTabButton priority;
 	private GuiImgButton placeMode;
 
-	public GuiFormationPlane( final InventoryPlayer inventoryPlayer, final PartFormationPlane te )
+	public GuiFormationPlane( final PlayerInventory inventoryPlayer, final PartFormationPlane te )
 	{
 		super( new ContainerFormationPlane( inventoryPlayer, te ) );
 		this.ySize = 251;

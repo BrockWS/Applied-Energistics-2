@@ -28,10 +28,10 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -89,7 +89,7 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	@GuiSync( 7 )
 	public String myName = "";
 
-	public ContainerCraftConfirm( final InventoryPlayer ip, final ITerminalHost te )
+	public ContainerCraftConfirm( final PlayerInventory ip, final ITerminalHost te )
 	{
 		super( ip, te );
 	}
@@ -261,13 +261,13 @@ public class ContainerCraftConfirm extends AEBaseContainer
 
 					for( final Object g : this.listeners )
 					{
-						if( g instanceof EntityPlayer )
+						if( g instanceof PlayerEntity )
 						{
-							NetworkHandler.instance().sendTo( a, (EntityPlayerMP) g );
-							NetworkHandler.instance().sendTo( b, (EntityPlayerMP) g );
+							NetworkHandler.instance().sendTo( a, (ServerPlayerEntity) g );
+							NetworkHandler.instance().sendTo( b, (ServerPlayerEntity) g );
 							if( c != null )
 							{
-								NetworkHandler.instance().sendTo( c, (EntityPlayerMP) g );
+								NetworkHandler.instance().sendTo( c, (ServerPlayerEntity) g );
 							}
 						}
 					}
@@ -376,7 +376,7 @@ public class ContainerCraftConfirm extends AEBaseContainer
 	}
 
 	@Override
-	public void onContainerClosed( final EntityPlayer par1EntityPlayer )
+	public void onContainerClosed( final PlayerEntity par1EntityPlayer )
 	{
 		super.onContainerClosed( par1EntityPlayer );
 		if( this.getJob() != null )

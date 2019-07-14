@@ -31,14 +31,14 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -71,7 +71,7 @@ public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 	}
 
 	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final EntityPlayer player, final EnumHand hand, final @Nullable ItemStack heldItem, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
+	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity player, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
 	{
 		if( player.isSneaking() )
 		{
@@ -92,7 +92,7 @@ public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 
 	@Override
 	@SideOnly( Side.CLIENT )
-	public void randomDisplayTick( final IBlockState state, final World w, final BlockPos pos, final Random r )
+	public void randomDisplayTick( final BlockState state, final World w, final BlockPos pos, final Random r )
 	{
 		if( !AEConfig.instance().isEnableEffects() )
 		{
@@ -135,8 +135,8 @@ public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 		if( tile != null )
 		{
 			final double twoPixels = 2.0 / 16.0;
-			final EnumFacing up = tile.getUp();
-			final EnumFacing forward = tile.getForward();
+			final Direction up = tile.getUp();
+			final Direction forward = tile.getForward();
 			final AEAxisAlignedBB bb = new AEAxisAlignedBB( twoPixels, twoPixels, twoPixels, 1.0 - twoPixels, 1.0 - twoPixels, 1.0 - twoPixels );
 
 			if( up.getFrontOffsetX() != 0 )

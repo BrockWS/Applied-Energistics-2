@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
@@ -52,8 +52,8 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 {
 
 	private final ItemStack patternItem;
-	private final InventoryCrafting crafting = new InventoryCrafting( new ContainerNull(), 3, 3 );
-	private final InventoryCrafting testFrame = new InventoryCrafting( new ContainerNull(), 3, 3 );
+	private final CraftingInventory crafting = new CraftingInventory( new ContainerNull(), 3, 3 );
+	private final CraftingInventory testFrame = new CraftingInventory( new ContainerNull(), 3, 3 );
 	private final ItemStack correctOutput;
 	private final IRecipe standardRecipe;
 	private final IAEItemStack[] condensedInputs;
@@ -69,7 +69,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 
 	public PatternHelper( final ItemStack is, final World w )
 	{
-		final NBTTagCompound encodedValue = is.getTagCompound();
+		final CompoundNBT encodedValue = is.getTagCompound();
 
 		if( encodedValue == null )
 		{
@@ -89,7 +89,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 
 		for( int x = 0; x < inTag.tagCount(); x++ )
 		{
-			NBTTagCompound ingredient = inTag.getCompoundTagAt( x );
+			CompoundNBT ingredient = inTag.getCompoundTagAt( x );
 			final ItemStack gs = new ItemStack( ingredient );
 
 			if( !ingredient.hasNoTags() && gs.isEmpty() )
@@ -129,7 +129,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 
 			for( int x = 0; x < outTag.tagCount(); x++ )
 			{
-				NBTTagCompound resultItemTag = outTag.getCompoundTagAt( x );
+				CompoundNBT resultItemTag = outTag.getCompoundTagAt( x );
 				final ItemStack gs = new ItemStack( resultItemTag );
 
 				if( !resultItemTag.hasNoTags() && gs.isEmpty() )
@@ -329,7 +329,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
 	}
 
 	@Override
-	public ItemStack getOutput( final InventoryCrafting craftingInv, final World w )
+	public ItemStack getOutput( final CraftingInventory craftingInv, final World w )
 	{
 		if( !this.isCrafting )
 		{

@@ -24,10 +24,10 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 
 import appeng.util.Platform;
 
@@ -41,13 +41,13 @@ public final class DispenserBlockTool extends BehaviorDefaultDispenseItem
 		final Item i = dispensedItem.getItem();
 		if( i instanceof IBlockTool )
 		{
-			final EnumFacing enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
+			final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
 			final IBlockTool tm = (IBlockTool) i;
 
 			final World w = dispenser.getWorld();
-			if( w instanceof WorldServer )
+			if( w instanceof ServerWorld )
 			{
-				tm.onItemUse( dispensedItem, Platform.getPlayer( (WorldServer) w ), w, dispenser.getBlockPos().offset( enumfacing ), EnumHand.MAIN_HAND,
+				tm.onItemUse( dispensedItem, Platform.getPlayer( (ServerWorld) w ), w, dispenser.getBlockPos().offset( enumfacing ), Hand.MAIN_HAND,
 						enumfacing, 0.5f, 0.5f, 0.5f );
 			}
 		}

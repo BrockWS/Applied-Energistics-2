@@ -21,14 +21,14 @@ package appeng.block.qnb;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -42,7 +42,7 @@ import appeng.tile.qnb.TileQuantumBridge;
 public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICustomCollision
 {
 
-	public static final PropertyBool FORMED = PropertyBool.create( "formed" );
+	public static final BooleanProperty FORMED = BooleanProperty.create( "formed" );
 
 	public static final QnbFormedStateProperty FORMED_STATE = new QnbFormedStateProperty();
 
@@ -69,7 +69,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
-	public IBlockState getExtendedState( IBlockState state, IBlockAccess world, BlockPos pos )
+	public BlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
 	{
 		IExtendedBlockState extState = (IExtendedBlockState) state;
 
@@ -84,7 +84,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
-	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
+	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
 	{
 		TileQuantumBridge bridge = this.getTileEntity( worldIn, pos );
 		if( bridge != null )
@@ -101,7 +101,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
-	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
+	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
 		final TileQuantumBridge bridge = this.getTileEntity( world, pos );
 		if( bridge != null )
@@ -111,7 +111,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
-	public void breakBlock( final World w, final BlockPos pos, final IBlockState state )
+	public void breakBlock( final World w, final BlockPos pos, final BlockState state )
 	{
 		final TileQuantumBridge bridge = this.getTileEntity( w, pos );
 		if( bridge != null )
@@ -123,7 +123,7 @@ public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICusto
 	}
 
 	@Override
-	public boolean isFullCube( IBlockState state )
+	public boolean isFullCube( BlockState state )
 	{
 		return false;
 	}

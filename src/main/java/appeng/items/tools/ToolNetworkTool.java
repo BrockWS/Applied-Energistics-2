@@ -22,17 +22,17 @@ package appeng.items.tools;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional.Interface;
 
@@ -77,7 +77,7 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick( final World w, final EntityPlayer p, final EnumHand hand )
+	public ActionResult<ItemStack> onItemRightClick( final World w, final PlayerEntity p, final Hand hand )
 	{
 		if( Platform.isClient() )
 		{
@@ -89,11 +89,11 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 			}
 		}
 
-		return new ActionResult<>( EnumActionResult.SUCCESS, p.getHeldItem( hand ) );
+		return new ActionResult<>( ActionResultType.SUCCESS, p.getHeldItem( hand ) );
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst( final EntityPlayer player, final World world, final BlockPos pos, final EnumFacing side, final float hitX, final float hitY, final float hitZ, final EnumHand hand )
+	public ActionResultType onItemUseFirst( final PlayerEntity player, final World world, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ, final Hand hand )
 	{
 		final RayTraceResult mop = new RayTraceResult( new Vec3d( hitX, hitY, hitZ ), side, pos );
 		final TileEntity te = world.getTileEntity( pos );
@@ -106,17 +106,17 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 			{
 				if( part.part instanceof INetworkToolAgent && !( (INetworkToolAgent) part.part ).showNetworkInfo( mop ) )
 				{
-					return EnumActionResult.FAIL;
+					return ActionResultType.FAIL;
 				}
 				else if( player.isSneaking() )
 				{
-					return EnumActionResult.PASS;
+					return ActionResultType.PASS;
 				}
 			}
 		}
 		else if( te instanceof INetworkToolAgent && !( (INetworkToolAgent) te ).showNetworkInfo( mop ) )
 		{
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 
 		if( Platform.isClient() )
@@ -124,16 +124,16 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 			NetworkHandler.instance().sendToServer( new PacketClick( pos, side, hitX, hitY, hitZ, hand ) );
 		}
 
-		return EnumActionResult.SUCCESS;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public boolean doesSneakBypassUse( final ItemStack itemstack, final IBlockAccess world, final BlockPos pos, final EntityPlayer player )
+	public boolean doesSneakBypassUse( final ItemStack itemstack, final IEnviromentBlockReader world, final BlockPos pos, final PlayerEntity player )
 	{
 		return true;
 	}
 
-	public boolean serverSideToolLogic( final ItemStack is, final EntityPlayer p, final EnumHand hand, final World w, final BlockPos pos, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
+	public boolean serverSideToolLogic( final ItemStack is, final PlayerEntity p, final Hand hand, final World w, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ )
 	{
 		if( side != null )
 		{
@@ -191,7 +191,7 @@ public class ToolNetworkTool extends AEBaseItem implements IGuiItem, IAEWrench, 
 	}
 
 	@Override
-	public boolean canWrench( final ItemStack wrench, final EntityPlayer player, final BlockPos pos )
+	public boolean canWrench( final ItemStack wrench, final PlayerEntity player, final BlockPos pos )
 	{
 		return true;
 	}

@@ -18,8 +18,8 @@
 
 /* Example:
 
- NBTTagCompound msg = new NBTTagCompound();
- NBTTagCompound item = new NBTTagCompound();
+ CompoundNBT msg = new CompoundNBT();
+ CompoundNBT item = new CompoundNBT();
 
  new ItemStack( Blocks.anvil ).writeToNBT( item );
  msg.setTag( "item", item );
@@ -33,8 +33,8 @@ package appeng.core.api.imc;
 
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.fml.InterModComms.IMCMessage;
 
 import appeng.api.AEApi;
 import appeng.core.api.IIMCProcessor;
@@ -46,8 +46,8 @@ public class IMCMatterCannon implements IIMCProcessor
 	@Override
 	public void process( final IMCMessage m )
 	{
-		final NBTTagCompound msg = m.getNBTValue();
-		final NBTTagCompound item = (NBTTagCompound) msg.getTag( "item" );
+		final CompoundNBT msg = m.getNBTValue();
+		final CompoundNBT item = (CompoundNBT) msg.getTag( "item" );
 
 		final ItemStack ammo = new ItemStack( item );
 		final double weight = msg.getDouble( "weight" );

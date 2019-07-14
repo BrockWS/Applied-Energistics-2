@@ -22,9 +22,9 @@ package appeng.api.definitions;
 import java.util.Optional;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 
 
 public interface IBlockDefinition extends IItemDefinition
@@ -35,9 +35,9 @@ public interface IBlockDefinition extends IItemDefinition
 	Optional<Block> maybeBlock();
 
 	/**
-	 * @return the {@link ItemBlock} implementation if applicable
+	 * @return the {@link BlockItem} implementation if applicable
 	 */
-	Optional<ItemBlock> maybeItemBlock();
+	Optional<BlockItem> maybeBlockItem();
 
 	/**
 	 * Compare Block with world.
@@ -47,5 +47,5 @@ public interface IBlockDefinition extends IItemDefinition
 	 *
 	 * @return if the block is placed in the world at the specific location.
 	 */
-	boolean isSameAs( IBlockAccess world, BlockPos pos );
+	boolean isSameAs( IEnviromentBlockReader world, BlockPos pos );
 }

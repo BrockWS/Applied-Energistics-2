@@ -20,9 +20,9 @@ package appeng.client.gui.implementations;
 
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 
 import appeng.api.config.ActionItems;
 import appeng.api.config.Settings;
@@ -41,7 +41,7 @@ public class GuiCraftingTerm extends GuiMEMonitorable
 
 	private GuiImgButton clearBtn;
 
-	public GuiCraftingTerm( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
+	public GuiCraftingTerm( final PlayerInventory inventoryPlayer, final ITerminalHost te )
 	{
 		super( inventoryPlayer, te, new ContainerCraftingTerm( inventoryPlayer, te ) );
 		this.setReservedSpace( 73 );

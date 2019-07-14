@@ -29,13 +29,13 @@ import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.relauncher.Side;
@@ -123,9 +123,9 @@ class ItemRendering implements IItemRendering
 			ModelResourceLocation model;
 
 			// For block items, the default will try to use the default state of the associated block
-			if( item instanceof ItemBlock )
+			if( item instanceof BlockItem )
 			{
-				Block block = ( (ItemBlock) item ).getBlock();
+				Block block = ( (BlockItem) item ).getBlock();
 
 				// We can only do this once the blocks are actually registered...
 				StateMapperHelper helper = new StateMapperHelper( item.getRegistryName() );
@@ -169,7 +169,7 @@ class ItemRendering implements IItemRendering
 		}
 
 		@Override
-		protected ModelResourceLocation getModelResourceLocation( IBlockState state )
+		protected ModelResourceLocation getModelResourceLocation( BlockState state )
 		{
 			return new ModelResourceLocation( this.registryName, this.getPropertyString( state.getProperties() ) );
 		}

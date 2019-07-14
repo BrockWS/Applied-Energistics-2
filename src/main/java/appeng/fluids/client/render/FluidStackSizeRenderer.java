@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.core.AEConfig;

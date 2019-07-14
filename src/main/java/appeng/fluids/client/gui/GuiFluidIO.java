@@ -19,7 +19,7 @@
 package appeng.fluids.client.gui;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.client.gui.implementations.GuiUpgradeable;
 import appeng.core.localization.GuiText;
@@ -40,7 +40,7 @@ public class GuiFluidIO extends GuiUpgradeable
 {
 	private final PartSharedFluidBus bus;
 
-	public GuiFluidIO( InventoryPlayer inventoryPlayer, PartSharedFluidBus te )
+	public GuiFluidIO( PlayerInventory inventoryPlayer, PartSharedFluidBus te )
 	{
 		super( new ContainerFluidIO( inventoryPlayer, te ) );
 		this.bus = te;

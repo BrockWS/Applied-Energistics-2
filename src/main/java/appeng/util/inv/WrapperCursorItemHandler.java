@@ -19,15 +19,15 @@
 package appeng.util.inv;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraftforge.items.ItemStackHandler;
 
 
 public class WrapperCursorItemHandler extends ItemStackHandler
 {
-	private final InventoryPlayer inv;
+	private final PlayerInventory inv;
 
-	public WrapperCursorItemHandler( InventoryPlayer inventoryPlayer )
+	public WrapperCursorItemHandler( PlayerInventory inventoryPlayer )
 	{
 		super( 1 );
 

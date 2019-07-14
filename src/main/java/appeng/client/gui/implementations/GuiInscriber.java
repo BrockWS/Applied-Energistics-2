@@ -19,7 +19,7 @@
 package appeng.client.gui.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.client.gui.AEBaseGui;
 import appeng.client.gui.widgets.GuiProgressBar;
@@ -36,7 +36,7 @@ public class GuiInscriber extends AEBaseGui
 	private final ContainerInscriber cvc;
 	private GuiProgressBar pb;
 
-	public GuiInscriber( final InventoryPlayer inventoryPlayer, final TileInscriber te )
+	public GuiInscriber( final PlayerInventory inventoryPlayer, final TileInscriber te )
 	{
 		super( new ContainerInscriber( inventoryPlayer, te ) );
 		this.cvc = (ContainerInscriber) this.inventorySlots;

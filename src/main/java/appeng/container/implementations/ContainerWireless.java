@@ -19,7 +19,7 @@
 package appeng.container.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.container.AEBaseContainer;
 import appeng.container.guisync.GuiSync;
@@ -38,7 +38,7 @@ public class ContainerWireless extends AEBaseContainer
 	@GuiSync( 2 )
 	public long drain = 0;
 
-	public ContainerWireless( final InventoryPlayer ip, final TileWireless te )
+	public ContainerWireless( final PlayerInventory ip, final TileWireless te )
 	{
 		super( ip, te, null );
 		this.wirelessTerminal = te;

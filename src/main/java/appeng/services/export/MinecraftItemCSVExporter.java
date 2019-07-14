@@ -39,8 +39,8 @@ import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -233,7 +233,7 @@ final class MinecraftItemCSVExporter implements Exporter
 			final boolean hasSubtypes = input.getHasSubtypes();
 			if( hasSubtypes )
 			{
-				final CreativeTabs creativeTab = input.getCreativeTab();
+				final ItemGroup creativeTab = input.getCreativeTab();
 				final NonNullList<ItemStack> stacks = NonNullList.create();
 
 				// modifies the stacks list and adds the different sub types to it

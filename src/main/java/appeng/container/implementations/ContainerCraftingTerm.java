@@ -19,9 +19,9 @@
 package appeng.container.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -49,7 +49,7 @@ public class ContainerCraftingTerm extends ContainerMEMonitorable implements IAE
 	private final SlotCraftingTerm outputSlot;
 	private IRecipe currentRecipe;
 
-	public ContainerCraftingTerm( final InventoryPlayer ip, final ITerminalHost monitorable )
+	public ContainerCraftingTerm( final PlayerInventory ip, final ITerminalHost monitorable )
 	{
 		super( ip, monitorable, false );
 		this.ct = (PartCraftingTerminal) monitorable;
@@ -80,7 +80,7 @@ public class ContainerCraftingTerm extends ContainerMEMonitorable implements IAE
 	public void onCraftMatrixChanged( IInventory inventory )
 	{
 		final ContainerNull cn = new ContainerNull();
-		final InventoryCrafting ic = new InventoryCrafting( cn, 3, 3 );
+		final CraftingInventory ic = new CraftingInventory( cn, 3, 3 );
 
 		for( int x = 0; x < 9; x++ )
 		{

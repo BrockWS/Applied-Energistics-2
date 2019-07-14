@@ -22,7 +22,7 @@ package appeng.client.gui.implementations;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.AEApi;
@@ -66,7 +66,7 @@ public class GuiCraftAmount extends AEBaseGui
 	private GuiBridge originalGui;
 
 	@Reflected
-	public GuiCraftAmount( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
+	public GuiCraftAmount( final PlayerInventory inventoryPlayer, final ITerminalHost te )
 	{
 		super( new ContainerCraftAmount( inventoryPlayer, te ) );
 	}

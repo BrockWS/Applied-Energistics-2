@@ -30,17 +30,17 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.definitions.IBlockDefinition;
 import appeng.block.AEBaseBlock;
-import appeng.block.AEBaseItemBlock;
+import appeng.block.AEBaseBlockItem;
 import appeng.block.AEBaseTileBlock;
 import appeng.bootstrap.components.IBlockRegistrationComponent;
 import appeng.bootstrap.components.IItemRegistrationComponent;
@@ -71,13 +71,13 @@ class BlockDefinitionBuilder implements IBlockBuilder
 
 	private final EnumSet<AEFeature> features = EnumSet.noneOf( AEFeature.class );
 
-	private CreativeTabs creativeTab = CreativeTab.instance;
+	private ItemGroup creativeTab = CreativeTab.instance;
 
 	private TileEntityDefinition tileEntityDefinition;
 
 	private boolean disableItem = false;
 
-	private Function<Block, ItemBlock> itemFactory;
+	private Function<Block, BlockItem> itemFactory;
 
 	@SideOnly( Side.CLIENT )
 	private BlockRendering blockRendering;
@@ -156,7 +156,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 	}
 
 	@Override
-	public IBlockBuilder item( Function<Block, ItemBlock> factory )
+	public IBlockBuilder item( Function<Block, BlockItem> factory )
 	{
 		this.itemFactory = factory;
 		return this;
@@ -189,7 +189,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		block.setRegistryName( AppEng.MOD_ID, this.registryName );
 		block.setUnlocalizedName( "appliedenergistics2." + this.registryName );
 
-		ItemBlock item = this.constructItemFromBlock( block );
+		BlockItem item = this.constructItemFromBlock( block );
 		if( item != null )
 		{
 			item.setRegistryName( AppEng.MOD_ID, this.registryName );
@@ -258,7 +258,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 	}
 
 	@Nullable
-	private ItemBlock constructItemFromBlock( Block block )
+	private BlockItem constructItemFromBlock( Block block )
 	{
 		if( this.disableItem )
 		{
@@ -271,11 +271,11 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		}
 		else if( block instanceof AEBaseBlock )
 		{
-			return new AEBaseItemBlock( block );
+			return new AEBaseBlockItem( block );
 		}
 		else
 		{
-			return new ItemBlock( block );
+			return new BlockItem( block );
 		}
 	}
 }

@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
@@ -53,7 +53,7 @@ public class GuiCellWorkbench extends GuiUpgradeable
 	private GuiImgButton partition;
 	private GuiToggleButton copyMode;
 
-	public GuiCellWorkbench( final InventoryPlayer inventoryPlayer, final TileCellWorkbench te )
+	public GuiCellWorkbench( final PlayerInventory inventoryPlayer, final TileCellWorkbench te )
 	{
 		super( new ContainerCellWorkbench( inventoryPlayer, te ) );
 		this.workbench = (ContainerCellWorkbench) this.inventorySlots;

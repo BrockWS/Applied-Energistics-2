@@ -19,14 +19,14 @@
 package appeng.client.render.tesr;
 
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.animation.FastTESR;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -61,8 +61,8 @@ public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 		}
 
 		BlockPos pos = te.getPos();
-		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache( te.getWorld(), pos );
-		IBlockState state = world.getBlockState( pos );
+		IEnviromentBlockReader world = MinecraftForgeClient.getRegionRenderCache( te.getWorld(), pos );
+		BlockState state = world.getBlockState( pos );
 		if( state.getPropertyKeys().contains( Properties.StaticProperty ) )
 		{
 			state = state.withProperty( Properties.StaticProperty, false );
@@ -76,13 +76,13 @@ public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 			exState = exState.withProperty( BlockSkyCompass.ROTATION, getRotation( te ) );
 
 			// Flip forward/up for rendering, the base model is facing up without any rotation
-			EnumFacing forward = exState.getValue( AEBaseTileBlock.FORWARD );
-			EnumFacing up = exState.getValue( AEBaseTileBlock.UP );
+			Direction forward = exState.getValue( AEBaseTileBlock.FORWARD );
+			Direction up = exState.getValue( AEBaseTileBlock.UP );
 			// This ensures the needle isn't flipped by the model rotator. Since the model is symmetrical, this should
 			// not affect the appearance
-			if( forward == EnumFacing.UP || forward == EnumFacing.DOWN )
+			if( forward == Direction.UP || forward == Direction.DOWN )
 			{
-				up = EnumFacing.NORTH;
+				up = Direction.NORTH;
 			}
 			exState = exState.withProperty( AEBaseTileBlock.FORWARD, up )
 					.withProperty( AEBaseTileBlock.UP, forward );
@@ -97,7 +97,7 @@ public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 	{
 		float rotation;
 
-		if( skyCompass.getForward() == EnumFacing.UP || skyCompass.getForward() == EnumFacing.DOWN )
+		if( skyCompass.getForward() == Direction.UP || skyCompass.getForward() == Direction.DOWN )
 		{
 			rotation = SkyCompassBakedModel.getAnimatedRotation( skyCompass.getPos(), false );
 		}
@@ -106,7 +106,7 @@ public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 			rotation = SkyCompassBakedModel.getAnimatedRotation( null, false );
 		}
 
-		if( skyCompass.getForward() == EnumFacing.DOWN )
+		if( skyCompass.getForward() == Direction.DOWN )
 		{
 			rotation = flipidiy( rotation );
 		}

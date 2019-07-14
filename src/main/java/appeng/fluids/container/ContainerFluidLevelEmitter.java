@@ -3,8 +3,8 @@ package appeng.fluids.container;
 
 
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -26,7 +26,7 @@ public class ContainerFluidLevelEmitter extends ContainerFluidConfigurable
 	@GuiSync( 3 )
 	public long EmitterValue = -1;
 
-	public ContainerFluidLevelEmitter( final InventoryPlayer ip, final PartFluidLevelEmitter te )
+	public ContainerFluidLevelEmitter( final PlayerInventory ip, final PartFluidLevelEmitter te )
 	{
 		super( ip, te );
 		this.lvlEmitter = te;
@@ -39,7 +39,7 @@ public class ContainerFluidLevelEmitter extends ContainerFluidConfigurable
 		this.textField.setText( String.valueOf( this.EmitterValue ) );
 	}
 
-	public void setLevel( final long l, final EntityPlayer player )
+	public void setLevel( final long l, final PlayerEntity player )
 	{
 		this.lvlEmitter.setReportingValue( l );
 		this.EmitterValue = l;

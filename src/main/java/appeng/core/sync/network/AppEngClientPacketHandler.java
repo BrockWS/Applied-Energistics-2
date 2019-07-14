@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.PacketThreadUtil;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
@@ -39,7 +39,7 @@ public class AppEngClientPacketHandler extends AppEngPacketHandlerBase implement
 {
 
 	@Override
-	public void onPacketData( final INetworkInfo manager, final INetHandler handler, final FMLProxyPacket packet, final EntityPlayer player )
+	public void onPacketData( final INetworkInfo manager, final INetHandler handler, final FMLProxyPacket packet, final PlayerEntity player )
 	{
 		final ByteBuf stream = packet.payload();
 

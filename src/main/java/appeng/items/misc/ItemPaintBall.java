@@ -19,7 +19,7 @@
 package appeng.items.misc;
 
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -66,7 +66,7 @@ public class ItemPaintBall extends AEBaseItem
 	}
 
 	@Override
-	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		for( final AEColor c : AEColor.values() )
 		{

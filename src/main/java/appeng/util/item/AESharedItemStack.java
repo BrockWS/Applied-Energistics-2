@@ -25,15 +25,15 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import appeng.api.config.FuzzyMode;
 
 
 final class AESharedItemStack implements Comparable<AESharedItemStack>
 {
-	private static final NBTTagCompound LOW_TAG = new NBTTagCompound();
-	private static final NBTTagCompound HIGH_TAG = new NBTTagCompound();
+	private static final CompoundNBT LOW_TAG = new CompoundNBT();
+	private static final CompoundNBT HIGH_TAG = new CompoundNBT();
 
 	private final ItemStack itemStack;
 	private final int itemId;
@@ -163,7 +163,7 @@ final class AESharedItemStack implements Comparable<AESharedItemStack>
 			Preconditions.checkState( !stack.isEmpty(), "ItemStack#isEmpty() has to be false" );
 			Preconditions.checkState( stack.getCount() == 1, "ItemStack#getCount() has to be 1" );
 
-			final NBTTagCompound tag = stack.hasTagCompound() ? stack.getTagCompound() : null;
+			final CompoundNBT tag = stack.hasTagCompound() ? stack.getTagCompound() : null;
 
 			this.lower = this.makeLowerBound( stack, tag, fuzzy, ignoreMeta );
 			this.upper = this.makeUpperBound( stack, tag, fuzzy, ignoreMeta );
@@ -179,7 +179,7 @@ final class AESharedItemStack implements Comparable<AESharedItemStack>
 			return this.upper;
 		}
 
-		private AESharedItemStack makeLowerBound( final ItemStack itemStack, final NBTTagCompound tag, final FuzzyMode fuzzy, final boolean ignoreMeta )
+		private AESharedItemStack makeLowerBound( final ItemStack itemStack, final CompoundNBT tag, final FuzzyMode fuzzy, final boolean ignoreMeta )
 		{
 			final ItemStack newDef = itemStack.copy();
 
@@ -220,7 +220,7 @@ final class AESharedItemStack implements Comparable<AESharedItemStack>
 			return new AESharedItemStack( newDef );
 		}
 
-		private AESharedItemStack makeUpperBound( final ItemStack itemStack, final NBTTagCompound tag, final FuzzyMode fuzzy, final boolean ignoreMeta )
+		private AESharedItemStack makeUpperBound( final ItemStack itemStack, final CompoundNBT tag, final FuzzyMode fuzzy, final boolean ignoreMeta )
 		{
 			final ItemStack newDef = itemStack.copy();
 

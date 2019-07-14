@@ -18,9 +18,9 @@
 
 /* Example:
 
- NBTTagCompound msg = new NBTTagCompound();
- NBTTagCompound in = new NBTTagCompound();
- NBTTagCompound out = new NBTTagCompound();
+ CompoundNBT msg = new CompoundNBT();
+ CompoundNBT in = new CompoundNBT();
+ CompoundNBT out = new CompoundNBT();
 
  new ItemStack( Blocks.iron_ore ).writeToNBT( in );
  new ItemStack( Items.iron_ingot ).writeToNBT( out );
@@ -32,10 +32,10 @@
 
  -- or --
 
- NBTTagCompound msg = new NBTTagCompound();
- NBTTagCompound in = new NBTTagCompound();
- NBTTagCompound out = new NBTTagCompound();
- NBTTagCompound optional = new NBTTagCompound();
+ CompoundNBT msg = new CompoundNBT();
+ CompoundNBT in = new CompoundNBT();
+ CompoundNBT out = new CompoundNBT();
+ CompoundNBT optional = new CompoundNBT();
 
  new ItemStack( Blocks.iron_ore ).writeToNBT( in );
  new ItemStack( Items.iron_ingot ).writeToNBT( out );
@@ -54,8 +54,8 @@ package appeng.core.api.imc;
 
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.fml.InterModComms.IMCMessage;
 
 import appeng.api.AEApi;
 import appeng.api.features.IGrinderRecipe;
@@ -69,9 +69,9 @@ public class IMCGrinder implements IIMCProcessor
 	@Override
 	public void process( final IMCMessage m )
 	{
-		final NBTTagCompound msg = m.getNBTValue();
-		final NBTTagCompound inTag = (NBTTagCompound) msg.getTag( "in" );
-		final NBTTagCompound outTag = (NBTTagCompound) msg.getTag( "out" );
+		final CompoundNBT msg = m.getNBTValue();
+		final CompoundNBT inTag = (CompoundNBT) msg.getTag( "in" );
+		final CompoundNBT outTag = (CompoundNBT) msg.getTag( "out" );
 
 		final ItemStack in = new ItemStack( inTag );
 		final ItemStack out = new ItemStack( outTag );
@@ -90,7 +90,7 @@ public class IMCGrinder implements IIMCProcessor
 
 		if( msg.hasKey( "optional" ) )
 		{
-			final NBTTagCompound optionalTag = (NBTTagCompound) msg.getTag( "optional" );
+			final CompoundNBT optionalTag = (CompoundNBT) msg.getTag( "optional" );
 			final ItemStack optional = new ItemStack( optionalTag );
 
 			if( optional.isEmpty() )

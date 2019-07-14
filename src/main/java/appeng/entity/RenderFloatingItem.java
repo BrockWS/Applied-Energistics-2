@@ -20,11 +20,11 @@ package appeng.entity;
 
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,7 +40,7 @@ public class RenderFloatingItem extends RenderEntityItem
 	}
 
 	@Override
-	public void doRender( final EntityItem entityItem, final double x, final double y, final double z, final float yaw, final float partialTick )
+	public void doRender( final ItemEntity entityItem, final double x, final double y, final double z, final float yaw, final float partialTick )
 	{
 		if( entityItem instanceof EntityFloatingItem )
 		{
@@ -49,7 +49,7 @@ public class RenderFloatingItem extends RenderEntityItem
 			{
 				GlStateManager.pushMatrix();
 
-				if( !( efi.getItem().getItem() instanceof ItemBlock ) )
+				if( !( efi.getItem().getItem() instanceof BlockItem ) )
 				{
 					GlStateManager.translate( 0, -0.3f, 0 );
 				}

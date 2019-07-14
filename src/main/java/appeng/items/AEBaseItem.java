@@ -22,7 +22,7 @@ package appeng.items;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -55,7 +55,7 @@ public abstract class AEBaseItem extends Item
 	}
 
 	@Override
-	public final void getSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	public final void getSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		if( this.isInCreativeTab( creativeTab ) )
 		{
@@ -75,7 +75,7 @@ public abstract class AEBaseItem extends Item
 		super.addInformation( stack, world, lines, advancedTooltips );
 	}
 
-	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		super.getSubItems( creativeTab, itemStacks );
 	}

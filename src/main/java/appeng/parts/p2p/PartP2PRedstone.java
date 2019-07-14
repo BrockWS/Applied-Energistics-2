@@ -23,12 +23,12 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 
 import appeng.api.networking.events.MENetworkBootingStatusChange;
@@ -105,7 +105,7 @@ public class PartP2PRedstone extends PartP2PTunnel<PartP2PRedstone>
 		Platform.notifyBlocksOfNeighbors( world, this.getTile().getPos() );
 
 		// and this cause sometimes it can go thought walls.
-		for( final EnumFacing face : EnumFacing.VALUES )
+		for( final Direction face : Direction.VALUES )
 		{
 			Platform.notifyBlocksOfNeighbors( world, this.getTile().getPos().offset( face ) );
 		}
@@ -124,14 +124,14 @@ public class PartP2PRedstone extends PartP2PTunnel<PartP2PRedstone>
 	}
 
 	@Override
-	public void readFromNBT( final NBTTagCompound tag )
+	public void readFromNBT( final CompoundNBT tag )
 	{
 		super.readFromNBT( tag );
 		this.power = tag.getInteger( "power" );
 	}
 
 	@Override
-	public void writeToNBT( final NBTTagCompound tag )
+	public void writeToNBT( final CompoundNBT tag )
 	{
 		super.writeToNBT( tag );
 		tag.setInteger( "power", this.power );
@@ -149,20 +149,20 @@ public class PartP2PRedstone extends PartP2PTunnel<PartP2PRedstone>
 	}
 
 	@Override
-	public void onNeighborChanged( IBlockAccess w, BlockPos pos, BlockPos neighbor )
+	public void onNeighborChanged( IEnviromentBlockReader w, BlockPos pos, BlockPos neighbor )
 	{
 		if( !this.isOutput() )
 		{
 			final BlockPos target = this.getTile().getPos().offset( this.getSide().getFacing() );
 
-			final IBlockState state = this.getTile().getWorld().getBlockState( target );
+			final BlockState state = this.getTile().getWorld().getBlockState( target );
 			final Block b = state.getBlock();
 			if( b != null && !this.isOutput() )
 			{
-				EnumFacing srcSide = this.getSide().getFacing();
+				Direction srcSide = this.getSide().getFacing();
 				if( b instanceof BlockRedstoneWire )
 				{
-					srcSide = EnumFacing.UP;
+					srcSide = Direction.UP;
 				}
 
 				this.power = b.getWeakPower( state, this.getTile().getWorld(), target, srcSide );

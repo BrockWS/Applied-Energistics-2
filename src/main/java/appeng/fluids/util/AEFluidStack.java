@@ -31,7 +31,7 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -50,7 +50,7 @@ public final class AEFluidStack extends AEStack<IAEFluidStack> implements IAEFlu
 {
 
 	private final Fluid fluid;
-	private NBTTagCompound tagCompound;
+	private CompoundNBT tagCompound;
 
 	private AEFluidStack( final AEFluidStack fluidStack )
 	{
@@ -96,7 +96,7 @@ public final class AEFluidStack extends AEStack<IAEFluidStack> implements IAEFlu
 		return new AEFluidStack( input );
 	}
 
-	public static IAEFluidStack fromNBT( final NBTTagCompound data )
+	public static IAEFluidStack fromNBT( final CompoundNBT data )
 	{
 		final FluidStack fluidStack = FluidStack.loadFluidStackFromNBT( data );
 
@@ -127,7 +127,7 @@ public final class AEFluidStack extends AEStack<IAEFluidStack> implements IAEFlu
 		final boolean hasTagCompound = ( mask & 0x80 ) > 0;
 
 		// don't send this...
-		final NBTTagCompound d = new NBTTagCompound();
+		final CompoundNBT d = new CompoundNBT();
 
 		final byte len2 = buffer.readByte();
 		final byte[] name = new byte[len2];
@@ -178,7 +178,7 @@ public final class AEFluidStack extends AEStack<IAEFluidStack> implements IAEFlu
 	}
 
 	@Override
-	public void writeToNBT( final NBTTagCompound data )
+	public void writeToNBT( final CompoundNBT data )
 	{
 		data.setString( "FluidName", this.fluid.getName() );
 		data.setByte( "Count", (byte) 0 );

@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
@@ -61,7 +61,7 @@ class ItemDefinitionBuilder implements IItemBuilder
 	@SideOnly( Side.CLIENT )
 	private ItemRendering itemRendering;
 
-	private CreativeTabs creativeTab = CreativeTab.instance;
+	private ItemGroup creativeTab = CreativeTab.instance;
 
 	ItemDefinitionBuilder( FeatureFactory factory, String registryName, Supplier<Item> itemSupplier )
 	{
@@ -97,7 +97,7 @@ class ItemDefinitionBuilder implements IItemBuilder
 	}
 
 	@Override
-	public IItemBuilder creativeTab( CreativeTabs tab )
+	public IItemBuilder creativeTab( ItemGroup tab )
 	{
 		this.creativeTab = tab;
 		return this;

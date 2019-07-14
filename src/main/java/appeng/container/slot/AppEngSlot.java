@@ -21,10 +21,10 @@ package appeng.container.slot;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -153,7 +153,7 @@ public class AppEngSlot extends Slot
 	}
 
 	@Override
-	public boolean canTakeStack( final EntityPlayer par1EntityPlayer )
+	public boolean canTakeStack( final PlayerEntity par1EntityPlayer )
 	{
 		if( this.isSlotEnabled() )
 		{

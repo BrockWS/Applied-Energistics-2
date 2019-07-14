@@ -23,7 +23,7 @@ import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -109,7 +109,7 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 	{
 		if( is.hasTagCompound() )
 		{
-			final NBTTagCompound c = is.getTagCompound();
+			final CompoundNBT c = is.getTagCompound();
 			return new WorldCoord( c.getInteger( NBT_SIZE_X_KEY ), c.getInteger( NBT_SIZE_Y_KEY ), c.getInteger( NBT_SIZE_Z_KEY ) );
 		}
 		return new WorldCoord( 0, 0, 0 );
@@ -120,7 +120,7 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 	{
 		if( is.hasTagCompound() )
 		{
-			final NBTTagCompound c = is.getTagCompound();
+			final CompoundNBT c = is.getTagCompound();
 			return c.getInteger( NBT_CELL_ID_KEY );
 		}
 		return -1;
@@ -180,7 +180,7 @@ public class ItemSpatialStorageCell extends AEBaseItem implements ISpatialStorag
 
 	private void setStorageCell( final ItemStack is, int id, BlockPos size )
 	{
-		final NBTTagCompound c = Platform.openNbtData( is );
+		final CompoundNBT c = Platform.openNbtData( is );
 
 		c.setInteger( NBT_CELL_ID_KEY, id );
 		c.setInteger( NBT_SIZE_X_KEY, size.getX() );

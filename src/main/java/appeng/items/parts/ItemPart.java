@@ -35,12 +35,12 @@ import javax.annotation.Nullable;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -154,11 +154,11 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 	}
 
 	@Override
-	public EnumActionResult onItemUse( final EntityPlayer player, final World w, final BlockPos pos, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
+	public ActionResultType onItemUse( final PlayerEntity player, final World w, final BlockPos pos, final Hand hand, final Direction side, final float hitX, final float hitY, final float hitZ )
 	{
 		if( this.getTypeByStack( player.getHeldItem( hand ) ) == PartType.INVALID_TYPE )
 		{
-			return EnumActionResult.FAIL;
+			return ActionResultType.FAIL;
 		}
 
 		return AEApi.instance().partHelper().placeBus( player.getHeldItem( hand ), pos, side, player, hand, w );
@@ -197,7 +197,7 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 	}
 
 	@Override
-	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		final List<Entry<Integer, PartTypeWithVariant>> types = new ArrayList<>( this.registered.entrySet() );
 		Collections.sort( types, REGISTERED_COMPARATOR );

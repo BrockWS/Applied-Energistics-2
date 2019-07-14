@@ -42,12 +42,12 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -328,7 +328,7 @@ public class ApiPart implements IPartHelper
 	}
 
 	@Override
-	public EnumActionResult placeBus( final ItemStack is, final BlockPos pos, final EnumFacing side, final EntityPlayer player, final EnumHand hand, final World w )
+	public ActionResultType placeBus( final ItemStack is, final BlockPos pos, final Direction side, final PlayerEntity player, final Hand hand, final World w )
 	{
 		return PartPlacement.place( is, pos, side, player, hand, w, PartPlacement.PlaceType.PLACE_ITEM, 0 );
 	}

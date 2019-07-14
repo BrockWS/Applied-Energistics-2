@@ -19,7 +19,7 @@
 package appeng.container.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.config.FuzzyMode;
@@ -41,7 +41,7 @@ public class ContainerFormationPlane extends ContainerUpgradeable
 	@GuiSync( 6 )
 	public YesNo placeMode;
 
-	public ContainerFormationPlane( final InventoryPlayer ip, final PartFormationPlane te )
+	public ContainerFormationPlane( final PlayerInventory ip, final PartFormationPlane te )
 	{
 		super( ip, te );
 	}

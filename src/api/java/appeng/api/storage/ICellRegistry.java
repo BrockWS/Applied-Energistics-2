@@ -28,7 +28,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import appeng.api.IAppEngApi;
 import appeng.api.storage.data.IAEStack;
@@ -45,9 +44,6 @@ public interface ICellRegistry
 
 	/**
 	 * Register a new handler.
-	 *
-	 * Never be call before {@link FMLInitializationEvent} was handled by AE2.
-	 * Will throw an exception otherwise.
 	 *
 	 * @param handler cell handler
 	 */
@@ -84,7 +80,7 @@ public interface ICellRegistry
 	 * get the handler, for the requested channel.
 	 *
 	 * @param channel requested channel
-	 * @param Cell ItemStack
+	 * @param is Cell
 	 * @return the handler registered for this channel.
 	 */
 	@Nullable

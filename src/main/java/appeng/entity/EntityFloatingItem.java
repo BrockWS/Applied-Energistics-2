@@ -19,12 +19,12 @@
 package appeng.entity;
 
 
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 
-public final class EntityFloatingItem extends EntityItem
+public final class EntityFloatingItem extends ItemEntity
 {
 
 	private final ICanDie parent;

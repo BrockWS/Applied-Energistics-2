@@ -24,18 +24,18 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -113,8 +113,8 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 
 			final BlockPos pos = te.getPos();
 
-			final EnumFacing e = bch.getWorldX();
-			final EnumFacing u = bch.getWorldY();
+			final Direction e = bch.getWorldX();
+			final Direction u = bch.getWorldY();
 
 			if( this.isAnnihilationPlane( te.getWorld().getTileEntity( pos.offset( e.getOpposite() ) ), this.getSide() ) )
 			{
@@ -148,33 +148,33 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	public PlaneConnections getConnections()
 	{
 
-		final EnumFacing facingRight, facingUp;
+		final Direction facingRight, facingUp;
 		AEPartLocation location = this.getSide();
 		switch( location )
 		{
 			case UP:
-				facingRight = EnumFacing.EAST;
-				facingUp = EnumFacing.NORTH;
+				facingRight = Direction.EAST;
+				facingUp = Direction.NORTH;
 				break;
 			case DOWN:
-				facingRight = EnumFacing.WEST;
-				facingUp = EnumFacing.NORTH;
+				facingRight = Direction.WEST;
+				facingUp = Direction.NORTH;
 				break;
 			case NORTH:
-				facingRight = EnumFacing.WEST;
-				facingUp = EnumFacing.UP;
+				facingRight = Direction.WEST;
+				facingUp = Direction.UP;
 				break;
 			case SOUTH:
-				facingRight = EnumFacing.EAST;
-				facingUp = EnumFacing.UP;
+				facingRight = Direction.EAST;
+				facingUp = Direction.UP;
 				break;
 			case WEST:
-				facingRight = EnumFacing.SOUTH;
-				facingUp = EnumFacing.UP;
+				facingRight = Direction.SOUTH;
+				facingUp = Direction.UP;
 				break;
 			case EAST:
-				facingRight = EnumFacing.NORTH;
-				facingUp = EnumFacing.UP;
+				facingRight = Direction.NORTH;
+				facingUp = Direction.UP;
 				break;
 			default:
 			case INTERNAL:
@@ -215,7 +215,7 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	}
 
 	@Override
-	public void onNeighborChanged( IBlockAccess w, BlockPos pos, BlockPos neighbor )
+	public void onNeighborChanged( IEnviromentBlockReader w, BlockPos pos, BlockPos neighbor )
 	{
 		if( pos.offset( this.getSide().getFacing() ).equals( neighbor ) )
 		{
@@ -226,7 +226,7 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	@Override
 	public void onEntityCollision( final Entity entity )
 	{
-		if( this.isAccepting && entity instanceof EntityItem && !entity.isDead && Platform.isServer() && this.getProxy().isActive() )
+		if( this.isAccepting && entity instanceof ItemEntity && !entity.isDead && Platform.isServer() && this.getProxy().isActive() )
 		{
 			boolean capture = false;
 			final BlockPos pos = this.getTile().getPos();
@@ -286,7 +286,7 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 
 			if( capture )
 			{
-				final boolean changed = this.storeEntityItem( (EntityItem) entity );
+				final boolean changed = this.storeEntityItem( (ItemEntity) entity );
 
 				if( changed )
 				{
@@ -304,11 +304,11 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	}
 
 	/**
-	 * Stores an {@link EntityItem} inside the network and either marks it as dead or sets it to the leftover stackSize.
+	 * Stores an {@link ItemEntity} inside the network and either marks it as dead or sets it to the leftover stackSize.
 	 *
-	 * @param entityItem {@link EntityItem} to store
+	 * @param entityItem {@link ItemEntity} to store
 	 */
-	private boolean storeEntityItem( final EntityItem entityItem )
+	private boolean storeEntityItem( final ItemEntity entityItem )
 	{
 		if( !entityItem.isDead )
 		{
@@ -359,7 +359,7 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	 *
 	 * @return true, if the entity was changed otherwise false.
 	 */
-	private boolean handleOverflow( final EntityItem entityItem, final IAEItemStack overflow )
+	private boolean handleOverflow( final ItemEntity entityItem, final IAEItemStack overflow )
 	{
 		if( overflow == null || overflow.getStackSize() == 0 )
 		{
@@ -409,7 +409,7 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 			try
 			{
 				final TileEntity te = this.getTile();
-				final WorldServer w = (WorldServer) te.getWorld();
+				final ServerWorld w = (ServerWorld) te.getWorld();
 
 				final BlockPos pos = te.getPos().offset( this.getSide().getFacing() );
 				final IEnergyGrid energy = this.getProxy().getEnergy();
@@ -471,9 +471,9 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	/**
 	 * Checks if this plane can handle the block at the specific coordinates.
 	 */
-	private boolean canHandleBlock( final WorldServer w, final BlockPos pos )
+	private boolean canHandleBlock( final ServerWorld w, final BlockPos pos )
 	{
-		final IBlockState state = w.getBlockState( pos );
+		final BlockState state = w.getBlockState( pos );
 		final Material material = state.getMaterial();
 		final float hardness = state.getBlockHardness( w, pos );
 		final boolean ignoreMaterials = material == Material.AIR || material == Material.LAVA || material == Material.WATER || material.isLiquid();
@@ -485,7 +485,7 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 				pos );
 	}
 
-	protected List<ItemStack> obtainBlockDrops( final WorldServer w, final BlockPos pos )
+	protected List<ItemStack> obtainBlockDrops( final ServerWorld w, final BlockPos pos )
 	{
 		final ItemStack[] out = Platform.getBlockDrops( w, pos );
 		return Lists.newArrayList( out );
@@ -494,9 +494,9 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 	/**
 	 * Checks if this plane can handle the block at the specific coordinates.
 	 */
-	protected float calculateEnergyUsage( final WorldServer w, final BlockPos pos, final List<ItemStack> items )
+	protected float calculateEnergyUsage( final ServerWorld w, final BlockPos pos, final List<ItemStack> items )
 	{
-		final IBlockState state = w.getBlockState( pos );
+		final BlockState state = w.getBlockState( pos );
 		final float hardness = state.getBlockHardness( w, pos );
 
 		float requiredEnergy = 1 + hardness;
@@ -545,16 +545,16 @@ public class PartAnnihilationPlane extends PartBasicState implements IGridTickab
 		return canStore;
 	}
 
-	private void breakBlockAndStoreItems( final WorldServer w, final BlockPos pos )
+	private void breakBlockAndStoreItems( final ServerWorld w, final BlockPos pos )
 	{
 		w.destroyBlock( pos, true );
 
 		final AxisAlignedBB box = new AxisAlignedBB( pos ).grow( 0.2 );
-		for( final Object ei : w.getEntitiesWithinAABB( EntityItem.class, box ) )
+		for( final Object ei : w.getEntitiesWithinAABB( ItemEntity.class, box ) )
 		{
-			if( ei instanceof EntityItem )
+			if( ei instanceof ItemEntity )
 			{
-				final EntityItem entityItem = (EntityItem) ei;
+				final ItemEntity entityItem = (ItemEntity) ei;
 				this.storeEntityItem( entityItem );
 			}
 		}

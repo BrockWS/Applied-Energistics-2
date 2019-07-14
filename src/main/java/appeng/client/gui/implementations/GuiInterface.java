@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.config.Settings;
 import appeng.api.config.YesNo;
@@ -47,7 +47,7 @@ public class GuiInterface extends GuiUpgradeable
 	private GuiImgButton BlockMode;
 	private GuiToggleButton interfaceMode;
 
-	public GuiInterface( final InventoryPlayer inventoryPlayer, final IInterfaceHost te )
+	public GuiInterface( final PlayerInventory inventoryPlayer, final IInterfaceHost te )
 	{
 		super( new ContainerInterface( inventoryPlayer, te ) );
 		this.ySize = 211;

@@ -19,9 +19,9 @@
 package appeng.client.render.crafting;
 
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,7 +45,7 @@ public class CraftingMonitorTESR extends TileEntitySpecialRenderer<TileCraftingM
 			return;
 		}
 
-		EnumFacing facing = te.getForward();
+		Direction facing = te.getForward();
 
 		IAEItemStack jobProgress = te.getJobProgress();
 		if( jobProgress != null )

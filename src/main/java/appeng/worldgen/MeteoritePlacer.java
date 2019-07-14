@@ -25,17 +25,20 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.util.math.RayTraceResult;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IBlockDefinition;
@@ -67,7 +70,7 @@ public final class MeteoritePlacer
 	private double realCrater = this.meteoriteSize * 2 + 5;
 	private double squaredMeteoriteSize = this.meteoriteSize * this.meteoriteSize;
 	private double crater = this.realCrater * this.realCrater;
-	private NBTTagCompound settings;
+	private CompoundNBT settings;
 	private Fallout type;
 
 	public MeteoritePlacer()
@@ -76,6 +79,8 @@ public final class MeteoritePlacer
 
 		this.skyChestDefinition = blocks.skyStoneChest();
 		this.skyStoneDefinition = blocks.skyStoneBlock();
+
+		// TODO: Use tags instead
 
 		this.validSpawn.add( Blocks.STONE );
 		this.validSpawn.add( Blocks.COBBLESTONE );
@@ -88,13 +93,13 @@ public final class MeteoritePlacer
 		this.validSpawn.add( Blocks.GOLD_ORE );
 		this.validSpawn.add( Blocks.DIAMOND_ORE );
 		this.validSpawn.add( Blocks.REDSTONE_ORE );
-		this.validSpawn.add( Blocks.HARDENED_CLAY );
+		this.validSpawn.add( Blocks.TERRACOTTA );
 		this.validSpawn.add( Blocks.ICE );
 		this.validSpawn.add( Blocks.SNOW );
-		this.validSpawn.add( Blocks.STAINED_HARDENED_CLAY );
+		// this.validSpawn.add( Blocks.STAINED_HARDENED_CLAY ); FIXME
 
 		this.skyStoneDefinition.maybeBlock().ifPresent( this.invalidSpawn::add );
-		this.invalidSpawn.add( Blocks.PLANKS );
+		// this.invalidSpawn.add( Blocks.PLANKS ); FIXME
 		this.invalidSpawn.add( Blocks.IRON_DOOR );
 		this.invalidSpawn.add( Blocks.IRON_BARS );
 		this.invalidSpawn.add( Blocks.OAK_DOOR );
@@ -104,35 +109,35 @@ public final class MeteoritePlacer
 		this.invalidSpawn.add( Blocks.IRON_DOOR );
 		this.invalidSpawn.add( Blocks.JUNGLE_DOOR );
 		this.invalidSpawn.add( Blocks.SPRUCE_DOOR );
-		this.invalidSpawn.add( Blocks.BRICK_BLOCK );
+		this.invalidSpawn.add( Blocks.BRICKS );
 		this.invalidSpawn.add( Blocks.CLAY );
 		this.invalidSpawn.add( Blocks.WATER );
-		this.invalidSpawn.add( Blocks.LOG );
-		this.invalidSpawn.add( Blocks.LOG2 );
+		// this.invalidSpawn.add( Blocks.LOG );
+		// this.invalidSpawn.add( Blocks.LOG2 );
 
 		this.type = new Fallout( this.putter, this.skyStoneDefinition );
 	}
 
-	boolean spawnMeteorite( final IMeteoriteWorld w, final NBTTagCompound meteoriteBlob )
+	boolean spawnMeteorite( final IMeteoriteWorld w, final CompoundNBT meteoriteBlob )
 	{
 		this.settings = meteoriteBlob;
 
-		final int x = this.settings.getInteger( "x" );
-		final int y = this.settings.getInteger( "y" );
-		final int z = this.settings.getInteger( "z" );
+		final int x = this.settings.getInt( "x" );
+		final int y = this.settings.getInt( "y" );
+		final int z = this.settings.getInt( "z" );
 
 		this.meteoriteSize = this.settings.getDouble( "real_sizeOfMeteorite" );
 		this.realCrater = this.settings.getDouble( "realCrater" );
 		this.squaredMeteoriteSize = this.settings.getDouble( "sizeOfMeteorite" );
 		this.crater = this.settings.getDouble( "crater" );
 
-		final Block blk = Block.getBlockById( this.settings.getInteger( "blk" ) );
+		final Block blk = Block.getStateById( this.settings.getInt( "blk" ) ).getBlock();
 
 		if( blk == Blocks.SAND )
 		{
 			this.type = new FalloutSand( w, x, y, z, this.putter, this.skyStoneDefinition );
 		}
-		else if( blk == Blocks.HARDENED_CLAY )
+		else if( blk == Blocks.TERRACOTTA )
 		{
 			this.type = new FalloutCopy( w, x, y, z, this.putter, this.skyStoneDefinition );
 		}
@@ -141,7 +146,7 @@ public final class MeteoritePlacer
 			this.type = new FalloutSnow( w, x, y, z, this.putter, this.skyStoneDefinition );
 		}
 
-		final int skyMode = this.settings.getInteger( "skyMode" );
+		final int skyMode = this.settings.getInt( "skyMode" );
 
 		// creator
 		if( skyMode > 10 )
@@ -204,11 +209,11 @@ public final class MeteoritePlacer
 		}
 
 		for( final Object o : w.getWorld()
-				.getEntitiesWithinAABB( EntityItem.class,
+				.getEntitiesWithinAABB( ItemEntity.class,
 						new AxisAlignedBB( w.minX( x - 30 ), y - 5, w.minZ( z - 30 ), w.maxX( x + 30 ), y + 30, w.maxZ( z + 30 ) ) ) )
 		{
 			final Entity e = (Entity) o;
-			e.setDead();
+			e.remove();
 		}
 	}
 
@@ -223,7 +228,7 @@ public final class MeteoritePlacer
 			this.skyChestDefinition.maybeBlock().ifPresent( block -> this.putter.put( w, x, y, z, block ) );
 
 			final TileEntity te = w.getTileEntity( x, y, z );
-			final InventoryAdaptor ap = InventoryAdaptor.getAdaptor( te, EnumFacing.UP );
+			final InventoryAdaptor ap = InventoryAdaptor.getAdaptor( te, Direction.UP );
 			if( ap != null )
 			{
 				int primary = Math.max( 1, (int) ( Math.random() * 4 ) );
@@ -297,6 +302,7 @@ public final class MeteoritePlacer
 							break;
 						case 1:
 							final List<ItemStack> possibles = new ArrayList<>();
+							/* TODO
 							possibles.addAll( OreDictionary.getOres( "nuggetIron" ) );
 							possibles.addAll( OreDictionary.getOres( "nuggetCopper" ) );
 							possibles.addAll( OreDictionary.getOres( "nuggetTin" ) );
@@ -305,8 +311,8 @@ public final class MeteoritePlacer
 							possibles.addAll( OreDictionary.getOres( "nuggetPlatinum" ) );
 							possibles.addAll( OreDictionary.getOres( "nuggetNickel" ) );
 							possibles.addAll( OreDictionary.getOres( "nuggetAluminium" ) );
-							possibles.addAll( OreDictionary.getOres( "nuggetElectrum" ) );
-							possibles.add( new ItemStack( net.minecraft.init.Items.GOLD_NUGGET ) );
+							possibles.addAll( OreDictionary.getOres( "nuggetElectrum" ) );*/
+							possibles.add( new ItemStack( net.minecraft.item.Items.GOLD_NUGGET ) );
 
 							ItemStack nugget = Platform.pickRandom( possibles );
 							if( !nugget.isEmpty() )
@@ -376,7 +382,7 @@ public final class MeteoritePlacer
 
 						if( blk_b != blk )
 						{
-							final IBlockState meta_b = w.getBlockState( i, j + 1, k );
+							final BlockState meta_b = w.getBlockState( i, j + 1, k );
 
 							w.setBlock( i, j, k, meta_b, 3 );
 						}
@@ -427,8 +433,8 @@ public final class MeteoritePlacer
 
 	double getSqDistance( final int x, final int z )
 	{
-		final int chunkX = this.settings.getInteger( "x" ) - x;
-		final int chunkZ = this.settings.getInteger( "z" ) - z;
+		final int chunkX = this.settings.getInt( "x" ) - x;
+		final int chunkZ = this.settings.getInt( "z" ) - z;
 
 		return chunkX * chunkX + chunkZ * chunkZ;
 	}
@@ -447,24 +453,24 @@ public final class MeteoritePlacer
 			return false; // must spawn on a valid block..
 		}
 
-		this.settings = new NBTTagCompound();
-		this.settings.setInteger( "x", x );
-		this.settings.setInteger( "y", y );
-		this.settings.setInteger( "z", z );
-		this.settings.setInteger( "blk", Block.getIdFromBlock( blk ) );
+		this.settings = new CompoundNBT();
+		this.settings.putInt( "x", x );
+		this.settings.putInt( "y", y );
+		this.settings.putInt( "z", z );
+		this.settings.putInt( "blk", Block.getStateId( w.getBlockState( x, y, z ) ) );
 
-		this.settings.setDouble( "real_sizeOfMeteorite", this.meteoriteSize );
-		this.settings.setDouble( "realCrater", this.realCrater );
-		this.settings.setDouble( "sizeOfMeteorite", this.squaredMeteoriteSize );
-		this.settings.setDouble( "crater", this.crater );
+		this.settings.putDouble( "real_sizeOfMeteorite", this.meteoriteSize );
+		this.settings.putDouble( "realCrater", this.realCrater );
+		this.settings.putDouble( "sizeOfMeteorite", this.squaredMeteoriteSize );
+		this.settings.putDouble( "crater", this.crater );
 
-		this.settings.setBoolean( "lava", Math.random() > 0.9 );
+		this.settings.putBoolean( "lava", Math.random() > 0.9 );
 
 		if( blk == Blocks.SAND )
 		{
 			this.type = new FalloutSand( w, x, y, z, this.putter, this.skyStoneDefinition );
 		}
-		else if( blk == Blocks.HARDENED_CLAY )
+		else if( blk == Blocks.TERRACOTTA )
 		{
 			this.type = new FalloutCopy( w, x, y, z, this.putter, this.skyStoneDefinition );
 		}
@@ -559,16 +565,16 @@ public final class MeteoritePlacer
 				this.decay( w, x, y, z );
 			}
 
-			this.settings.setInteger( "skyMode", skyMode );
+			this.settings.putInt( "skyMode", skyMode );
 			w.done();
 
-			WorldData.instance().spawnData().addNearByMeteorites( w.getWorld().provider.getDimension(), x >> 4, z >> 4, this.settings );
+			WorldData.instance().spawnData().addNearByMeteorites( w.getWorld().getDimension().getType().getId(), x >> 4, z >> 4, this.settings );
 			return true;
 		}
 		return false;
 	}
 
-	NBTTagCompound getSettings()
+	CompoundNBT getSettings()
 	{
 		return this.settings;
 	}

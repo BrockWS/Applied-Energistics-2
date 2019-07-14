@@ -25,17 +25,17 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.PropertyDirection;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,13 +57,13 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	public static final PropertyDirection FACING = PropertyDirection.create( "facing" );
 
 	// Used to alternate between two variants of the fixture on adjacent blocks
-	public static final PropertyBool ODD = PropertyBool.create( "odd" );
+	public static final BooleanProperty ODD = BooleanProperty.create( "odd" );
 
 	public BlockQuartzFixture()
 	{
 		super( Material.CIRCUITS );
 
-		this.setDefaultState( this.blockState.getBaseState().withProperty( FACING, EnumFacing.UP ).withProperty( ODD, false ) );
+		this.setDefaultState( this.blockState.getBaseState().withProperty( FACING, Direction.UP ).withProperty( ODD, false ) );
 		this.setLightLevel( 0.9375F );
 		this.setLightOpacity( 0 );
 		this.setFullSize( false );
@@ -74,7 +74,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	 * Sets the "ODD" property of the block state according to the placement of the block.
 	 */
 	@Override
-	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
+	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
 	{
 		boolean oddPlacement = ( ( pos.getX() + pos.getY() + pos.getZ() ) % 2 ) != 0;
 
@@ -83,15 +83,15 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
-	public int getMetaFromState( final IBlockState state )
+	public int getMetaFromState( final BlockState state )
 	{
 		return state.getValue( FACING ).ordinal();
 	}
 
 	@Override
-	public IBlockState getStateFromMeta( final int meta )
+	public BlockState getStateFromMeta( final int meta )
 	{
-		EnumFacing facing = EnumFacing.values()[meta];
+		Direction facing = Direction.values()[meta];
 		return this.getDefaultState().withProperty( FACING, facing );
 	}
 
@@ -102,12 +102,12 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
-	public boolean isValidOrientation( final World w, final BlockPos pos, final EnumFacing forward, final EnumFacing up )
+	public boolean isValidOrientation( final World w, final BlockPos pos, final Direction forward, final Direction up )
 	{
 		return this.canPlaceAt( w, pos, up.getOpposite() );
 	}
 
-	private boolean canPlaceAt( final World w, final BlockPos pos, final EnumFacing dir )
+	private boolean canPlaceAt( final World w, final BlockPos pos, final Direction dir )
 	{
 		final BlockPos test = pos.offset( dir );
 		return w.isSideSolid( test, dir.getOpposite(), false );
@@ -116,7 +116,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	@Override
 	public Iterable<AxisAlignedBB> getSelectedBoundingBoxesFromPool( final World w, final BlockPos pos, final Entity e, final boolean isVisual )
 	{
-		final EnumFacing up = this.getOrientable( w, pos ).getUp();
+		final Direction up = this.getOrientable( w, pos ).getUp();
 		final double xOff = -0.3 * up.getFrontOffsetX();
 		final double yOff = -0.3 * up.getFrontOffsetY();
 		final double zOff = -0.3 * up.getFrontOffsetZ();
@@ -135,7 +135,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 
 	@Override
 	@SideOnly( Side.CLIENT )
-	public void randomDisplayTick( final IBlockState state, final World w, final BlockPos pos, final Random r )
+	public void randomDisplayTick( final BlockState state, final World w, final BlockPos pos, final Random r )
 	{
 		if( !AEConfig.instance().isEnableEffects() )
 		{
@@ -147,7 +147,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 			return;
 		}
 
-		final EnumFacing up = this.getOrientable( w, pos ).getUp();
+		final Direction up = this.getOrientable( w, pos ).getUp();
 		final double xOff = -0.3 * up.getFrontOffsetX();
 		final double yOff = -0.3 * up.getFrontOffsetY();
 		final double zOff = -0.3 * up.getFrontOffsetZ();
@@ -163,9 +163,9 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
-	public void neighborChanged( IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
+	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
 	{
-		final EnumFacing up = this.getOrientable( world, pos ).getUp();
+		final Direction up = this.getOrientable( world, pos ).getUp();
 		if( !this.canPlaceAt( world, pos, up.getOpposite() ) )
 		{
 			this.dropTorch( world, pos );
@@ -174,7 +174,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 
 	private void dropTorch( final World w, final BlockPos pos )
 	{
-		final IBlockState prev = w.getBlockState( pos );
+		final BlockState prev = w.getBlockState( pos );
 		w.destroyBlock( pos, true );
 		w.notifyBlockUpdate( pos, prev, w.getBlockState( pos ), 3 );
 	}
@@ -182,7 +182,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	@Override
 	public boolean canPlaceBlockAt( final World w, final BlockPos pos )
 	{
-		for( final EnumFacing dir : EnumFacing.VALUES )
+		for( final Direction dir : Direction.VALUES )
 		{
 			if( this.canPlaceAt( w, pos, dir ) )
 			{
@@ -199,7 +199,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
-	public IOrientable getOrientable( final IBlockAccess w, final BlockPos pos )
+	public IOrientable getOrientable( final IEnviromentBlockReader w, final BlockPos pos )
 	{
 		return new MetaRotation( w, pos, FACING );
 	}
@@ -211,7 +211,7 @@ public class BlockQuartzFixture extends AEBaseBlock implements IOrientableBlock,
 	}
 
 	@Override
-	public boolean isFullCube( IBlockState state )
+	public boolean isFullCube( BlockState state )
 	{
 		return false;
 	}

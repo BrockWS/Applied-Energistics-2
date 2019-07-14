@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -31,7 +31,7 @@ public abstract class BlockSlabCommon extends BlockSlab
 		this.setHardness( block.getBlockHardness( block.getDefaultState(), null, null ) );
 		this.setResistance( block.getExplosionResistance( null ) * 5.0F / 3.0F );
 
-		IBlockState iblockstate = this.blockState.getBaseState();
+		BlockState iblockstate = this.blockState.getBaseState();
 
 		if( !this.isDouble() )
 		{
@@ -39,7 +39,7 @@ public abstract class BlockSlabCommon extends BlockSlab
 		}
 
 		this.setDefaultState( iblockstate.withProperty( VARIANT, Variant.DEFAULT ) );
-		this.setCreativeTab( CreativeTabs.BUILDING_BLOCKS );
+		this.setCreativeTab( ItemGroup.BUILDING_BLOCKS );
 		this.useNeighborBrightness = true;
 	}
 
@@ -47,9 +47,9 @@ public abstract class BlockSlabCommon extends BlockSlab
 	 * Convert the given metadata into a BlockState for this Block
 	 */
 	@Override
-	public IBlockState getStateFromMeta( int meta )
+	public BlockState getStateFromMeta( int meta )
 	{
-		IBlockState iblockstate = this.getDefaultState().withProperty( VARIANT, Variant.DEFAULT );
+		BlockState iblockstate = this.getDefaultState().withProperty( VARIANT, Variant.DEFAULT );
 
 		if( !this.isDouble() )
 		{
@@ -63,7 +63,7 @@ public abstract class BlockSlabCommon extends BlockSlab
 	 * Convert the BlockState into the correct metadata value
 	 */
 	@Override
-	public int getMetaFromState( IBlockState state )
+	public int getMetaFromState( BlockState state )
 	{
 		int i = 0;
 
@@ -83,13 +83,13 @@ public abstract class BlockSlabCommon extends BlockSlab
 
 	@Override
 	@Nullable
-	public Item getItemDropped( IBlockState state, Random rand, int fortune )
+	public Item getItemDropped( BlockState state, Random rand, int fortune )
 	{
 		return Item.getItemFromBlock( this );
 	}
 
 	@Override
-	public ItemStack getItem( World worldIn, BlockPos pos, IBlockState state )
+	public ItemStack getItem( World worldIn, BlockPos pos, BlockState state )
 	{
 		return new ItemStack( this, 1, 0 );
 	}
@@ -131,13 +131,13 @@ public abstract class BlockSlabCommon extends BlockSlab
 
 		@Override
 		@Nullable
-		public Item getItemDropped( IBlockState state, Random rand, int fortune )
+		public Item getItemDropped( BlockState state, Random rand, int fortune )
 		{
 			return Item.getItemFromBlock( this.halfSlabBlock );
 		}
 
 		@Override
-		public ItemStack getItem( World worldIn, BlockPos pos, IBlockState state )
+		public ItemStack getItem( World worldIn, BlockPos pos, BlockState state )
 		{
 			return new ItemStack( this.halfSlabBlock, 1, 0 );
 		}

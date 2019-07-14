@@ -19,7 +19,7 @@
 package appeng.container.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.config.SecurityPermissions;
 import appeng.api.config.Settings;
@@ -44,7 +44,7 @@ public class ContainerInterface extends ContainerUpgradeable
 	@GuiSync( 4 )
 	public YesNo iTermMode = YesNo.YES;
 
-	public ContainerInterface( final InventoryPlayer ip, final IInterfaceHost te )
+	public ContainerInterface( final PlayerInventory ip, final IInterfaceHost te )
 	{
 		super( ip, te.getInterfaceDuality().getHost() );
 

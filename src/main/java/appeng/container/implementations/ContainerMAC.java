@@ -19,7 +19,7 @@
 package appeng.container.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
@@ -46,7 +46,7 @@ public class ContainerMAC extends ContainerUpgradeable implements IProgressProvi
 	@GuiSync( 4 )
 	public int craftProgress = 0;
 
-	public ContainerMAC( final InventoryPlayer ip, final TileMolecularAssembler te )
+	public ContainerMAC( final PlayerInventory ip, final TileMolecularAssembler te )
 	{
 		super( ip, te );
 		this.tma = te;

@@ -20,8 +20,8 @@ package appeng.container.implementations;
 
 
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,7 +44,7 @@ public class ContainerPriority extends AEBaseContainer
 	@GuiSync( 2 )
 	public long PriorityValue = -1;
 
-	public ContainerPriority( final InventoryPlayer ip, final IPriorityHost te )
+	public ContainerPriority( final PlayerInventory ip, final IPriorityHost te )
 	{
 		super( ip, (TileEntity) ( te instanceof TileEntity ? te : null ), (IPart) ( te instanceof IPart ? te : null ) );
 		this.priHost = te;
@@ -57,7 +57,7 @@ public class ContainerPriority extends AEBaseContainer
 		this.textField.setText( String.valueOf( this.PriorityValue ) );
 	}
 
-	public void setPriority( final int newValue, final EntityPlayer player )
+	public void setPriority( final int newValue, final PlayerEntity player )
 	{
 		this.priHost.setPriority( newValue );
 		this.PriorityValue = newValue;

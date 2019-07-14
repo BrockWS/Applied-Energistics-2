@@ -51,24 +51,24 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.block.model.BlockPart;
-import net.minecraft.client.renderer.block.model.BlockPartFace;
-import net.minecraft.client.renderer.block.model.BlockPartRotation;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelBlock;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.BlockFaceUV;
+import net.minecraft.client.renderer.model.BlockPart;
+import net.minecraft.client.renderer.model.BlockPartFace;
+import net.minecraft.client.renderer.model.BlockPartRotation;
+import net.minecraft.client.renderer.model.FaceBakery;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverride;
+import net.minecraft.client.renderer.model.ItemTransformVec3f;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.ModelBlock;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.Direction;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
@@ -252,7 +252,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 									new ResourceLocation( modelLocation.getResourceDomain(), "models/" + modelPath + ".json" ) );
 					reader = new InputStreamReader( iresource.getInputStream(), Charsets.UTF_8 );
 
-					lvt_5_1_ = JsonUtils.gsonDeserialize( this.UVLSERIALIZER, reader, ModelBlock.class, false );
+					lvt_5_1_ = JSONUtils.gsonDeserialize( this.UVLSERIALIZER, reader, ModelBlock.class, false );
 					lvt_5_1_.name = modelLocation.toString();
 				}
 				catch( IOException e )
@@ -304,7 +304,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 			public BlockPartFace deserialize( JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_ ) throws JsonParseException
 			{
 				JsonObject jsonobject = p_deserialize_1_.getAsJsonObject();
-				EnumFacing enumfacing = this.parseCullFace( jsonobject );
+				Direction enumfacing = this.parseCullFace( jsonobject );
 				int i = this.parseTintIndex( jsonobject );
 				String s = this.parseTexture( jsonobject );
 				BlockFaceUV blockfaceuv = (BlockFaceUV) p_deserialize_3_.deserialize( jsonobject, BlockFaceUV.class );
@@ -315,19 +315,19 @@ public enum UVLModelLoader implements ICustomModelLoader
 
 			protected int parseTintIndex( JsonObject object )
 			{
-				return JsonUtils.getInt( object, "tintindex", -1 );
+				return JSONUtils.getInt( object, "tintindex", -1 );
 			}
 
 			private String parseTexture( JsonObject object )
 			{
-				return JsonUtils.getString( object, "texture" );
+				return JSONUtils.getString( object, "texture" );
 			}
 
 			@Nullable
-			private EnumFacing parseCullFace( JsonObject object )
+			private Direction parseCullFace( JsonObject object )
 			{
-				String s = JsonUtils.getString( object, "cullface", "" );
-				return EnumFacing.byName( s );
+				String s = JSONUtils.getString( object, "cullface", "" );
+				return Direction.byName( s );
 			}
 
 			protected Pair<Float, Float> parseUVL( JsonObject object )
@@ -337,7 +337,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 					return null;
 				}
 				object = object.get( "uvlightmap" ).getAsJsonObject();
-				return new ImmutablePair<>( JsonUtils.getFloat( object, "sky", 0 ), JsonUtils.getFloat( object, "block", 0 ) );
+				return new ImmutablePair<>( JSONUtils.getFloat( object, "sky", 0 ), JSONUtils.getFloat( object, "block", 0 ) );
 			}
 		}
 
@@ -345,7 +345,7 @@ public enum UVLModelLoader implements ICustomModelLoader
 		{
 
 			@Override
-			public BakedQuad makeBakedQuad( Vector3f posFrom, Vector3f posTo, BlockPartFace face, TextureAtlasSprite sprite, EnumFacing facing, ITransformation modelRotationIn, BlockPartRotation partRotation, boolean uvLocked, boolean shade )
+			public BakedQuad makeBakedQuad( Vector3f posFrom, Vector3f posTo, BlockPartFace face, TextureAtlasSprite sprite, Direction facing, ITransformation modelRotationIn, BlockPartRotation partRotation, boolean uvLocked, boolean shade )
 			{
 				BakedQuad quad = super.makeBakedQuad( posFrom, posTo, face, sprite, facing, modelRotationIn, partRotation, uvLocked, shade );
 

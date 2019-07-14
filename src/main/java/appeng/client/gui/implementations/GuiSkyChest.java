@@ -19,7 +19,7 @@
 package appeng.client.gui.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.client.gui.AEBaseGui;
 import appeng.container.implementations.ContainerSkyChest;
@@ -31,7 +31,7 @@ import appeng.tile.storage.TileSkyChest;
 public class GuiSkyChest extends AEBaseGui
 {
 
-	public GuiSkyChest( final InventoryPlayer inventoryPlayer, final TileSkyChest te )
+	public GuiSkyChest( final PlayerInventory inventoryPlayer, final TileSkyChest te )
 	{
 		super( new ContainerSkyChest( inventoryPlayer, te ) );
 		this.ySize = 195;

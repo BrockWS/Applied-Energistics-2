@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;

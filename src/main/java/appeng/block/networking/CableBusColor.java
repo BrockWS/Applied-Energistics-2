@@ -19,10 +19,10 @@
 package appeng.block.networking;
 
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,7 +39,7 @@ public class CableBusColor implements IBlockColor
 {
 
 	@Override
-	public int colorMultiplier( IBlockState state, IBlockAccess worldIn, BlockPos pos, int color )
+	public int colorMultiplier( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos, int color )
 	{
 
 		AEColor busColor = AEColor.TRANSPARENT;

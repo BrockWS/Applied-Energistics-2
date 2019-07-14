@@ -21,7 +21,7 @@ package appeng.client.gui.implementations;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.config.SecurityPermissions;
 import appeng.api.config.SortOrder;
@@ -43,7 +43,7 @@ public class GuiSecurityStation extends GuiMEMonitorable
 	private GuiToggleButton build;
 	private GuiToggleButton security;
 
-	public GuiSecurityStation( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
+	public GuiSecurityStation( final PlayerInventory inventoryPlayer, final ITerminalHost te )
 	{
 		super( inventoryPlayer, te, new ContainerSecurityStation( inventoryPlayer, te ) );
 		this.setCustomSortOrder( false );

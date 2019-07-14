@@ -19,7 +19,7 @@
 package appeng.items.misc;
 
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.util.AEColor;

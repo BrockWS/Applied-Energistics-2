@@ -18,7 +18,7 @@
 
 package appeng.client.render;
 
-
+/*
 import java.util.Arrays;
 
 import com.google.common.collect.ImmutableMap;
@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -45,12 +45,12 @@ import appeng.bootstrap.components.IItemRegistrationComponent;
 import appeng.bootstrap.components.ItemModelComponent;
 import appeng.bootstrap.components.ItemVariantsComponent;
 import appeng.core.Api;
+*/
 
-
-@Mod( modid = "uvlightmapjsontest", name = "UVLightmapJsonTest", version = "0.0.0" )
+//@Mod( modid = "uvlightmapjsontest", name = "UVLightmapJsonTest", version = "0.0.0" )
 public class UVLightmapJsonTest
 {
-	@EventHandler
+	/*@EventHandler
 	public void preInit( FMLPreInitializationEvent event )
 	{
 		final ResourceLocation uvlblockR = new ResourceLocation( "uvlightmapjsontest", "uvlblock" );
@@ -91,5 +91,5 @@ public class UVLightmapJsonTest
 		fact.addBootstrapComponent( (IItemRegistrationComponent) ( side, registry ) -> registry.register( uvlblockItem ) );
 		fact.addBootstrapComponent( new ItemVariantsComponent( uvlblockItem, Arrays.asList( uvlblockR ) ) );
 		fact.addBootstrapComponent( new ItemModelComponent( uvlblockItem, ImmutableMap.of( 0, new ModelResourceLocation( uvlblockR, "inventory" ) ) ) );
-	}
+	}*/
 }

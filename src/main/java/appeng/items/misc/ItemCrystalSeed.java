@@ -27,10 +27,10 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -97,7 +97,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 		else
 		{
 			final int progress;
-			final NBTTagCompound comp = Platform.openNbtData( is );
+			final CompoundNBT comp = Platform.openNbtData( is );
 			comp.setInteger( "progress", progress = is.getItemDamage() );
 			is.setItemDamage( ( is.getItemDamage() / SINGLE_OFFSET ) * SINGLE_OFFSET );
 			return progress;
@@ -147,7 +147,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 
 	private void setProgress( final ItemStack is, final int newDamage )
 	{
-		final NBTTagCompound comp = Platform.openNbtData( is );
+		final CompoundNBT comp = Platform.openNbtData( is );
 		comp.setInteger( "progress", newDamage );
 		is.setItemDamage( is.getItemDamage() / LEVEL_OFFSET * LEVEL_OFFSET );
 	}
@@ -239,7 +239,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 	}
 
 	@Override
-	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		// lvl 0
 		itemStacks.add( newStyle( new ItemStack( this, 1, CERTUS ) ) );

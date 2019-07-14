@@ -28,7 +28,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.AEApi;
@@ -59,7 +59,7 @@ public class GuiCraftingStatus extends GuiCraftingCPU
 	private GuiBridge originalGui;
 	private ItemStack myIcon = ItemStack.EMPTY;
 
-	public GuiCraftingStatus( final InventoryPlayer inventoryPlayer, final ITerminalHost te )
+	public GuiCraftingStatus( final PlayerInventory inventoryPlayer, final ITerminalHost te )
 	{
 		super( new ContainerCraftingStatus( inventoryPlayer, te ) );
 

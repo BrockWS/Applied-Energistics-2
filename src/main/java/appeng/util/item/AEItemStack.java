@@ -30,7 +30,7 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
@@ -86,7 +86,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		return new AEItemStack( AEItemStackRegistry.getRegisteredStack( stack ), stack.getCount() );
 	}
 
-	public static IAEItemStack fromNBT( final NBTTagCompound i )
+	public static IAEItemStack fromNBT( final CompoundNBT i )
 	{
 		if( i == null )
 		{
@@ -107,7 +107,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	}
 
 	@Override
-	public void writeToNBT( final NBTTagCompound i )
+	public void writeToNBT( final CompoundNBT i )
 	{
 		this.getDefinition().writeToNBT( i );
 		i.setLong( "Cnt", this.getStackSize() );

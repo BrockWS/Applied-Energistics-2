@@ -32,18 +32,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.BlockStainedGlassPane;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemSnowball;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -104,13 +104,13 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 	}
 
 	@Override
-	public EnumActionResult onItemUse( EntityPlayer p, World w, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ )
+	public ActionResultType onItemUse( PlayerEntity p, World w, BlockPos pos, Hand hand, Direction side, float hitX, float hitY, float hitZ )
 	{
 		return this.onItemUse( p.getHeldItem( hand ), p, w, pos, hand, side, hitX, hitY, hitZ );
 	}
 
 	@Override
-	public EnumActionResult onItemUse( ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ )
+	public ActionResultType onItemUse( ItemStack is, PlayerEntity p, World w, BlockPos pos, Hand hand, Direction side, float hitX, float hitY, float hitZ )
 	{
 		final Block blk = w.getBlockState( pos ).getBlock();
 
@@ -137,7 +137,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 
 			if( !Platform.hasPermissions( new DimensionalCoord( w, pos ), p ) )
 			{
-				return EnumActionResult.FAIL;
+				return ActionResultType.FAIL;
 			}
 
 			final double powerPerUse = 100;
@@ -153,7 +153,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 						{
 							inv.extractItems( AEItemStack.fromItemStack( paintBall ), Actionable.MODULATE, new BaseActionSource() );
 							this.extractAEPower( is, powerPerUse, Actionable.MODULATE );
-							return EnumActionResult.SUCCESS;
+							return ActionResultType.SUCCESS;
 						}
 					}
 				}
@@ -166,7 +166,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 					inv.extractItems( AEItemStack.fromItemStack( paintBall ), Actionable.MODULATE, new BaseActionSource() );
 					this.extractAEPower( is, powerPerUse, Actionable.MODULATE );
 					( (TilePaint) painted ).cleanSide( side.getOpposite() );
-					return EnumActionResult.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			}
 			else if( !paintBall.isEmpty() )
@@ -179,7 +179,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 					{
 						inv.extractItems( AEItemStack.fromItemStack( paintBall ), Actionable.MODULATE, new BaseActionSource() );
 						this.extractAEPower( is, powerPerUse, Actionable.MODULATE );
-						return EnumActionResult.SUCCESS;
+						return ActionResultType.SUCCESS;
 					}
 				}
 			}
@@ -190,7 +190,7 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 			this.cycleColors( is, paintBall, 1 );
 		}
 
-		return EnumActionResult.FAIL;
+		return ActionResultType.FAIL;
 	}
 
 	@Override
@@ -248,10 +248,10 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 
 	public ItemStack getColor( final ItemStack is )
 	{
-		final NBTTagCompound c = is.getTagCompound();
+		final CompoundNBT c = is.getTagCompound();
 		if( c != null && c.hasKey( "color" ) )
 		{
-			final NBTTagCompound color = c.getCompoundTag( "color" );
+			final CompoundNBT color = c.getCompoundTag( "color" );
 			final ItemStack oldColor = new ItemStack( color );
 			if( !oldColor.isEmpty() )
 			{
@@ -333,22 +333,22 @@ public class ToolColorApplicator extends AEBasePoweredItem implements IStorageCe
 
 	private void setColor( final ItemStack is, final ItemStack newColor )
 	{
-		final NBTTagCompound data = Platform.openNbtData( is );
+		final CompoundNBT data = Platform.openNbtData( is );
 		if( newColor.isEmpty() )
 		{
 			data.removeTag( "color" );
 		}
 		else
 		{
-			final NBTTagCompound color = new NBTTagCompound();
+			final CompoundNBT color = new CompoundNBT();
 			newColor.writeToNBT( color );
 			data.setTag( "color", color );
 		}
 	}
 
-	private boolean recolourBlock( final Block blk, final EnumFacing side, final World w, final BlockPos pos, final EnumFacing orientation, final AEColor newColor, final EntityPlayer p )
+	private boolean recolourBlock( final Block blk, final Direction side, final World w, final BlockPos pos, final Direction orientation, final AEColor newColor, final PlayerEntity p )
 	{
-		final IBlockState state = w.getBlockState( pos );
+		final BlockState state = w.getBlockState( pos );
 
 		if( blk instanceof BlockColored )
 		{

@@ -21,8 +21,8 @@ package appeng.core;
 
 import java.util.Optional;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -30,7 +30,7 @@ import appeng.api.AEApi;
 import appeng.items.parts.ItemFacade;
 
 
-public final class CreativeTabFacade extends CreativeTabs
+public final class CreativeTabFacade extends ItemGroup
 {
 
 	public static CreativeTabFacade instance = null;

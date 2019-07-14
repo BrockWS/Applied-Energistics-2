@@ -23,7 +23,7 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
 import appeng.entity.EntityTinyTNTPrimed;
@@ -35,7 +35,7 @@ public final class DispenserBehaviorTinyTNT extends BehaviorDefaultDispenseItem
 	@Override
 	protected ItemStack dispenseStack( final IBlockSource dispenser, final ItemStack dispensedItem )
 	{
-		final EnumFacing enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
+		final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
 		final World world = dispenser.getWorld();
 		final int i = dispenser.getBlockPos().getX() + enumfacing.getFrontOffsetX();
 		final int j = dispenser.getBlockPos().getY() + enumfacing.getFrontOffsetY();

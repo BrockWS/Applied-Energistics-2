@@ -20,13 +20,13 @@ package appeng.block.crafting;
 
 
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -60,11 +60,11 @@ public class BlockCraftingMonitor extends BlockCraftingUnit
 	}
 
 	@Override
-	public IExtendedBlockState getExtendedState( IBlockState state, IBlockAccess world, BlockPos pos )
+	public IExtendedBlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
 	{
 		AEColor color = AEColor.TRANSPARENT;
-		EnumFacing forward = EnumFacing.NORTH;
-		EnumFacing up = EnumFacing.UP;
+		Direction forward = Direction.NORTH;
+		Direction up = Direction.UP;
 
 		TileCraftingMonitorTile te = this.getTileEntity( world, pos );
 		if( te != null )
@@ -82,7 +82,7 @@ public class BlockCraftingMonitor extends BlockCraftingUnit
 
 	@Override
 	@SideOnly( Side.CLIENT )
-	public void getSubBlocks( final CreativeTabs tabs, final NonNullList<ItemStack> itemStacks )
+	public void getSubBlocks( final ItemGroup tabs, final NonNullList<ItemStack> itemStacks )
 	{
 		itemStacks.add( new ItemStack( this, 1, 0 ) );
 	}

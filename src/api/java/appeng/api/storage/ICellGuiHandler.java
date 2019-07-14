@@ -2,7 +2,7 @@
 package appeng.api.storage;
 
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.implementations.tiles.IChestOrDrive;
@@ -42,6 +42,6 @@ public interface ICellGuiHandler
 	 * @param is item
 	 * @param chan storage channel
 	 */
-	<T extends IAEStack<T>> void openChestGui( EntityPlayer player, IChestOrDrive chest, ICellHandler cellHandler, IMEInventoryHandler<T> inv, ItemStack is, IStorageChannel<T> chan );
+	<T extends IAEStack<T>> void openChestGui( PlayerEntity player, IChestOrDrive chest, ICellHandler cellHandler, IMEInventoryHandler<T> inv, ItemStack is, IStorageChannel<T> chan );
 
 }

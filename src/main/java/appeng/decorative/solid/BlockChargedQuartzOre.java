@@ -21,9 +21,9 @@ package appeng.decorative.solid;
 
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +42,7 @@ import appeng.core.AppEng;
 public class BlockChargedQuartzOre extends BlockQuartzOre
 {
 	@Override
-	public Item getItemDropped( final IBlockState state, final Random rand, final int fortune )
+	public Item getItemDropped( final BlockState state, final Random rand, final int fortune )
 	{
 		return AEApi.instance()
 				.definitions()
@@ -53,7 +53,7 @@ public class BlockChargedQuartzOre extends BlockQuartzOre
 	}
 
 	@Override
-	public int damageDropped( final IBlockState state )
+	public int damageDropped( final BlockState state )
 	{
 		return AEApi.instance()
 				.definitions()
@@ -65,7 +65,7 @@ public class BlockChargedQuartzOre extends BlockQuartzOre
 	}
 
 	@Override
-	public ItemStack getPickBlock( IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player )
+	public ItemStack getPickBlock( BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player )
 	{
 		return AEApi.instance()
 				.definitions()
@@ -77,7 +77,7 @@ public class BlockChargedQuartzOre extends BlockQuartzOre
 
 	@Override
 	@SideOnly( Side.CLIENT )
-	public void randomDisplayTick( final IBlockState state, final World w, final BlockPos pos, final Random r )
+	public void randomDisplayTick( final BlockState state, final World w, final BlockPos pos, final Random r )
 	{
 		if( !AEConfig.instance().isEnableEffects() )
 		{

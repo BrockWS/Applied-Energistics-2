@@ -21,10 +21,10 @@ package appeng.container.implementations;
 
 import java.util.Iterator;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
@@ -59,7 +59,7 @@ public class ContainerCellWorkbench extends ContainerUpgradeable
 	private ItemStack prevStack = ItemStack.EMPTY;
 	private int lastUpgrades = 0;
 
-	public ContainerCellWorkbench( final InventoryPlayer ip, final TileCellWorkbench te )
+	public ContainerCellWorkbench( final PlayerInventory ip, final TileCellWorkbench te )
 	{
 		super( ip, te );
 		this.workBench = te;
@@ -164,9 +164,9 @@ public class ContainerCellWorkbench extends ContainerUpgradeable
 						}
 					}
 
-					if( listener instanceof EntityPlayerMP )
+					if( listener instanceof ServerPlayerEntity )
 					{
-						( (EntityPlayerMP) listener ).isChangingQuantityOnly = false;
+						( (ServerPlayerEntity) listener ).isChangingQuantityOnly = false;
 					}
 				}
 			}

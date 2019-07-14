@@ -19,7 +19,7 @@
 package appeng.container.implementations;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.container.AEBaseContainer;
 import appeng.container.slot.SlotRestrictedInput;
@@ -31,7 +31,7 @@ public class ContainerChest extends AEBaseContainer
 
 	private final TileChest chest;
 
-	public ContainerChest( final InventoryPlayer ip, final TileChest chest )
+	public ContainerChest( final PlayerInventory ip, final TileChest chest )
 	{
 		super( ip, chest, null );
 		this.chest = chest;

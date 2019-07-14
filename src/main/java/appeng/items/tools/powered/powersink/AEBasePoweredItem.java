@@ -23,9 +23,9 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -61,7 +61,7 @@ public abstract class AEBasePoweredItem extends AEBaseItem implements IAEItemPow
 	@Override
 	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag advancedTooltips )
 	{
-		final NBTTagCompound tag = stack.getTagCompound();
+		final CompoundNBT tag = stack.getTagCompound();
 		double internalCurrentPower = 0;
 		final double internalMaxPower = this.getAEMaxPower( stack );
 
@@ -83,12 +83,12 @@ public abstract class AEBasePoweredItem extends AEBaseItem implements IAEItemPow
 	}
 
 	@Override
-	protected void getCheckedSubItems( final CreativeTabs creativeTab, final NonNullList<ItemStack> itemStacks )
+	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
 		super.getCheckedSubItems( creativeTab, itemStacks );
 
 		final ItemStack charged = new ItemStack( this, 1 );
-		final NBTTagCompound tag = Platform.openNbtData( charged );
+		final CompoundNBT tag = Platform.openNbtData( charged );
 		tag.setDouble( CURRENT_POWER_NBT_KEY, this.getAEMaxPower( charged ) );
 		tag.setDouble( MAX_POWER_NBT_KEY, this.getAEMaxPower( charged ) );
 
@@ -129,7 +129,7 @@ public abstract class AEBasePoweredItem extends AEBaseItem implements IAEItemPow
 
 		if( mode == Actionable.MODULATE )
 		{
-			final NBTTagCompound data = Platform.openNbtData( is );
+			final CompoundNBT data = Platform.openNbtData( is );
 			final double toAdd = Math.min( amount, required );
 
 			data.setDouble( CURRENT_POWER_NBT_KEY, currentStorage + toAdd );
@@ -146,7 +146,7 @@ public abstract class AEBasePoweredItem extends AEBaseItem implements IAEItemPow
 
 		if( mode == Actionable.MODULATE )
 		{
-			final NBTTagCompound data = Platform.openNbtData( is );
+			final CompoundNBT data = Platform.openNbtData( is );
 
 			data.setDouble( CURRENT_POWER_NBT_KEY, currentStorage - fulfillable );
 		}
@@ -163,7 +163,7 @@ public abstract class AEBasePoweredItem extends AEBaseItem implements IAEItemPow
 	@Override
 	public double getAECurrentPower( final ItemStack is )
 	{
-		final NBTTagCompound data = Platform.openNbtData( is );
+		final CompoundNBT data = Platform.openNbtData( is );
 
 		return data.getDouble( CURRENT_POWER_NBT_KEY );
 	}
@@ -175,7 +175,7 @@ public abstract class AEBasePoweredItem extends AEBaseItem implements IAEItemPow
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities( ItemStack stack, NBTTagCompound nbt )
+	public ICapabilityProvider initCapabilities( ItemStack stack, CompoundNBT nbt )
 	{
 		return new PoweredItemCapabilities( stack, this );
 	}

@@ -20,8 +20,8 @@ package appeng.entity;
 
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -38,7 +38,7 @@ import appeng.core.features.AEFeature;
 import appeng.util.Platform;
 
 
-public final class EntityGrowingCrystal extends EntityItem
+public final class EntityGrowingCrystal extends ItemEntity
 {
 
 	private int progress_1000 = 0;
@@ -73,7 +73,7 @@ public final class EntityGrowingCrystal extends EntityItem
 			final int i = MathHelper.floor( ( this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY ) / 2.0D );
 			final int k = MathHelper.floor( this.posZ );
 
-			final IBlockState state = this.world.getBlockState( new BlockPos( j, i, k ) );
+			final BlockState state = this.world.getBlockState( new BlockPos( j, i, k ) );
 			final Material mat = state.getMaterial();
 			final IGrowableCrystal cry = (IGrowableCrystal) is.getItem();
 

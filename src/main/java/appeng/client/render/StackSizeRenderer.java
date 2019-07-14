@@ -20,7 +20,7 @@ package appeng.client.render;
 
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import appeng.api.storage.data.IAEItemStack;
 import appeng.core.AEConfig;

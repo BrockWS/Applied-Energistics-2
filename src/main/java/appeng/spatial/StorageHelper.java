@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
 
 import appeng.api.AEApi;
@@ -63,13 +63,13 @@ public class StorageHelper
 	 */
 	private Entity teleportEntity( Entity entity, final TelDestination link )
 	{
-		final WorldServer oldWorld;
-		final WorldServer newWorld;
+		final ServerWorld oldWorld;
+		final ServerWorld newWorld;
 
 		try
 		{
-			oldWorld = (WorldServer) entity.world;
-			newWorld = (WorldServer) link.dim;
+			oldWorld = (ServerWorld) entity.world;
+			newWorld = (ServerWorld) link.dim;
 		}
 		catch( final Throwable e )
 		{
@@ -111,9 +111,9 @@ public class StorageHelper
 		// load the chunk!
 		newWorld.getChunkProvider().provideChunk( MathHelper.floor( link.x ) >> 4, MathHelper.floor( link.z ) >> 4 );
 
-		if( entity instanceof EntityPlayerMP && link.dim.provider instanceof StorageWorldProvider )
+		if( entity instanceof ServerPlayerEntity && link.dim.provider instanceof StorageWorldProvider )
 		{
-			AppEng.instance().getAdvancementTriggers().getSpatialExplorer().trigger( (EntityPlayerMP) entity );
+			AppEng.instance().getAdvancementTriggers().getSpatialExplorer().trigger( (ServerPlayerEntity) entity );
 		}
 
 		entity.changeDimension( link.dim.provider.getDimension(), new METeleporter( link ) );
@@ -230,7 +230,7 @@ public class StorageHelper
 		@Override
 		public void visit( final BlockPos pos )
 		{
-			final IBlockState state = this.dst.getBlockState( pos );
+			final BlockState state = this.dst.getBlockState( pos );
 			final Block blk = state.getBlock();
 			blk.neighborChanged( state, this.dst, pos, blk, pos );
 		}
@@ -240,9 +240,9 @@ public class StorageHelper
 	{
 
 		private final World dst;
-		private final IBlockState state;
+		private final BlockState state;
 
-		public WrapInMatrixFrame( final IBlockState state, final World dst2 )
+		public WrapInMatrixFrame( final BlockState state, final World dst2 )
 		{
 			this.dst = dst2;
 			this.state = state;

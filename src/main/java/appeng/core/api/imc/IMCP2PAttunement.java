@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.InterModComms.IMCMessage;
 
 import appeng.api.AEApi;
 import appeng.api.config.TunnelType;

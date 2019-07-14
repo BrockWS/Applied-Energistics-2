@@ -26,13 +26,13 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,28 +54,28 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick( final World w, final EntityPlayer p, final EnumHand hand )
+	public ActionResult<ItemStack> onItemRightClick( final World w, final PlayerEntity p, final Hand hand )
 	{
 		if( p.isSneaking() )
 		{
 			this.encode( p.getHeldItem( hand ), p );
 			p.swingArm( hand );
-			return new ActionResult<>( EnumActionResult.SUCCESS, p.getHeldItem( hand ) );
+			return new ActionResult<>( ActionResultType.SUCCESS, p.getHeldItem( hand ) );
 		}
 
-		return new ActionResult<>( EnumActionResult.PASS, p.getHeldItem( hand ) );
+		return new ActionResult<>( ActionResultType.PASS, p.getHeldItem( hand ) );
 	}
 
 	@Override
-	public boolean itemInteractionForEntity( ItemStack is, final EntityPlayer player, final EntityLivingBase target, final EnumHand hand )
+	public boolean itemInteractionForEntity( ItemStack is, final PlayerEntity player, final EntityLivingBase target, final Hand hand )
 	{
-		if( target instanceof EntityPlayer && !player.isSneaking() )
+		if( target instanceof PlayerEntity && !player.isSneaking() )
 		{
 			if( player.capabilities.isCreativeMode )
 			{
 				is = player.getHeldItem( hand );
 			}
-			this.encode( is, (EntityPlayer) target );
+			this.encode( is, (PlayerEntity) target );
 			player.swingArm( hand );
 			return true;
 		}
@@ -89,7 +89,7 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 		return username != null ? super.getItemStackDisplayName( is ) + " - " + username.getName() : super.getItemStackDisplayName( is );
 	}
 
-	private void encode( final ItemStack is, final EntityPlayer p )
+	private void encode( final ItemStack is, final PlayerEntity p )
 	{
 		final GameProfile username = this.getProfile( is );
 
@@ -106,11 +106,11 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	@Override
 	public void setProfile( final ItemStack itemStack, final GameProfile profile )
 	{
-		final NBTTagCompound tag = Platform.openNbtData( itemStack );
+		final CompoundNBT tag = Platform.openNbtData( itemStack );
 
 		if( profile != null )
 		{
-			final NBTTagCompound pNBT = new NBTTagCompound();
+			final CompoundNBT pNBT = new CompoundNBT();
 			NBTUtil.writeGameProfile( pNBT, profile );
 			tag.setTag( "profile", pNBT );
 		}
@@ -123,7 +123,7 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	@Override
 	public GameProfile getProfile( final ItemStack is )
 	{
-		final NBTTagCompound tag = Platform.openNbtData( is );
+		final CompoundNBT tag = Platform.openNbtData( is );
 		if( tag.hasKey( "profile" ) )
 		{
 			return NBTUtil.readGameProfileFromNBT( tag.getCompoundTag( "profile" ) );
@@ -134,7 +134,7 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	@Override
 	public EnumSet<SecurityPermissions> getPermissions( final ItemStack is )
 	{
-		final NBTTagCompound tag = Platform.openNbtData( is );
+		final CompoundNBT tag = Platform.openNbtData( is );
 		final EnumSet<SecurityPermissions> result = EnumSet.noneOf( SecurityPermissions.class );
 
 		for( final SecurityPermissions sp : SecurityPermissions.values() )
@@ -151,14 +151,14 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	@Override
 	public boolean hasPermission( final ItemStack is, final SecurityPermissions permission )
 	{
-		final NBTTagCompound tag = Platform.openNbtData( is );
+		final CompoundNBT tag = Platform.openNbtData( is );
 		return tag.getBoolean( permission.name() );
 	}
 
 	@Override
 	public void removePermission( final ItemStack itemStack, final SecurityPermissions permission )
 	{
-		final NBTTagCompound tag = Platform.openNbtData( itemStack );
+		final CompoundNBT tag = Platform.openNbtData( itemStack );
 		if( tag.hasKey( permission.name() ) )
 		{
 			tag.removeTag( permission.name() );
@@ -168,7 +168,7 @@ public class ToolBiometricCard extends AEBaseItem implements IBiometricCard
 	@Override
 	public void addPermission( final ItemStack itemStack, final SecurityPermissions permission )
 	{
-		final NBTTagCompound tag = Platform.openNbtData( itemStack );
+		final CompoundNBT tag = Platform.openNbtData( itemStack );
 		tag.setBoolean( permission.name(), true );
 	}
 

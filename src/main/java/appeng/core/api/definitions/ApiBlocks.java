@@ -24,8 +24,8 @@ import com.google.common.base.Verify;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockSlab;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -38,7 +38,7 @@ import appeng.api.definitions.IBlockDefinition;
 import appeng.api.definitions.IBlocks;
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.ITileDefinition;
-import appeng.block.AEBaseItemBlockChargeable;
+import appeng.block.AEBaseBlockItemChargeable;
 import appeng.block.crafting.BlockCraftingMonitor;
 import appeng.block.crafting.BlockCraftingStorage;
 import appeng.block.crafting.BlockCraftingUnit;
@@ -448,13 +448,13 @@ public final class ApiBlocks implements IBlocks
 				.build();
 		this.energyCell = registry.block( "energy_cell", BlockEnergyCell::new )
 				.features( AEFeature.ENERGY_CELLS )
-				.item( AEBaseItemBlockChargeable::new )
+				.item( AEBaseBlockItemChargeable::new )
 				.tileEntity( new TileEntityDefinition( TileEnergyCell.class ) )
 				.rendering( new BlockEnergyCellRendering( new ResourceLocation( AppEng.MOD_ID, "energy_cell" ) ) )
 				.build();
 		this.energyCellDense = registry.block( "dense_energy_cell", BlockDenseEnergyCell::new )
 				.features( AEFeature.ENERGY_CELLS, AEFeature.DENSE_ENERGY_CELLS )
-				.item( AEBaseItemBlockChargeable::new )
+				.item( AEBaseBlockItemChargeable::new )
 				.tileEntity( new TileEntityDefinition( TileDenseEnergyCell.class ) )
 				.rendering( new BlockEnergyCellRendering( new ResourceLocation( AppEng.MOD_ID, "dense_energy_cell" ) ) )
 				.build();
@@ -611,7 +611,7 @@ public final class ApiBlocks implements IBlocks
 		Verify.verify( itemDef.maybeItem().isPresent() );
 
 		// Return a new composite block definition that combines the single slab block with the slab item
-		return new BlockDefinition( slabId, slabBlock, (ItemBlock) itemDef.maybeItem().get() );
+		return new BlockDefinition( slabId, slabBlock, (BlockItem) itemDef.maybeItem().get() );
 	}
 
 	private static IBlockDefinition makeStairs( String registryName, FeatureFactory registry, IBlockDefinition block )

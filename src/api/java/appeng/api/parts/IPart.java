@@ -33,20 +33,18 @@ import javax.annotation.Nonnull;
 import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.networking.IGridNode;
 import appeng.api.util.AECableType;
@@ -76,7 +74,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 * {@link #requireDynamicRender()} in order for
 	 * this method to be called.
 	 */
-	@SideOnly( Side.CLIENT )
+	//@SideOnly( Side.CLIENT ) FIXME
 	default void renderDynamic( double x, double y, double z, float partialTicks, int destroyStage )
 	{
 	}
@@ -104,14 +102,14 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 *
 	 * @param data to be written nbt data
 	 */
-	void writeToNBT( NBTTagCompound data );
+	void writeToNBT( CompoundNBT data );
 
 	/**
 	 * Read the previously written NBT Data. this is the mirror for writeToNBT
 	 *
 	 * @param data to be read nbt data
 	 */
-	void readFromNBT( NBTTagCompound data );
+	void readFromNBT( CompoundNBT data );
 
 	/**
 	 * @return get the amount of light produced by the bus
@@ -125,12 +123,12 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 *
 	 * @return true if entity can climb
 	 */
-	boolean isLadder( EntityLivingBase entity );
+	boolean isLadder( LivingEntity entity );
 
 	/**
 	 * a block around the bus's host has been changed.
 	 */
-	void onNeighborChanged( IBlockAccess w, BlockPos pos, BlockPos neighbor );
+	void onNeighborChanged( IEnviromentBlockReader w, BlockPos pos, BlockPos neighbor );
 
 	/**
 	 * @return output redstone on facing side
@@ -214,7 +212,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 *
 	 * @return if your activate method performed something.
 	 */
-	boolean onActivate( EntityPlayer player, EnumHand hand, Vec3d pos );
+	boolean onActivate( PlayerEntity player, Hand hand, Vec3d pos );
 
 	/**
 	 * Called when you right click the part, very similar to Block.onActivateBlock
@@ -225,7 +223,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 *
 	 * @return if your activate method performed something, you should use false unless you really need it.
 	 */
-	boolean onShiftActivate( EntityPlayer player, EnumHand hand, Vec3d pos );
+	boolean onShiftActivate( PlayerEntity player, Hand hand, Vec3d pos );
 
 	/**
 	 * Called when you left click the part, very similar to Block.onBlockClicked
@@ -236,7 +234,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 *
 	 * @return if your activate method performed something, you should use false unless you really need it.
 	 */
-	default boolean onClicked( EntityPlayer player, EnumHand hand, Vec3d pos )
+	default boolean onClicked( PlayerEntity player, Hand hand, Vec3d pos )
 	{
 		return false;
 	}
@@ -250,7 +248,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 * 
 	 * @return if your activate method performed something, you should use false unless you really need it.
 	 */
-	default boolean onShiftClicked( EntityPlayer player, EnumHand hand, Vec3d pos )
+	default boolean onShiftClicked( PlayerEntity player, Hand hand, Vec3d pos )
 	{
 		return false;
 	}
@@ -287,7 +285,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 * @param held held item
 	 * @param side placing side
 	 */
-	void onPlacement( EntityPlayer player, EnumHand hand, ItemStack held, AEPartLocation side );
+	void onPlacement( PlayerEntity player, Hand hand, ItemStack held, AEPartLocation side );
 
 	/**
 	 * Used to determine which parts can be placed on what cables.
@@ -332,11 +330,11 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 * forwarded to parts on the appropriate
 	 * side.
 	 *
-	 * @see TileEntity#hasCapability(Capability, EnumFacing)
+	 * @see TileEntity#hasCapability(Capability, Direction)
 	 *
 	 * @return True if your part has the requested capability.
 	 */
-	default boolean hasCapability( Capability<?> capabilityClass )
+	default boolean hasCapability( Capability<?> capabilityClass ) // FIXME: Use Optional Capabilities
 	{
 		return false;
 	}
@@ -346,7 +344,7 @@ public interface IPart extends IBoxProvider, ICustomCableConnection
 	 * forwarded to parts on the appropriate
 	 * side.
 	 *
-	 * @see TileEntity#getCapability(Capability, EnumFacing)
+	 * @see TileEntity#getCapability(Capability, Direction)
 	 *
 	 * @return The capability or null.
 	 */

@@ -19,10 +19,10 @@
 package appeng.container.slot;
 
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
@@ -55,11 +55,11 @@ public class SlotRestrictedInput extends AppEngSlot
 {
 
 	private final PlacableItemType which;
-	private final InventoryPlayer p;
+	private final PlayerInventory p;
 	private boolean allowEdit = true;
 	private int stackLimit = -1;
 
-	public SlotRestrictedInput( final PlacableItemType valid, final IItemHandler i, final int slotIndex, final int x, final int y, final InventoryPlayer p )
+	public SlotRestrictedInput( final PlacableItemType valid, final IItemHandler i, final int slotIndex, final int x, final int y, final PlayerInventory p )
 	{
 		super( i, slotIndex, x, y );
 		this.which = valid;
@@ -234,7 +234,7 @@ public class SlotRestrictedInput extends AppEngSlot
 	}
 
 	@Override
-	public boolean canTakeStack( final EntityPlayer par1EntityPlayer )
+	public boolean canTakeStack( final PlayerEntity par1EntityPlayer )
 	{
 		return this.isAllowEdit();
 	}

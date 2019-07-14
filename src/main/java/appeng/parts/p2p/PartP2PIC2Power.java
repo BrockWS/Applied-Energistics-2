@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -64,7 +64,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power>
 	}
 
 	@Override
-	public void readFromNBT( NBTTagCompound tag )
+	public void readFromNBT( CompoundNBT tag )
 	{
 		super.readFromNBT( tag );
 		this.bufferedEnergy1 = tag.getDouble( TAG_BUFFERED_ENERGY_1 );
@@ -74,7 +74,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power>
 	}
 
 	@Override
-	public void writeToNBT( NBTTagCompound tag )
+	public void writeToNBT( CompoundNBT tag )
 	{
 		super.writeToNBT( tag );
 		tag.setDouble( TAG_BUFFERED_ENERGY_1, this.bufferedEnergy1 );
@@ -150,13 +150,13 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power>
 		}
 
 		@Override
-		public boolean emitsEnergyTo( IEnergyAcceptor receiver, EnumFacing side )
+		public boolean emitsEnergyTo( IEnergyAcceptor receiver, Direction side )
 		{
 			return PartP2PIC2Power.this.isOutput() && side == PartP2PIC2Power.this.getSide().getFacing();
 		}
 
 		@Override
-		public boolean acceptsEnergyFrom( IEnergyEmitter emitter, EnumFacing side )
+		public boolean acceptsEnergyFrom( IEnergyEmitter emitter, Direction side )
 		{
 			return !PartP2PIC2Power.this.isOutput() && side == PartP2PIC2Power.this.getSide().getFacing();
 		}
@@ -188,7 +188,7 @@ public class PartP2PIC2Power extends PartP2PTunnel<PartP2PIC2Power>
 		}
 
 		@Override
-		public double injectEnergy( EnumFacing directionFrom, double amount, double voltage )
+		public double injectEnergy( Direction directionFrom, double amount, double voltage )
 		{
 			TunnelCollection<PartP2PIC2Power> outs;
 			try

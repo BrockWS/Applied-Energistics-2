@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.ActionItems;
@@ -62,7 +62,7 @@ public class GuiFluidStorageBus extends GuiUpgradeable
 	private GuiImgButton clear;
 	private final PartFluidStorageBus bus;
 
-	public GuiFluidStorageBus( InventoryPlayer inventoryPlayer, PartFluidStorageBus te )
+	public GuiFluidStorageBus( PlayerInventory inventoryPlayer, PartFluidStorageBus te )
 	{
 		super( new ContainerFluidStorageBus( inventoryPlayer, te ) );
 		this.ySize = 251;

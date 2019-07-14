@@ -20,15 +20,15 @@ package appeng.block.crafting;
 
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +43,7 @@ import appeng.util.Platform;
 public class BlockMolecularAssembler extends AEBaseTileBlock
 {
 
-	public static final PropertyBool POWERED = PropertyBool.create( "powered" );
+	public static final BooleanProperty POWERED = BooleanProperty.create( "powered" );
 
 	public BlockMolecularAssembler()
 	{
@@ -60,7 +60,7 @@ public class BlockMolecularAssembler extends AEBaseTileBlock
 	}
 
 	@Override
-	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
+	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
 	{
 		boolean powered = false;
 		TileMolecularAssembler te = this.getTileEntity( worldIn, pos );
@@ -85,19 +85,19 @@ public class BlockMolecularAssembler extends AEBaseTileBlock
 
 	@SideOnly( Side.CLIENT )
 	@Override
-	public boolean canRenderInLayer( IBlockState state, BlockRenderLayer layer )
+	public boolean canRenderInLayer( BlockState state, BlockRenderLayer layer )
 	{
 		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
-	public boolean isFullCube( IBlockState state )
+	public boolean isFullCube( BlockState state )
 	{
 		return false;
 	}
 
 	@Override
-	public boolean onBlockActivated( final World w, final BlockPos pos, final IBlockState state, final EntityPlayer p, final EnumHand hand, final EnumFacing side, final float hitX, final float hitY, final float hitZ )
+	public boolean onBlockActivated( final World w, final BlockPos pos, final BlockState state, final PlayerEntity p, final Hand hand, final Direction side, final float hitX, final float hitY, final float hitZ )
 	{
 		final TileMolecularAssembler tg = this.getTileEntity( w, pos );
 		if( tg != null && !p.isSneaking() )

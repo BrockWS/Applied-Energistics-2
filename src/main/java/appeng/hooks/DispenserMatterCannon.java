@@ -22,12 +22,12 @@ package appeng.hooks;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 
 import appeng.api.util.AEPartLocation;
 import appeng.items.tools.powered.ToolMatterCannon;
@@ -43,7 +43,7 @@ public final class DispenserMatterCannon extends BehaviorDefaultDispenseItem
 		final Item i = dispensedItem.getItem();
 		if( i instanceof ToolMatterCannon )
 		{
-			final EnumFacing enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
+			final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
 			AEPartLocation dir = AEPartLocation.INTERNAL;
 			for( final AEPartLocation d : AEPartLocation.SIDE_LOCATIONS )
 			{
@@ -56,9 +56,9 @@ public final class DispenserMatterCannon extends BehaviorDefaultDispenseItem
 			final ToolMatterCannon tm = (ToolMatterCannon) i;
 
 			final World w = dispenser.getWorld();
-			if( w instanceof WorldServer )
+			if( w instanceof ServerWorld )
 			{
-				final EntityPlayer p = Platform.getPlayer( (WorldServer) w );
+				final PlayerEntity p = Platform.getPlayer( (ServerWorld) w );
 				Platform.configurePlayer( p, dir, dispenser.getBlockTileEntity() );
 
 				p.posX += dir.xOffset;

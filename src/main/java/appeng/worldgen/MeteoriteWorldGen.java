@@ -21,10 +21,10 @@ package appeng.worldgen;
 
 import java.util.Random;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import appeng.api.features.IWorldGen.WorldGenType;
@@ -40,7 +40,7 @@ import appeng.worldgen.meteorite.ChunkOnly;
 public final class MeteoriteWorldGen implements IWorldGenerator
 {
 	@Override
-	public void generate( final Random r, final int chunkX, final int chunkZ, final World w, final IChunkGenerator chunkGenerator, final IChunkProvider chunkProvider )
+	public void generate(final Random r, final int chunkX, final int chunkZ, final World w, final ChunkGenerator chunkGenerator, final AbstractChunkProvider chunkProvider )
 	{
 		if( WorldGenRegistry.INSTANCE.isWorldGenEnabled( WorldGenType.METEORITES, w ) )
 		{
@@ -71,14 +71,14 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 				{
 					for( int cz = pz - 6; cz < pz + 6; cz++ )
 					{
-						if( w.getChunkProvider().getLoadedChunk( cx, cz ) != null )
+						if( w.getChunkProvider().chunkExists( cx, cz )  )
 						{
 							if( px == cx && pz == cz )
 							{
 								continue;
 							}
 
-							if( WorldData.instance().spawnData().hasGenerated( w.provider.getDimension(), cx, cz ) )
+							if( WorldData.instance().spawnData().hasGenerated( w.getDimension().getType().getId(), cx, cz ) )
 							{
 								final MeteoritePlacer mp2 = new MeteoritePlacer();
 								mp2.spawnMeteorite( new ChunkOnly( w, cx, cz ), mp.getSettings() );
@@ -100,9 +100,9 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 		return false;
 	}
 
-	private Iterable<NBTTagCompound> getNearByMeteorites( final World w, final int chunkX, final int chunkZ )
+	private Iterable<CompoundNBT> getNearByMeteorites( final World w, final int chunkX, final int chunkZ )
 	{
-		return WorldData.instance().spawnData().getNearByMeteorites( w.provider.getDimension(), chunkX, chunkZ );
+		return WorldData.instance().spawnData().getNearByMeteorites( w.getDimension().getType().getId(), chunkX, chunkZ );
 	}
 
 	private class MeteoriteSpawn implements IWorldCallable<Object>
@@ -128,7 +128,7 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 			double minSqDist = Double.MAX_VALUE;
 
 			// near by meteorites!
-			for( final NBTTagCompound data : MeteoriteWorldGen.this.getNearByMeteorites( world, chunkX, chunkZ ) )
+			for( final CompoundNBT data : MeteoriteWorldGen.this.getNearByMeteorites( world, chunkX, chunkZ ) )
 			{
 				final MeteoritePlacer mp = new MeteoritePlacer();
 				mp.spawnMeteorite( new ChunkOnly( world, chunkX, chunkZ ), data );
@@ -143,7 +143,7 @@ public final class MeteoriteWorldGen implements IWorldGenerator
 				MeteoriteWorldGen.this.tryMeteorite( world, this.depth, this.x, this.z );
 			}
 
-			WorldData.instance().spawnData().setGenerated( world.provider.getDimension(), chunkX, chunkZ );
+			WorldData.instance().spawnData().setGenerated( world.getDimension().getType().getId(), chunkX, chunkZ );
 			WorldData.instance().compassData().service().updateArea( world, chunkX, chunkZ );
 
 			return null;

@@ -22,7 +22,7 @@ package appeng.bootstrap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.item.Item;
 
@@ -42,7 +42,7 @@ public interface IItemBuilder
 
 	IItemBuilder addFeatures( AEFeature... features );
 
-	IItemBuilder creativeTab( CreativeTabs tab );
+	IItemBuilder creativeTab( ItemGroup tab );
 
 	IItemBuilder rendering( ItemRenderingCustomizer callback );
 

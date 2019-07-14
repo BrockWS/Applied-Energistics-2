@@ -19,7 +19,7 @@
 package appeng.client.gui.widgets;
 
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import appeng.client.gui.AEBaseGui;
 

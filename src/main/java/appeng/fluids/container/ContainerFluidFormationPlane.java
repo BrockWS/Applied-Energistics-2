@@ -2,7 +2,7 @@
 package appeng.fluids.container;
 
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.config.SecurityPermissions;
@@ -17,7 +17,7 @@ public class ContainerFluidFormationPlane extends ContainerFluidConfigurable
 {
 	private final PartFluidFormationPlane plane;
 
-	public ContainerFluidFormationPlane( final InventoryPlayer ip, final PartFluidFormationPlane te )
+	public ContainerFluidFormationPlane( final PlayerInventory ip, final PartFluidFormationPlane te )
 	{
 		super( ip, te );
 		this.plane = te;

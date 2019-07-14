@@ -20,14 +20,14 @@ package appeng.decorative.solid;
 
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.block.BlockState;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import appeng.block.AEBaseBlock;
 import appeng.core.worlddata.WorldData;
@@ -61,7 +61,7 @@ public class BlockSkyStone extends AEBaseBlock
 	{
 		if( event.getState().getBlock() == this && event.getEntityPlayer() != null )
 		{
-			final ItemStack is = event.getEntityPlayer().getItemStackFromSlot( EntityEquipmentSlot.MAINHAND );
+			final ItemStack is = event.getEntityPlayer().getItemStackFromSlot( EquipmentSlotType.MAINHAND );
 			int level = -1;
 
 			if( !is.isEmpty() )
@@ -77,7 +77,7 @@ public class BlockSkyStone extends AEBaseBlock
 	}
 
 	@Override
-	public void onBlockAdded( final World w, final BlockPos pos, final IBlockState state )
+	public void onBlockAdded( final World w, final BlockPos pos, final BlockState state )
 	{
 		super.onBlockAdded( w, pos, state );
 		if( Platform.isServer() )
@@ -87,7 +87,7 @@ public class BlockSkyStone extends AEBaseBlock
 	}
 
 	@Override
-	public void breakBlock( final World w, final BlockPos pos, final IBlockState state )
+	public void breakBlock( final World w, final BlockPos pos, final BlockState state )
 	{
 		super.breakBlock( w, pos, state );
 

@@ -29,7 +29,7 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.crafting.ICraftingLink;
@@ -93,7 +93,7 @@ public interface IStorageHelper
 	 *
 	 * @return crafting link
 	 */
-	ICraftingLink loadCraftingLink( NBTTagCompound data, ICraftingRequester req );
+	ICraftingLink loadCraftingLink( CompoundNBT data, ICraftingRequester req );
 
 	/**
 	 * Extracts items from a {@link IMEInventory} respecting power requirements.

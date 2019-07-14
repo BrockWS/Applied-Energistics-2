@@ -24,7 +24,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerInventory;
 
 import appeng.api.config.Settings;
 import appeng.client.gui.AEBaseGui;
@@ -42,7 +42,7 @@ public class GuiSpatialIOPort extends AEBaseGui
 	private final ContainerSpatialIOPort container;
 	private GuiImgButton units;
 
-	public GuiSpatialIOPort( final InventoryPlayer inventoryPlayer, final TileSpatialIOPort te )
+	public GuiSpatialIOPort( final PlayerInventory inventoryPlayer, final TileSpatialIOPort te )
 	{
 		super( new ContainerSpatialIOPort( inventoryPlayer, te ) );
 		this.ySize = 199;
