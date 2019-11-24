@@ -29,31 +29,30 @@ import appeng.api.storage.data.IAEItemStack;
 import appeng.items.materials.MaterialType;
 import appeng.util.InventoryAdaptor;
 
-
 public final class BasicItemStorageCell extends AbstractStorageCell<IAEItemStack>
 {
 
 	protected final int perType;
 	protected final double idleDrain;
 
-	public BasicItemStorageCell( final MaterialType whichCell, final int kilobytes )
+	public BasicItemStorageCell( final int whichCell, final int kilobytes )
 	{
 		super( whichCell, kilobytes );
 		switch( whichCell )
 		{
-			case CELL1K_PART:
+			case 0:
 				this.idleDrain = 0.5;
 				this.perType = 8;
 				break;
-			case CELL4K_PART:
+			case 1:
 				this.idleDrain = 1.0;
 				this.perType = 32;
 				break;
-			case CELL16K_PART:
+			case 2:
 				this.idleDrain = 1.5;
 				this.perType = 128;
 				break;
-			case CELL64K_PART:
+			case 3:
 				this.idleDrain = 2.0;
 				this.perType = 512;
 				break;

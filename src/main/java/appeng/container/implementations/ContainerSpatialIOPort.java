@@ -37,122 +37,122 @@ import appeng.util.Platform;
 
 public class ContainerSpatialIOPort extends AEBaseContainer
 {
-
-	@GuiSync( 0 )
-	public long currentPower;
-	@GuiSync( 1 )
-	public long maxPower;
-	@GuiSync( 2 )
-	public long reqPower;
-	@GuiSync( 3 )
-	public long eff;
-	private IGrid network;
-	private int delay = 40;
-
-	@GuiSync( 31 )
-	public int xSize;
-	@GuiSync( 32 )
-	public int ySize;
-	@GuiSync( 33 )
-	public int zSize;
-
+//
+//	@GuiSync( 0 )
+//	public long currentPower;
+//	@GuiSync( 1 )
+//	public long maxPower;
+//	@GuiSync( 2 )
+//	public long reqPower;
+//	@GuiSync( 3 )
+//	public long eff;
+//	private IGrid network;
+//	private int delay = 40;
+//
+//	@GuiSync( 31 )
+//	public int xSize;
+//	@GuiSync( 32 )
+//	public int ySize;
+//	@GuiSync( 33 )
+//	public int zSize;
+//
 	public ContainerSpatialIOPort( final PlayerInventory ip, final TileSpatialIOPort spatialIOPort )
 	{
 		super( ip, spatialIOPort, null );
-
-		if( Platform.isServer() )
-		{
-			this.network = spatialIOPort.getGridNode( AEPartLocation.INTERNAL ).getGrid();
-		}
-
-		this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.SPATIAL_STORAGE_CELLS, spatialIOPort
-				.getInternalInventory(), 0, 52, 48, this.getInventoryPlayer() ) );
-		this.addSlotToContainer(
-				new SlotOutput( spatialIOPort.getInternalInventory(), 1, 113, 48, SlotRestrictedInput.PlacableItemType.SPATIAL_STORAGE_CELLS.IIcon ) );
-
-		this.bindPlayerInventory( ip, 0, 197 - /* height of player inventory */82 );
+//
+//		if( Platform.isServer() )
+//		{
+//			this.network = spatialIOPort.getGridNode( AEPartLocation.INTERNAL ).getGrid();
+//		}
+//
+//		this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.SPATIAL_STORAGE_CELLS, spatialIOPort
+//				.getInternalInventory(), 0, 52, 48, this.getInventoryPlayer() ) );
+//		this.addSlotToContainer(
+//				new SlotOutput( spatialIOPort.getInternalInventory(), 1, 113, 48, SlotRestrictedInput.PlacableItemType.SPATIAL_STORAGE_CELLS.IIcon ) );
+//
+//		this.bindPlayerInventory( ip, 0, 197 - /* height of player inventory */82 );
 	}
-
-	@Override
-	public void detectAndSendChanges()
-	{
-		this.verifyPermissions( SecurityPermissions.BUILD, false );
-
-		if( Platform.isServer() )
-		{
-			this.delay++;
-			if( this.delay > 15 && this.network != null )
-			{
-				this.delay = 0;
-
-				final IEnergyGrid eg = this.network.getCache( IEnergyGrid.class );
-				final ISpatialCache sc = this.network.getCache( ISpatialCache.class );
-				if( eg != null )
-				{
-					this.setCurrentPower( (long) ( 100.0 * eg.getStoredPower() ) );
-					this.setMaxPower( (long) ( 100.0 * eg.getMaxStoredPower() ) );
-					this.setRequiredPower( (long) ( 100.0 * sc.requiredPower() ) );
-					this.setEfficency( (long) ( 100.0f * sc.currentEfficiency() ) );
-
-					final DimensionalCoord min = sc.getMin();
-					final DimensionalCoord max = sc.getMax();
-
-					if( min != null && max != null && sc.isValidRegion() )
-					{
-						this.xSize = sc.getMax().x - sc.getMin().x - 1;
-						this.ySize = sc.getMax().y - sc.getMin().y - 1;
-						this.zSize = sc.getMax().z - sc.getMin().z - 1;
-					}
-					else
-					{
-						this.xSize = 0;
-						this.ySize = 0;
-						this.zSize = 0;
-					}
-				}
-			}
-		}
-
-		super.detectAndSendChanges();
-	}
-
-	public long getCurrentPower()
-	{
-		return this.currentPower;
-	}
-
-	private void setCurrentPower( final long currentPower )
-	{
-		this.currentPower = currentPower;
-	}
-
-	public long getMaxPower()
-	{
-		return this.maxPower;
-	}
-
-	private void setMaxPower( final long maxPower )
-	{
-		this.maxPower = maxPower;
-	}
-
-	public long getRequiredPower()
-	{
-		return this.reqPower;
-	}
-
-	private void setRequiredPower( final long reqPower )
-	{
-		this.reqPower = reqPower;
-	}
-
-	public long getEfficency()
-	{
-		return this.eff;
-	}
-
-	private void setEfficency( final long eff )
-	{
-		this.eff = eff;
-	}
+//
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		this.verifyPermissions( SecurityPermissions.BUILD, false );
+//
+//		if( Platform.isServer() )
+//		{
+//			this.delay++;
+//			if( this.delay > 15 && this.network != null )
+//			{
+//				this.delay = 0;
+//
+//				final IEnergyGrid eg = this.network.getCache( IEnergyGrid.class );
+//				final ISpatialCache sc = this.network.getCache( ISpatialCache.class );
+//				if( eg != null )
+//				{
+//					this.setCurrentPower( (long) ( 100.0 * eg.getStoredPower() ) );
+//					this.setMaxPower( (long) ( 100.0 * eg.getMaxStoredPower() ) );
+//					this.setRequiredPower( (long) ( 100.0 * sc.requiredPower() ) );
+//					this.setEfficency( (long) ( 100.0f * sc.currentEfficiency() ) );
+//
+//					final DimensionalCoord min = sc.getMin();
+//					final DimensionalCoord max = sc.getMax();
+//
+//					if( min != null && max != null && sc.isValidRegion() )
+//					{
+//						this.xSize = sc.getMax().x - sc.getMin().x - 1;
+//						this.ySize = sc.getMax().y - sc.getMin().y - 1;
+//						this.zSize = sc.getMax().z - sc.getMin().z - 1;
+//					}
+//					else
+//					{
+//						this.xSize = 0;
+//						this.ySize = 0;
+//						this.zSize = 0;
+//					}
+//				}
+//			}
+//		}
+//
+//		super.detectAndSendChanges();
+//	}
+//
+//	public long getCurrentPower()
+//	{
+//		return this.currentPower;
+//	}
+//
+//	private void setCurrentPower( final long currentPower )
+//	{
+//		this.currentPower = currentPower;
+//	}
+//
+//	public long getMaxPower()
+//	{
+//		return this.maxPower;
+//	}
+//
+//	private void setMaxPower( final long maxPower )
+//	{
+//		this.maxPower = maxPower;
+//	}
+//
+//	public long getRequiredPower()
+//	{
+//		return this.reqPower;
+//	}
+//
+//	private void setRequiredPower( final long reqPower )
+//	{
+//		this.reqPower = reqPower;
+//	}
+//
+//	public long getEfficency()
+//	{
+//		return this.eff;
+//	}
+//
+//	private void setEfficency( final long eff )
+//	{
+//		this.eff = eff;
+//	}
 }

@@ -18,49 +18,49 @@
 
 package appeng.integration.modules.theoneprobe.tile;
 
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.api.networking.energy.IAEPowerStorage;
+//import appeng.integration.modules.theoneprobe.TheOneProbeText;
+//import appeng.tile.AEBaseTile;
+//import appeng.util.Platform;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
 
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.api.networking.energy.IAEPowerStorage;
-import appeng.integration.modules.theoneprobe.TheOneProbeText;
-import appeng.tile.AEBaseTile;
-import appeng.util.Platform;
-
-
-public class PowerStorageInfoProvider implements ITileProbInfoProvider
+public class PowerStorageInfoProvider //implements ITileProbInfoProvider
 {
-
-	@Override
-	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
-	{
-		if( tile instanceof IAEPowerStorage )
-		{
-			final IAEPowerStorage storage = (IAEPowerStorage) tile;
-			final double maxPower = storage.getAEMaxPower();
-
-			if( maxPower > 0 )
-			{
-				final long internalCurrentPower = (long) ( storage.getAECurrentPower() * 100 );
-
-				if( internalCurrentPower >= 0 )
-				{
-					final long internalMaxPower = (long) ( 100 * maxPower );
-
-					final String formatCurrentPower = Platform.formatPowerLong( internalCurrentPower, false );
-					final String formatMaxPower = Platform.formatPowerLong( internalMaxPower, false );
-					final String formattedString = String.format( TheOneProbeText.STORED_ENERGY.getLocal(), formatCurrentPower, formatMaxPower );
-
-					probeInfo.text( formattedString );
-				}
-			}
-		}
-
-	}
+//
+//	@Override
+//	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
+//	{
+//		if( tile instanceof IAEPowerStorage )
+//		{
+//			final IAEPowerStorage storage = (IAEPowerStorage) tile;
+//			final double maxPower = storage.getAEMaxPower();
+//
+//			if( maxPower > 0 )
+//			{
+//				final long internalCurrentPower = (long) ( storage.getAECurrentPower() * 100 );
+//
+//				if( internalCurrentPower >= 0 )
+//				{
+//					final long internalMaxPower = (long) ( 100 * maxPower );
+//
+//					final String formatCurrentPower = Platform.formatPowerLong( internalCurrentPower, false );
+//					final String formatMaxPower = Platform.formatPowerLong( internalMaxPower, false );
+//					final String formattedString = String.format( TheOneProbeText.STORED_ENERGY.getLocal(), formatCurrentPower, formatMaxPower );
+//
+//					probeInfo.text( formattedString );
+//				}
+//			}
+//		}
+//
+//	}
 
 }

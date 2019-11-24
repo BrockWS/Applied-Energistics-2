@@ -36,7 +36,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -61,6 +61,10 @@ import appeng.util.SettingsFrom;
 public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, ICustomNameObject
 {
 
+    public AEBaseTile() {
+        super(null);
+    }
+
 	private static final ThreadLocal<WeakReference<AEBaseTile>> DROP_NO_ITEMS = new ThreadLocal<>();
 	private static final Map<Class<? extends TileEntity>, IStackSrc> ITEM_STACKS = new HashMap<>();
 	private int renderFragment = 0;
@@ -71,11 +75,11 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	private BlockState state;
 	private boolean markDirtyQueued = false;
 
-	@Override
-	public boolean shouldRefresh( final World world, final BlockPos pos, final BlockState oldState, final BlockState newSate )
-	{
-		return newSate.getBlock() != oldState.getBlock(); // state doesn't change tile entities in AE2.
-	}
+//	@Override
+//	public boolean shouldRefresh( final World world, final BlockPos pos, final BlockState oldState, final BlockState newSate )
+//	{
+//		return newSate.getBlock() != oldState.getBlock(); // state doesn't change tile entities in AE2.
+//	}
 
 	public static void registerTileItem( final Class<? extends TileEntity> c, final IStackSrc wat )
 	{
@@ -121,11 +125,11 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Override
-	public void readFromNBT( final CompoundNBT data )
+	public void read( final CompoundNBT data )
 	{
-		super.readFromNBT( data );
+		super.read( data );
 
-		if( data.hasKey( "customName" ) )
+		if( data.contains( "customName" ) )
 		{
 			this.customName = data.getString( "customName" );
 		}
@@ -148,32 +152,32 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	}
 
 	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
+	public CompoundNBT write( final CompoundNBT data )
 	{
-		super.writeToNBT( data );
+		super.write( data );
 
 		if( this.canBeRotated() )
 		{
-			data.setString( "forward", this.getForward().name() );
-			data.setString( "up", this.getUp().name() );
+			data.putString( "forward", this.getForward().name() );
+			data.putString( "up", this.getUp().name() );
 		}
 
 		if( this.customName != null )
 		{
-			data.setString( "customName", this.customName );
+			data.putString( "customName", this.customName );
 		}
 
 		return data;
 	}
 
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public SUpdateTileEntityPacket getUpdatePacket()
 	{
-		return new SPacketUpdateTileEntity( this.pos, 64, this.getUpdateTag() );
+		return new SUpdateTileEntityPacket( this.pos, 64, this.getUpdateTag() );
 	}
 
 	@Override
-	public void onDataPacket( final NetworkManager net, final SPacketUpdateTileEntity pkt )
+	public void onDataPacket( final NetworkManager net, final SUpdateTileEntityPacket pkt )
 	{
 		// / pkt.actionType
 		if( pkt.getTileEntityType() == 64 )
@@ -210,7 +214,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		}
 
 		stream.capacity( stream.readableBytes() );
-		data.setByteArray( "X", stream.array() );
+		data.putByteArray( "X", stream.array() );
 		return data;
 	}
 
@@ -251,9 +255,9 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 			return new CompoundNBT();
 		}
 
-		data.setInteger( "x", this.pos.getX() );
-		data.setInteger( "y", this.pos.getY() );
-		data.setInteger( "z", this.pos.getZ() );
+		data.putInt( "x", this.pos.getX() );
+		data.putInt( "y", this.pos.getY() );
+		data.putInt( "z", this.pos.getZ() );
 		return data;
 	}
 
@@ -279,8 +283,8 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 			final Direction old_Up = this.up;
 
 			final byte orientation = data.readByte();
-			this.forward = Direction.VALUES[orientation & 0x7];
-			this.up = Direction.VALUES[orientation >> 3];
+			this.forward = Direction.values()[orientation & 0x7];
+			this.up = Direction.values()[orientation >> 3];
 
 			return this.forward != old_Forward || this.up != old_Up;
 		}
@@ -355,9 +359,9 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 
 	public void onPlacement( final ItemStack stack, final PlayerEntity player, final Direction side )
 	{
-		if( stack.hasTagCompound() )
+		if( stack.hasTag() )
 		{
-			this.uploadSettings( SettingsFrom.DISMANTLE_ITEM, stack.getTagCompound() );
+			this.uploadSettings( SettingsFrom.DISMANTLE_ITEM, stack.getTag() );
 		}
 	}
 
@@ -381,7 +385,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		if( this instanceof IPriorityHost )
 		{
 			final IPriorityHost pHost = (IPriorityHost) this;
-			pHost.setPriority( compound.getInteger( "priority" ) );
+			pHost.setPriority( compound.getInt( "priority" ) );
 		}
 
 		if( this instanceof ISegmentedInventory )
@@ -404,9 +408,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 	 * returns the contents of the tile entity, into the world, defaults to dropping everything in the inventory.
 	 *
 	 * @param w world
-	 * @param x x pos of tile entity
-	 * @param y y pos of tile entity
-	 * @param z z pos of tile entity
+	 * @param pos pos of tile entity
 	 * @param drops drops of tile entity
 	 */
 	@Override
@@ -434,8 +436,8 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		if( this.hasCustomInventoryName() )
 		{
 			final CompoundNBT dsp = new CompoundNBT();
-			dsp.setString( "Name", this.getCustomInventoryName() );
-			output.setTag( "display", dsp );
+			dsp.putString( "Name", this.getCustomInventoryName() );
+			output.put( "display", dsp );
 		}
 
 		if( this instanceof IConfigurableObject )
@@ -450,7 +452,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 		if( this instanceof IPriorityHost )
 		{
 			final IPriorityHost pHost = (IPriorityHost) this;
-			output.setInteger( "priority", pHost.getPriority() );
+			output.putInt( "priority", pHost.getPriority() );
 		}
 
 		if( this instanceof ISegmentedInventory )
@@ -462,7 +464,7 @@ public class AEBaseTile extends TileEntity implements IOrientable, ICommonTile, 
 			}
 		}
 
-		return output.hasNoTags() ? null : output;
+		return output.isEmpty() ? null : output;
 	}
 
 	@Override

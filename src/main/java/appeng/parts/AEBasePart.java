@@ -32,7 +32,7 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -43,8 +43,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.AEApi;
@@ -82,6 +82,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 
 	private final AENetworkProxy proxy;
 	private final ItemStack is;
+	private final PartType type;
 	private TileEntity tile = null;
 	private IPartHost host = null;
 	private AEPartLocation side = null;
@@ -91,6 +92,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		Preconditions.checkNotNull( is );
 
 		this.is = is;
+		this.type = ((ItemPart) is.getItem()).type;
 		this.proxy = new AENetworkProxy( this, "part", is, this instanceof PartCable );
 		this.proxy.setValidSides( EnumSet.noneOf( Direction.class ) );
 	}
@@ -102,7 +104,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 
 	public PartType getType()
 	{
-		return ItemPart.instance.getTypeByStack( this.is );
+		return this.type;
 	}
 
 	@Override
@@ -189,7 +191,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	@Override
 	public String getCustomInventoryName()
 	{
-		return this.getItemStack().getDisplayName();
+		return this.getItemStack().getDisplayName().getUnformattedComponentText();
 	}
 
 	@Override
@@ -200,7 +202,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 
 	public void addEntityCrashInfo( final CrashReportCategory crashreportcategory )
 	{
-		crashreportcategory.addCrashSection( "Part Side", this.getSide() );
+		crashreportcategory.addDetail( "Part Side", this.getSide() );
 	}
 
 	@Override
@@ -209,7 +211,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		if( type == PartItemStack.NETWORK )
 		{
 			final ItemStack copy = this.is.copy();
-			copy.setTagCompound( null );
+			copy.setTag( null );
 			return copy;
 		}
 		return this.is;
@@ -308,7 +310,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public void randomDisplayTick( final World world, final BlockPos pos, final Random r )
 	{
 
@@ -333,7 +335,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 	}
 
 	@Override
-	public boolean isLadder( final EntityLivingBase entity )
+	public boolean isLadder( final LivingEntity entity )
 	{
 		return false;
 	}
@@ -370,7 +372,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		if( this instanceof IPriorityHost )
 		{
 			final IPriorityHost pHost = (IPriorityHost) this;
-			pHost.setPriority( compound.getInteger( "priority" ) );
+			pHost.setPriority( compound.getInt( "priority" ) );
 		}
 
 		final IItemHandler inv = this.getInventoryByName( "config" );
@@ -406,7 +408,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 		if( this instanceof IPriorityHost )
 		{
 			final IPriorityHost pHost = (IPriorityHost) this;
-			output.setInteger( "priority", pHost.getPriority() );
+			output.putInt( "priority", pHost.getPriority() );
 		}
 
 		final IItemHandler inv = this.getInventoryByName( "config" );
@@ -415,7 +417,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 			( (AppEngInternalAEInventory) inv ).writeToNBT( output, "config" );
 		}
 
-		return output.hasNoTags() ? null : output;
+		return output.isEmpty() ? null : output;
 	}
 
 	public boolean useStandardMemoryCard()
@@ -444,7 +446,7 @@ public abstract class AEBasePart implements IPart, IGridProxyable, IActionHost, 
 				}
 			}
 
-			final String name = is.getUnlocalizedName();
+			final String name = is.getTranslationKey();
 
 			if( player.isSneaking() )
 			{

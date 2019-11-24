@@ -18,49 +18,49 @@
 
 package appeng.integration.modules.theoneprobe.part;
 
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.api.parts.IPart;
+//import appeng.integration.modules.theoneprobe.TheOneProbeText;
+//import appeng.parts.networking.PartCableSmart;
+//import appeng.parts.networking.PartDenseCableSmart;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
 
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.api.parts.IPart;
-import appeng.integration.modules.theoneprobe.TheOneProbeText;
-import appeng.parts.networking.PartCableSmart;
-import appeng.parts.networking.PartDenseCableSmart;
-
-
-public class ChannelInfoProvider implements IPartProbInfoProvider
+public class ChannelInfoProvider //implements IPartProbInfoProvider
 {
-
-	@Override
-	public void addProbeInfo( IPart part, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
-	{
-		if( part instanceof PartDenseCableSmart || part instanceof PartCableSmart )
-		{
-			final int usedChannels;
-			final int maxChannels = ( part instanceof PartDenseCableSmart ) ? 32 : 8;
-
-			if( part.getGridNode().isActive() )
-			{
-				final CompoundNBT tmp = new CompoundNBT();
-				part.writeToNBT( tmp );
-				usedChannels = tmp.getByte( "usedChannels" );
-			}
-			else
-			{
-				usedChannels = 0;
-			}
-
-			final String formattedChannelString = String.format( TheOneProbeText.CHANNELS.getLocal(), usedChannels, maxChannels );
-
-			probeInfo.text( formattedChannelString );
-		}
-
-	}
+//
+//	@Override
+//	public void addProbeInfo( IPart part, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
+//	{
+//		if( part instanceof PartDenseCableSmart || part instanceof PartCableSmart )
+//		{
+//			final int usedChannels;
+//			final int maxChannels = ( part instanceof PartDenseCableSmart ) ? 32 : 8;
+//
+//			if( part.getGridNode().isActive() )
+//			{
+//				final CompoundNBT tmp = new CompoundNBT();
+//				part.writeToNBT( tmp );
+//				usedChannels = tmp.getByte( "usedChannels" );
+//			}
+//			else
+//			{
+//				usedChannels = 0;
+//			}
+//
+//			final String formattedChannelString = String.format( TheOneProbeText.CHANNELS.getLocal(), usedChannels, maxChannels );
+//
+//			probeInfo.text( formattedChannelString );
+//		}
+//
+//	}
 
 }

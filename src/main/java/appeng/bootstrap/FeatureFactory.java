@@ -27,26 +27,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelManager;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
 
-import appeng.api.definitions.IItemDefinition;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+
 import appeng.api.util.AEColor;
-import appeng.api.util.AEColoredItemDefinition;
 import appeng.bootstrap.components.BuiltInModelComponent;
-import appeng.bootstrap.components.ModelOverrideComponent;
-import appeng.bootstrap.components.TileEntityComponent;
+import appeng.bootstrap.components.IModelBakeComponent;
+import appeng.bootstrap.components.IModelRegistrationComponent;
 import appeng.core.features.AEFeature;
-import appeng.core.features.ActivityState;
-import appeng.core.features.ColoredItemDefinition;
-import appeng.core.features.ItemStackSrc;
 import appeng.util.Platform;
 
 
@@ -57,26 +59,21 @@ public class FeatureFactory
 
 	private final Map<Class<? extends IBootstrapComponent>, List<IBootstrapComponent>> bootstrapComponents;
 
-	@SideOnly( Side.CLIENT )
-	private ModelOverrideComponent modelOverrideComponent;
+//	@OnlyIn( Dist.CLIENT )
+//	private ModelOverrideComponent modelOverrideComponent;
 
-	@SideOnly( Side.CLIENT )
+    @OnlyIn( Dist.CLIENT )
 	private BuiltInModelComponent builtInModelComponent;
-
-	public final TileEntityComponent tileEntityComponent;
 
 	public FeatureFactory()
 	{
 		this.defaultFeatures = new AEFeature[] { AEFeature.CORE };
 		this.bootstrapComponents = new HashMap<>();
 
-		this.tileEntityComponent = new TileEntityComponent();
-		this.addBootstrapComponent( this.tileEntityComponent );
-
 		if( Platform.isClient() )
 		{
-			this.modelOverrideComponent = new ModelOverrideComponent();
-			this.addBootstrapComponent( this.modelOverrideComponent );
+//			this.modelOverrideComponent = new ModelOverrideComponent();
+//			this.addBootstrapComponent( this.modelOverrideComponent );
 
 			this.builtInModelComponent = new BuiltInModelComponent();
 			this.addBootstrapComponent( this.builtInModelComponent );
@@ -87,10 +84,9 @@ public class FeatureFactory
 	{
 		this.defaultFeatures = defaultFeatures.clone();
 		this.bootstrapComponents = parent.bootstrapComponents;
-		this.tileEntityComponent = parent.tileEntityComponent;
 		if( Platform.isClient() )
 		{
-			this.modelOverrideComponent = parent.modelOverrideComponent;
+//			this.modelOverrideComponent = parent.modelOverrideComponent;
 			this.builtInModelComponent = parent.builtInModelComponent;
 		}
 	}
@@ -105,21 +101,21 @@ public class FeatureFactory
 		return new ItemDefinitionBuilder( this, id, item ).features( this.defaultFeatures );
 	}
 
-	public AEColoredItemDefinition colored( IItemDefinition target, int offset )
+	public IAEColoredItemBuilder colored(String id, List<AEColor> validColors, Function<AEColor, Item> item)
 	{
-		ColoredItemDefinition definition = new ColoredItemDefinition();
+//		ColoredItemDefinition definition = new ColoredItemDefinition();
+//
+//		for( final AEColor color : AEColor.VALID_COLORS )
+//		{
+//
+//			final ActivityState state = ActivityState.from( target.isEnabled() );
+//
+//			definition.add( color, new ItemStackSrc( item.apply(color), ActivityState.Enabled ) );
+//		}
+//
+//		return definition;
 
-		target.maybeItem().ifPresent( targetItem ->
-		{
-			for( final AEColor color : AEColor.VALID_COLORS )
-			{
-				final ActivityState state = ActivityState.from( target.isEnabled() );
-
-				definition.add( color, new ItemStackSrc( targetItem, offset + color.ordinal(), state ) );
-			}
-		} );
-
-		return definition;
+		return new AEColoredItemDefinitionBuilder(this, id, validColors, item).features(this.defaultFeatures);
 	}
 
 	public FeatureFactory features( AEFeature... features )
@@ -139,16 +135,16 @@ public class FeatureFactory
 		this.bootstrapComponents.computeIfAbsent( eventType, c -> new ArrayList<IBootstrapComponent>() ).add( component );
 	}
 
-	@SideOnly( Side.CLIENT )
-	void addBuiltInModel( String path, IModel model )
+    @OnlyIn( Dist.CLIENT )
+	void addBuiltInModel( String path, IUnbakedModel model )
 	{
 		this.builtInModelComponent.addModel( path, model );
 	}
 
-	@SideOnly( Side.CLIENT )
+    @OnlyIn( Dist.CLIENT )
 	void addModelOverride( String resourcePath, BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer )
 	{
-		this.modelOverrideComponent.addOverride( resourcePath, customizer );
+//		this.modelOverrideComponent.addOverride( resourcePath, customizer );
 	}
 
 	public <T extends IBootstrapComponent> Iterator<T> getBootstrapComponents( Class<T> eventType )

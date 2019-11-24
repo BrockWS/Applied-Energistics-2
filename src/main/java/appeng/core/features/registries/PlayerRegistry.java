@@ -19,40 +19,40 @@
 package appeng.core.features.registries;
 
 
-import javax.annotation.Nullable;
+//import javax.annotation.Nullable;
+//
+//import com.mojang.authlib.GameProfile;
+//
+//import net.minecraft.entity.player.PlayerEntity;
+//
+//import appeng.api.features.IPlayerRegistry;
+//import appeng.core.worlddata.WorldData;
 
-import com.mojang.authlib.GameProfile;
 
-import net.minecraft.entity.player.PlayerEntity;
-
-import appeng.api.features.IPlayerRegistry;
-import appeng.core.worlddata.WorldData;
-
-
-public class PlayerRegistry implements IPlayerRegistry
+public class PlayerRegistry// implements IPlayerRegistry
 {
-
-	@Override
-	public int getID( final GameProfile username )
-	{
-		if( username == null || !username.isComplete() )
-		{
-			return -1;
-		}
-
-		return WorldData.instance().playerData().getPlayerID( username );
-	}
-
-	@Override
-	public int getID( final PlayerEntity player )
-	{
-		return this.getID( player.getGameProfile() );
-	}
-
-	@Nullable
-	@Override
-	public PlayerEntity findPlayer( final int playerID )
-	{
-		return WorldData.instance().playerData().getPlayerFromID( playerID );
-	}
+//
+//	@Override
+//	public int getID( final GameProfile username )
+//	{
+//		if( username == null || !username.isComplete() )
+//		{
+//			return -1;
+//		}
+//
+//		return WorldData.instance().playerData().getPlayerID( username );
+//	}
+//
+//	@Override
+//	public int getID( final PlayerEntity player )
+//	{
+//		return this.getID( player.getGameProfile() );
+//	}
+//
+//	@Nullable
+//	@Override
+//	public PlayerEntity findPlayer( final int playerID )
+//	{
+//		return WorldData.instance().playerData().getPlayerFromID( playerID );
+//	}
 }

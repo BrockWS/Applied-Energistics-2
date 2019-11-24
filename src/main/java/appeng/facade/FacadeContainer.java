@@ -109,8 +109,8 @@ public class FacadeContainer implements IFacadeContainer
 			if( this.storage.getFacade( x ) != null )
 			{
 				final CompoundNBT data = new CompoundNBT();
-				this.storage.getFacade( x ).getItemStack().writeToNBT( data );
-				c.setTag( "facade:" + x, data );
+				this.storage.getFacade( x ).getItemStack().write( data );
+				c.put( "facade:" + x, data );
 			}
 		}
 	}
@@ -162,10 +162,10 @@ public class FacadeContainer implements IFacadeContainer
 		{
 			this.storage.setFacade( x, null );
 
-			final CompoundNBT t = c.getCompoundTag( "facade:" + x );
+			final CompoundNBT t = c.getCompound( "facade:" + x );
 			if( t != null )
 			{
-				final ItemStack is = new ItemStack( t );
+				final ItemStack is = ItemStack.read( t );
 				if( !is.isEmpty() )
 				{
 					final Item i = is.getItem();

@@ -120,34 +120,34 @@ public class PacketClick extends AppEngPacket
 		if( this.leftClick )
 		{
 			final Block block = player.world.getBlockState( pos ).getBlock();
-			if( block instanceof BlockCableBus )
-			{
-				( (BlockCableBus) block ).onBlockClickPacket( player.world, pos, player, this.hand, new Vec3d( this.hitX, this.hitY, this.hitZ ) );
-			}
+//			if( block instanceof BlockCableBus )
+//			{
+//				( (BlockCableBus) block ).onBlockClickPacket( player.world, pos, player, this.hand, new Vec3d( this.hitX, this.hitY, this.hitZ ) );
+//			}
 		}
 		else
 		{
 			if( !is.isEmpty() )
 			{
-				if( is.getItem() instanceof ToolNetworkTool )
-				{
-					final ToolNetworkTool tnt = (ToolNetworkTool) is.getItem();
-					tnt.serverSideToolLogic( is, player, this.hand, player.world, pos, this.side, this.hitX, this.hitY,
-							this.hitZ );
-				}
-
-				else if( maybeMemoryCard.isSameAs( is ) )
-				{
-					final IMemoryCard mem = (IMemoryCard) is.getItem();
-					mem.notifyUser( player, MemoryCardMessages.SETTINGS_CLEARED );
-					is.setTagCompound( null );
-				}
-
-				else if( maybeColorApplicator.isSameAs( is ) )
-				{
-					final ToolColorApplicator mem = (ToolColorApplicator) is.getItem();
-					mem.cycleColors( is, mem.getColor( is ), 1 );
-				}
+//				if( is.getItem() instanceof ToolNetworkTool )
+//				{
+//					final ToolNetworkTool tnt = (ToolNetworkTool) is.getItem();
+//					tnt.serverSideToolLogic( is, player, this.hand, player.world, pos, this.side, this.hitX, this.hitY,
+//							this.hitZ );
+//				}
+//
+//				else if( maybeMemoryCard.isSameAs( is ) )
+//				{
+//					final IMemoryCard mem = (IMemoryCard) is.getItem();
+//					mem.notifyUser( player, MemoryCardMessages.SETTINGS_CLEARED );
+//					is.setTagCompound( null );
+//				}
+//
+//				else if( maybeColorApplicator.isSameAs( is ) )
+//				{
+//					final ToolColorApplicator mem = (ToolColorApplicator) is.getItem();
+//					mem.cycleColors( is, mem.getColor( is ), 1 );
+//				}
 			}
 		}
 	}

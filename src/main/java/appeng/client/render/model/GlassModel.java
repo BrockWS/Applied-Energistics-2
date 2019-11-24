@@ -21,11 +21,15 @@ package appeng.client.render.model;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
@@ -37,7 +41,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 /**
  * Model class for the connected texture glass model.
  */
-public class GlassModel implements IModel
+public class GlassModel implements IUnbakedModel
 {
 
 	@Override
@@ -47,7 +51,7 @@ public class GlassModel implements IModel
 	}
 
 	@Override
-	public Collection<ResourceLocation> getTextures()
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors)
 	{
 		return ImmutableSet.<ResourceLocation>builder()
 				.add( GlassBakedModel.TEXTURE_A, GlassBakedModel.TEXTURE_B, GlassBakedModel.TEXTURE_C, GlassBakedModel.TEXTURE_D )
@@ -56,15 +60,8 @@ public class GlassModel implements IModel
 	}
 
 	@Override
-	public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+	public IBakedModel bake( ModelBakery bakery, Function<ResourceLocation, TextureAtlasSprite> spriteGetter, ISprite sprite, VertexFormat format )
 	{
-		return new GlassBakedModel( format, bakedTextureGetter );
+		return new GlassBakedModel( format, spriteGetter );
 	}
-
-	@Override
-	public IModelState getDefaultState()
-	{
-		return TRSRTransformation.identity();
-	}
-
 }

@@ -49,9 +49,9 @@ public final class Capabilities
 
 	public static Capability<ISpatialDimension> SPATIAL_DIMENSION;
 
-	//public static Capability<ITeslaConsumer> TESLA_CONSUMER;
+//	public static Capability<ITeslaConsumer> TESLA_CONSUMER;
 
-	//public static Capability<ITeslaHolder> TESLA_HOLDER;
+//	public static Capability<ITeslaHolder> TESLA_HOLDER;
 
 	public static Capability<IEnergyStorage> FORGE_ENERGY;
 
@@ -75,25 +75,6 @@ public final class Capabilities
 	{
 		SPATIAL_DIMENSION = cap;
 	}
-
-	/* TODO Remove Everything Tesla
-	@CapabilityInject( ITeslaConsumer.class )
-	private static void capITeslaConsumerRegistered( Capability<ITeslaConsumer> cap )
-	{
-		if( IntegrationRegistry.INSTANCE.isEnabled( IntegrationType.TESLA ) )
-		{
-			TESLA_CONSUMER = cap;
-		}
-	}
-
-	@CapabilityInject( ITeslaHolder.class )
-	private static void capITeslaHolderRegistered( Capability<ITeslaHolder> cap )
-	{
-		if( IntegrationRegistry.INSTANCE.isEnabled( IntegrationType.TESLA ) )
-		{
-			TESLA_HOLDER = cap;
-		}
-	}*/
 
 	@CapabilityInject( IEnergyStorage.class )
 	private static void capIEnergyStorageRegistered( Capability<IEnergyStorage> cap )

@@ -20,10 +20,8 @@ package appeng.core.stats;
 
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.stats.StatBasic;
-import net.minecraft.util.text.TextComponentTranslation;
 
-
+// TODO: Stats
 public enum Stats
 {
 
@@ -36,7 +34,7 @@ public enum Stats
 	// done
 	TurnedCranks;
 
-	private StatBasic stat;
+//	private Stat stat;
 
 	Stats()
 	{
@@ -44,18 +42,18 @@ public enum Stats
 
 	public void addToPlayer( final PlayerEntity player, final int howMany )
 	{
-		player.addStat( this.stat, howMany );
+//		player.addStat( this.stat, howMany );
 	}
 
 	public static void register()
 	{
-		for( final Stats s : Stats.values() )
-		{
-			if( s.stat == null )
-			{
-				s.stat = new StatBasic( "stat.ae2." + s.name(), new TextComponentTranslation( "stat.ae2." + s.name() ) );
-				s.stat.registerStat();
-			}
-		}
+//		for( final Stats s : Stats.values() )
+//		{
+//			if( s.stat == null )
+//			{
+//				s.stat = new StatBasic( "stat.ae2." + s.name(), new TextComponentTranslation( "stat.ae2." + s.name() ) );
+//				s.stat.registerStat();
+//			}
+//		}
 	}
 }

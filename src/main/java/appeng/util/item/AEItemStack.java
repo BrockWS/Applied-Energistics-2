@@ -31,11 +31,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import appeng.api.AEApi;
 import appeng.api.config.FuzzyMode;
@@ -48,13 +51,13 @@ import appeng.util.Platform;
 public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemStack
 {
 	private AESharedItemStack sharedStack;
-	private Optional<OreReference> oreReference;
+//	private Optional<OreReference> oreReference;
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private String displayName;
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private List<String> tooltip;
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private ResourceLocation uniqueID;
 
 	private AEItemStack( final AEItemStack is )
@@ -63,7 +66,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		this.setCraftable( is.isCraftable() );
 		this.setCountRequestable( is.getCountRequestable() );
 		this.sharedStack = is.sharedStack;
-		this.oreReference = is.oreReference;
+//		this.oreReference = is.oreReference;
 	}
 
 	private AEItemStack( final AESharedItemStack is, long size )
@@ -72,7 +75,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		this.setStackSize( size );
 		this.setCraftable( false );
 		this.setCountRequestable( 0 );
-		this.oreReference = OreHelper.INSTANCE.getOre( is.getDefinition() );
+//		this.oreReference = OreHelper.INSTANCE.getOre( is.getDefinition() );
 	}
 
 	@Nullable
@@ -93,7 +96,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			return null;
 		}
 
-		final ItemStack itemstack = new ItemStack( i );
+		final ItemStack itemstack = ItemStack.read(i);
 		if( itemstack.isEmpty() )
 		{
 			return null;
@@ -109,22 +112,25 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public void writeToNBT( final CompoundNBT i )
 	{
-		this.getDefinition().writeToNBT( i );
-		i.setLong( "Cnt", this.getStackSize() );
-		i.setLong( "Req", this.getCountRequestable() );
-		i.setBoolean( "Craft", this.isCraftable() );
+		this.getDefinition().write( i );
+		i.putLong( "Cnt", this.getStackSize() );
+		i.putLong( "Req", this.getCountRequestable() );
+		i.putBoolean( "Craft", this.isCraftable() );
 	}
 
 	public static AEItemStack fromPacket( final ByteBuf data )
 	{
-		final byte mask = data.readByte();
-		final byte stackType = (byte) ( ( mask & 0x0C ) >> 2 );
-		final byte countReqType = (byte) ( ( mask & 0x30 ) >> 4 );
-		final boolean isCraftable = ( mask & 0x40 ) > 0;
+//		final byte mask = data.readByte();
+//		final byte stackType = (byte) ( ( mask & 0x0C ) >> 2 );
+//		final byte countReqType = (byte) ( ( mask & 0x30 ) >> 4 );
+//		final boolean isCraftable = ( mask & 0x40 ) > 0;
 
-		final ItemStack itemstack = new ItemStack( ByteBufUtils.readTag( data ) );
-		final long stackSize = getPacketValue( stackType, data );
-		final long countRequestable = getPacketValue( countReqType, data );
+		PacketBuffer packetBuffer = new PacketBuffer(data);
+
+		final ItemStack itemstack = packetBuffer.readItemStack();
+		final long stackSize = packetBuffer.readLong();
+		final long countRequestable = packetBuffer.readLong();
+		final boolean isCraftable = packetBuffer.readBoolean();
 
 		if( itemstack.isEmpty() )
 		{
@@ -140,13 +146,18 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public void writeToPacket( final ByteBuf i )
 	{
-		final byte mask = (byte) ( ( this.getType( this.getStackSize() ) << 2 ) | ( this
-				.getType( this.getCountRequestable() ) << 4 ) | ( (byte) ( this.isCraftable() ? 1 : 0 ) << 6 ) | ( this.hasTagCompound() ? 1 : 0 ) << 7 );
-
-		i.writeByte( mask );
-		ByteBufUtils.writeTag( i, this.getDefinition().serializeNBT() );
-		this.putPacketValue( i, this.getStackSize() );
-		this.putPacketValue( i, this.getCountRequestable() );
+//		final byte mask = (byte) ( ( this.getType( this.getStackSize() ) << 2 ) | ( this
+//				.getType( this.getCountRequestable() ) << 4 ) | ( (byte) ( this.isCraftable() ? 1 : 0 ) << 6 ) | ( this.hasTagCompound() ? 1 : 0 ) << 7 );
+//
+//		i.writeByte( mask );
+		PacketBuffer packetBuffer = new PacketBuffer(i);
+		packetBuffer.writeCompoundTag(this.getDefinition().serializeNBT());
+		packetBuffer.writeLong(this.getStackSize());
+		packetBuffer.writeLong(this.getCountRequestable());
+		packetBuffer.writeBoolean(this.isCraftable());
+//		ByteBufUtils.writeTag( i, this.getDefinition().serializeNBT() );
+//		this.putPacketValue( i, this.getStackSize() );
+//		this.putPacketValue( i, this.getCountRequestable() );
 	}
 
 	@Override
@@ -165,10 +176,10 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public boolean fuzzyComparison( final IAEItemStack other, final FuzzyMode mode )
 	{
-		if( mode == FuzzyMode.IGNORE_ALL && OreHelper.INSTANCE.sameOre( this, other ) )
-		{
-			return true;
-		}
+//		if( mode == FuzzyMode.IGNORE_ALL && OreHelper.INSTANCE.sameOre( this, other ) )
+//		{
+//			return true;
+//		}
 
 		final ItemStack itemStack = this.getDefinition();
 		final ItemStack otherStack = other.getDefinition();
@@ -210,18 +221,6 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	public Item getItem()
 	{
 		return this.getDefinition().getItem();
-	}
-
-	@Override
-	public int getItemDamage()
-	{
-		return this.sharedStack.getItemDamage();
-	}
-
-	@Override
-	public boolean sameOre( final IAEItemStack is )
-	{
-		return OreHelper.INSTANCE.sameOre( this, is );
 	}
 
 	@Override
@@ -274,10 +273,10 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 	@Override
 	public String toString()
 	{
-		return this.getStackSize() + "x" + this.getDefinition().getItem().getUnlocalizedName() + "@" + this.getDefinition().getItemDamage();
+		return this.getStackSize() + "x" + this.getDefinition().getItem().getTranslationKey();
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public List<String> getToolTip()
 	{
 		if( this.tooltip == null )
@@ -287,7 +286,7 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		return this.tooltip;
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public String getDisplayName()
 	{
 		if( this.displayName == null )
@@ -297,12 +296,12 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 		return this.displayName;
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public String getModID()
 	{
 		if( this.uniqueID == null )
 		{
-			this.uniqueID = Item.REGISTRY.getNameForObject( this.getDefinition().getItem() );
+			this.uniqueID = ForgeRegistries.ITEMS.getKey( this.getDefinition().getItem() );
 		}
 
 		if( this.uniqueID == null )
@@ -310,18 +309,28 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 			return "** Null";
 		}
 
-		return this.uniqueID.getResourceDomain() == null ? "** Null" : this.uniqueID.getResourceDomain();
-	}
-
-	public Optional<OreReference> getOre()
-	{
-		return this.oreReference;
+		return this.uniqueID.getNamespace() == null ? "** Null" : this.uniqueID.getNamespace();
 	}
 
 	@Override
 	public boolean hasTagCompound()
 	{
-		return this.getDefinition().hasTagCompound();
+		return this.getDefinition().hasTag();
+	}
+
+	@Override
+	public String getModId() {
+		return "null";
+	}
+
+	@Override
+	public String getModName() {
+		return "null";
+	}
+
+	@Override
+	public String getStackName() {
+		return "null";
 	}
 
 	@Override
@@ -353,18 +362,18 @@ public final class AEItemStack extends AEStack<IAEItemStack> implements IAEItemS
 				}
 				else if( mode == FuzzyMode.PERCENT_99 )
 				{
-					return ( a.getItemDamage() > 1 ) == ( b.getItemDamage() > 1 );
+					return ( a.getDamage() > 1 ) == ( b.getDamage() > 1 );
 				}
 				else
 				{
-					final float percentDamageOfA = (float) a.getItemDamage() / (float) a.getMaxDamage();
-					final float percentDamageOfB = (float) b.getItemDamage() / (float) b.getMaxDamage();
+					final float percentDamageOfA = (float) a.getDamage() / (float) a.getMaxDamage();
+					final float percentDamageOfB = (float) b.getDamage() / (float) b.getMaxDamage();
 
 					return ( percentDamageOfA > mode.breakPoint ) == ( percentDamageOfB > mode.breakPoint );
 				}
 			}
 
-			return a.getMetadata() == b.getMetadata();
+//			return a.getMetadata() == b.getMetadata();
 		}
 
 		return false;

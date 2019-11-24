@@ -18,44 +18,44 @@
 
 package appeng.integration.modules.theoneprobe.tile;
 
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.world.World;
+//import net.minecraftforge.items.IItemHandler;
+//
+//import mcjty.theoneprobe.api.ElementAlignment;
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.tile.AEBaseTile;
+//import appeng.tile.misc.TileCharger;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandler;
 
-import mcjty.theoneprobe.api.ElementAlignment;
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.tile.AEBaseTile;
-import appeng.tile.misc.TileCharger;
-
-
-public class ChargerInfoProvider implements ITileProbInfoProvider
+public class ChargerInfoProvider //implements ITileProbInfoProvider
 {
-
-	@Override
-	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
-	{
-		if( tile instanceof TileCharger )
-		{
-			final TileCharger charger = (TileCharger) tile;
-			final IItemHandler chargerInventory = charger.getInternalInventory();
-			final ItemStack chargingItem = chargerInventory.getStackInSlot( 0 );
-
-			if( !chargingItem.isEmpty() )
-			{
-				final String currentInventory = chargingItem.getDisplayName();
-				final IProbeInfo centerAlignedHorizontalLayout = probeInfo
-						.horizontal( probeInfo.defaultLayoutStyle().alignment( ElementAlignment.ALIGN_CENTER ) );
-
-				centerAlignedHorizontalLayout.item( chargingItem );
-				centerAlignedHorizontalLayout.text( currentInventory );
-			}
-		}
-	}
+//
+//	@Override
+//	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
+//	{
+//		if( tile instanceof TileCharger )
+//		{
+//			final TileCharger charger = (TileCharger) tile;
+//			final IItemHandler chargerInventory = charger.getInternalInventory();
+//			final ItemStack chargingItem = chargerInventory.getStackInSlot( 0 );
+//
+//			if( !chargingItem.isEmpty() )
+//			{
+//				final String currentInventory = chargingItem.getDisplayName();
+//				final IProbeInfo centerAlignedHorizontalLayout = probeInfo
+//						.horizontal( probeInfo.defaultLayoutStyle().alignment( ElementAlignment.ALIGN_CENTER ) );
+//
+//				centerAlignedHorizontalLayout.item( chargingItem );
+//				centerAlignedHorizontalLayout.text( currentInventory );
+//			}
+//		}
+//	}
 
 }

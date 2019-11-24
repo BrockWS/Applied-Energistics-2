@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import appeng.api.implementations.items.IGrowableCrystal;
 import appeng.api.implementations.tiles.ICrystalGrowthAccelerator;
 import appeng.client.EffectType;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.features.AEFeature;
 import appeng.util.Platform;
@@ -45,7 +45,7 @@ public final class EntityGrowingCrystal extends ItemEntity
 
 	public EntityGrowingCrystal( final World w )
 	{
-		super( w );
+		super( null, w );
 	}
 
 	public EntityGrowingCrystal( final World w, final double x, final double y, final double z, final ItemStack is )
@@ -55,9 +55,9 @@ public final class EntityGrowingCrystal extends ItemEntity
 	}
 
 	@Override
-	public void onUpdate()
+	public void tick()
 	{
-		super.onUpdate();
+		super.tick();
 
 		if( !AEConfig.instance().isFeatureEnabled( AEFeature.IN_WORLD_PURIFICATION ) )
 		{
@@ -70,7 +70,7 @@ public final class EntityGrowingCrystal extends ItemEntity
 		if( gc instanceof IGrowableCrystal ) // if it changes this just stops being an issue...
 		{
 			final int j = MathHelper.floor( this.posX );
-			final int i = MathHelper.floor( ( this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY ) / 2.0D );
+			final int i = MathHelper.floor( ( this.getBoundingBox().minY + this.getBoundingBox().maxY ) / 2.0D );
 			final int k = MathHelper.floor( this.posZ );
 
 			final BlockState state = this.world.getBlockState( new BlockPos( j, i, k ) );

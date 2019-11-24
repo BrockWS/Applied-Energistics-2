@@ -24,7 +24,7 @@
 package appeng.api.definitions;
 
 
-import appeng.api.util.AEColoredItemDefinition;
+import appeng.api.util.IColoredItemDefinition;
 
 
 /**
@@ -111,7 +111,7 @@ public interface IItems
 
 	IItemDefinition colorApplicator();
 
-	AEColoredItemDefinition coloredPaintBall();
+	IColoredItemDefinition coloredPaintBall();
 
-	AEColoredItemDefinition coloredLumenPaintBall();
+	IColoredItemDefinition coloredLumenPaintBall();
 }

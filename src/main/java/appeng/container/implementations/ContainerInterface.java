@@ -35,87 +35,87 @@ import appeng.helpers.IInterfaceHost;
 
 public class ContainerInterface extends ContainerUpgradeable
 {
-
-	private final DualityInterface myDuality;
-
-	@GuiSync( 3 )
-	public YesNo bMode = YesNo.NO;
-
-	@GuiSync( 4 )
-	public YesNo iTermMode = YesNo.YES;
-
+//
+//	private final DualityInterface myDuality;
+//
+//	@GuiSync( 3 )
+//	public YesNo bMode = YesNo.NO;
+//
+//	@GuiSync( 4 )
+//	public YesNo iTermMode = YesNo.YES;
+//
 	public ContainerInterface( final PlayerInventory ip, final IInterfaceHost te )
 	{
 		super( ip, te.getInterfaceDuality().getHost() );
-
-		this.myDuality = te.getInterfaceDuality();
-
-		for( int x = 0; x < DualityInterface.NUMBER_OF_PATTERN_SLOTS; x++ )
-		{
-			this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.ENCODED_PATTERN, this.myDuality
-					.getPatterns(), x, 8 + 18 * x, 90 + 7, this.getInventoryPlayer() ) );
-		}
-
-		for( int x = 0; x < DualityInterface.NUMBER_OF_CONFIG_SLOTS; x++ )
-		{
-			this.addSlotToContainer( new SlotFake( this.myDuality.getConfig(), x, 8 + 18 * x, 35 ) );
-		}
-
-		for( int x = 0; x < DualityInterface.NUMBER_OF_STORAGE_SLOTS; x++ )
-		{
-			this.addSlotToContainer( new SlotNormal( this.myDuality.getStorage(), x, 8 + 18 * x, 35 + 18 ) );
-		}
+//
+//		this.myDuality = te.getInterfaceDuality();
+//
+//		for( int x = 0; x < DualityInterface.NUMBER_OF_PATTERN_SLOTS; x++ )
+//		{
+//			this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.ENCODED_PATTERN, this.myDuality
+//					.getPatterns(), x, 8 + 18 * x, 90 + 7, this.getInventoryPlayer() ) );
+//		}
+//
+//		for( int x = 0; x < DualityInterface.NUMBER_OF_CONFIG_SLOTS; x++ )
+//		{
+//			this.addSlotToContainer( new SlotFake( this.myDuality.getConfig(), x, 8 + 18 * x, 35 ) );
+//		}
+//
+//		for( int x = 0; x < DualityInterface.NUMBER_OF_STORAGE_SLOTS; x++ )
+//		{
+//			this.addSlotToContainer( new SlotNormal( this.myDuality.getStorage(), x, 8 + 18 * x, 35 + 18 ) );
+//		}
 	}
-
-	@Override
-	protected int getHeight()
-	{
-		return 211;
-	}
-
-	@Override
-	protected void setupConfig()
-	{
-		this.setupUpgrades();
-	}
-
-	@Override
-	public int availableUpgrades()
-	{
-		return 1;
-	}
-
-	@Override
-	public void detectAndSendChanges()
-	{
-		this.verifyPermissions( SecurityPermissions.BUILD, false );
-		super.detectAndSendChanges();
-	}
-
-	@Override
-	protected void loadSettingsFromHost( final IConfigManager cm )
-	{
-		this.setBlockingMode( (YesNo) cm.getSetting( Settings.BLOCK ) );
-		this.setInterfaceTerminalMode( (YesNo) cm.getSetting( Settings.INTERFACE_TERMINAL ) );
-	}
-
-	public YesNo getBlockingMode()
-	{
-		return this.bMode;
-	}
-
-	private void setBlockingMode( final YesNo bMode )
-	{
-		this.bMode = bMode;
-	}
-
-	public YesNo getInterfaceTerminalMode()
-	{
-		return this.iTermMode;
-	}
-
-	private void setInterfaceTerminalMode( final YesNo iTermMode )
-	{
-		this.iTermMode = iTermMode;
-	}
+//
+//	@Override
+//	protected int getHeight()
+//	{
+//		return 211;
+//	}
+//
+//	@Override
+//	protected void setupConfig()
+//	{
+//		this.setupUpgrades();
+//	}
+//
+//	@Override
+//	public int availableUpgrades()
+//	{
+//		return 1;
+//	}
+//
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		this.verifyPermissions( SecurityPermissions.BUILD, false );
+//		super.detectAndSendChanges();
+//	}
+//
+//	@Override
+//	protected void loadSettingsFromHost( final IConfigManager cm )
+//	{
+//		this.setBlockingMode( (YesNo) cm.getSetting( Settings.BLOCK ) );
+//		this.setInterfaceTerminalMode( (YesNo) cm.getSetting( Settings.INTERFACE_TERMINAL ) );
+//	}
+//
+//	public YesNo getBlockingMode()
+//	{
+//		return this.bMode;
+//	}
+//
+//	private void setBlockingMode( final YesNo bMode )
+//	{
+//		this.bMode = bMode;
+//	}
+//
+//	public YesNo getInterfaceTerminalMode()
+//	{
+//		return this.iTermMode;
+//	}
+//
+//	private void setInterfaceTerminalMode( final YesNo iTermMode )
+//	{
+//		this.iTermMode = iTermMode;
+//	}
 }

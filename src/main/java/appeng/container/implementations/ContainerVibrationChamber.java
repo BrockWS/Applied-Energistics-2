@@ -29,52 +29,52 @@ import appeng.tile.misc.TileVibrationChamber;
 import appeng.util.Platform;
 
 
-public class ContainerVibrationChamber extends AEBaseContainer implements IProgressProvider
+public class ContainerVibrationChamber extends AEBaseContainer //implements IProgressProvider
 {
-	private final TileVibrationChamber vibrationChamber;
-	@GuiSync( 0 )
-	public int burnSpeed = 0;
-	@GuiSync( 1 )
-	public int remainingBurnTime = 0;
-
+//	private final TileVibrationChamber vibrationChamber;
+//	@GuiSync( 0 )
+//	public int burnSpeed = 0;
+//	@GuiSync( 1 )
+//	public int remainingBurnTime = 0;
+//
 	public ContainerVibrationChamber( final PlayerInventory ip, final TileVibrationChamber vibrationChamber )
 	{
 		super( ip, vibrationChamber, null );
-		this.vibrationChamber = vibrationChamber;
-
-		this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.FUEL, vibrationChamber.getInternalInventory(), 0, 80, 37, this
-				.getInventoryPlayer() ) );
-
-		this.bindPlayerInventory( ip, 0, 166 - /* height of player inventory */82 );
+//		this.vibrationChamber = vibrationChamber;
+//
+//		this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.FUEL, vibrationChamber.getInternalInventory(), 0, 80, 37, this
+//				.getInventoryPlayer() ) );
+//
+//		this.bindPlayerInventory( ip, 0, 166 - /* height of player inventory */82 );
 	}
-
-	@Override
-	public void detectAndSendChanges()
-	{
-		if( Platform.isServer() )
-		{
-			this.remainingBurnTime = this.vibrationChamber
-					.getMaxBurnTime() <= 0 ? 0 : (int) ( 100.0 * this.vibrationChamber.getBurnTime() / this.vibrationChamber.getMaxBurnTime() );
-			this.burnSpeed = this.remainingBurnTime <= 0 ? 0 : this.vibrationChamber.getBurnSpeed();
-
-		}
-		super.detectAndSendChanges();
-	}
-
-	@Override
-	public int getCurrentProgress()
-	{
-		return this.burnSpeed;
-	}
-
-	public int getRemainingBurnTime()
-	{
-		return this.remainingBurnTime;
-	}
-
-	@Override
-	public int getMaxProgress()
-	{
-		return TileVibrationChamber.MAX_BURN_SPEED;
-	}
+//
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		if( Platform.isServer() )
+//		{
+//			this.remainingBurnTime = this.vibrationChamber
+//					.getMaxBurnTime() <= 0 ? 0 : (int) ( 100.0 * this.vibrationChamber.getBurnTime() / this.vibrationChamber.getMaxBurnTime() );
+//			this.burnSpeed = this.remainingBurnTime <= 0 ? 0 : this.vibrationChamber.getBurnSpeed();
+//
+//		}
+//		super.detectAndSendChanges();
+//	}
+//
+//	@Override
+//	public int getCurrentProgress()
+//	{
+//		return this.burnSpeed;
+//	}
+//
+//	public int getRemainingBurnTime()
+//	{
+//		return this.remainingBurnTime;
+//	}
+//
+//	@Override
+//	public int getMaxProgress()
+//	{
+//		return TileVibrationChamber.MAX_BURN_SPEED;
+//	}
 }

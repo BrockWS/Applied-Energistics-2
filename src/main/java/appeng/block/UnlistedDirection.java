@@ -20,41 +20,40 @@ package appeng.block;
 
 
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 
-public class UnlistedDirection implements IUnlistedProperty<Direction>
+public class UnlistedDirection //implements IUnlistedProperty<Direction>
 {
-
-	private final String name;
-
-	public UnlistedDirection( String name )
-	{
-		this.name = name;
-	}
-
-	@Override
-	public String getName()
-	{
-		return this.name;
-	}
-
-	@Override
-	public boolean isValid( Direction value )
-	{
-		return value != null;
-	}
-
-	@Override
-	public Class<Direction> getType()
-	{
-		return Direction.class;
-	}
-
-	@Override
-	public String valueToString( Direction value )
-	{
-		return value.getName();
-	}
+//
+//	private final String name;
+//
+//	public UnlistedDirection( String name )
+//	{
+//		this.name = name;
+//	}
+//
+//	@Override
+//	public String getName()
+//	{
+//		return this.name;
+//	}
+//
+//	@Override
+//	public boolean isValid( Direction value )
+//	{
+//		return value != null;
+//	}
+//
+//	@Override
+//	public Class<Direction> getType()
+//	{
+//		return Direction.class;
+//	}
+//
+//	@Override
+//	public String valueToString( Direction value )
+//	{
+//		return value.getName();
+//	}
 
 }

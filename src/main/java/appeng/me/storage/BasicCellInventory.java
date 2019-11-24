@@ -15,7 +15,7 @@ import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AELog;
 import appeng.util.item.AEStack;
 

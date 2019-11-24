@@ -62,15 +62,15 @@ public class PacketSwitchGuis extends AppEngPacket
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
 		final Container c = player.openContainer;
-		if( c instanceof AEBaseContainer )
-		{
-			final AEBaseContainer bc = (AEBaseContainer) c;
-			final ContainerOpenContext context = bc.getOpenContext();
-			if( context != null )
-			{
-				final TileEntity te = context.getTile();
-				Platform.openGUI( player, te, context.getSide(), this.newGui );
-			}
-		}
+//		if( c instanceof AEBaseContainer )
+//		{
+//			final AEBaseContainer bc = (AEBaseContainer) c;
+//			final ContainerOpenContext context = bc.getOpenContext();
+//			if( context != null )
+//			{
+//				final TileEntity te = context.getTile();
+//				Platform.openGUI( player, te, context.getSide(), this.newGui );
+//			}
+//		}
 	}
 }

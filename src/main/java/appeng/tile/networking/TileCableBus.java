@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -38,6 +39,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import appeng.api.networking.IGridNode;
 import appeng.api.parts.IFacadeContainer;
@@ -65,16 +67,16 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 	private int oldLV = -1; // on re-calculate light when it changes
 
 	@Override
-	public void readFromNBT( final CompoundNBT data )
+	public void read( final CompoundNBT data )
 	{
-		super.readFromNBT( data );
+		super.read( data );
 		this.getCableBus().readFromNBT( data );
 	}
 
 	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
+	public CompoundNBT write( final CompoundNBT data )
 	{
-		super.writeToNBT( data );
+		super.write( data );
 		this.getCableBus().writeToNBT( data );
 		return data;
 	}
@@ -89,7 +91,7 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 		if( newLV != this.oldLV )
 		{
 			this.oldLV = newLV;
-			this.world.checkLight( this.pos );
+			this.world.getLight( this.pos );
 			ret = true;
 		}
 
@@ -139,9 +141,9 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 	}
 
 	@Override
-	public void invalidate()
+	public void remove()
 	{
-		super.invalidate();
+		super.remove();
 		this.getCableBus().removeFromWorld();
 	}
 
@@ -170,12 +172,12 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 		return this.getCableBus().getCableConnectionLength( cable );
 	}
 
-	@Override
-	public void onChunkUnload()
-	{
-		super.onChunkUnload();
-		this.getCableBus().removeFromWorld();
-	}
+//	@Override
+//	public void onChunkUnload()
+//	{
+//		super.onChunkUnload();
+//		this.getCableBus().removeFromWorld();
+//	}
 
 	@Override
 	public void markForUpdate()
@@ -189,7 +191,7 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 		if( newLV != this.oldLV )
 		{
 			this.oldLV = newLV;
-			this.world.checkLight( this.pos );
+			this.world.getLight( this.pos );
 		}
 
 		super.markForUpdate();
@@ -342,7 +344,7 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 	@Override
 	public void cleanup()
 	{
-		this.getWorld().setBlockToAir( this.pos );
+		this.getWorld().setBlockState( this.pos, Blocks.AIR.getDefaultState() );
 	}
 
 	@Override
@@ -386,19 +388,7 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 	}
 
 	@Override
-	public boolean hasCapability( Capability<?> capabilityClass, @Nullable Direction fromSide )
-	{
-		// Note that null will be translated to INTERNAL here
-		AEPartLocation partLocation = AEPartLocation.fromFacing( fromSide );
-
-		IPart part = this.getPart( partLocation );
-		boolean result = part != null && part.hasCapability( capabilityClass );
-
-		return result || super.hasCapability( capabilityClass, fromSide );
-	}
-
-	@Override
-	public <T> T getCapability( Capability<T> capabilityClass, @Nullable Direction fromSide )
+	public <T> LazyOptional<T> getCapability(Capability<T> capabilityClass, @Nullable Direction fromSide )
 	{
 		// Note that null will be translated to INTERNAL here
 		AEPartLocation partLocation = AEPartLocation.fromFacing( fromSide );
@@ -408,7 +398,7 @@ public class TileCableBus extends AEBaseTile implements AEMultiTile, ICustomColl
 
 		if( result != null )
 		{
-			return result;
+			return LazyOptional.of(() -> result);
 		}
 
 		return super.getCapability( capabilityClass, fromSide );

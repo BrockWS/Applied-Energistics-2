@@ -19,8 +19,8 @@
 package appeng.recipes;
 
 
-import appeng.api.recipes.IRecipeHandler;
-import appeng.api.recipes.IRecipeLoader;
+//import appeng.api.recipes.IRecipeHandler;
+//import appeng.api.recipes.IRecipeLoader;
 
 
 /**
@@ -29,17 +29,17 @@ import appeng.api.recipes.IRecipeLoader;
  * @version rv3 - 10.08.2015
  * @since rv0
  */
-public class RecipeHandler implements IRecipeHandler
+public class RecipeHandler //implements IRecipeHandler
 {
-	@Override
-	public void parseRecipes( final IRecipeLoader loader, final String path )
-	{
-		// dummy
-	}
-
-	@Override
-	public void injectRecipes()
-	{
-		// dummy
-	}
+//	@Override
+//	public void parseRecipes( final IRecipeLoader loader, final String path )
+//	{
+//		// dummy
+//	}
+//
+//	@Override
+//	public void injectRecipes()
+//	{
+//		// dummy
+//	}
 }

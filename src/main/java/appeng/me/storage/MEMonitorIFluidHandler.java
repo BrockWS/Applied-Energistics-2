@@ -29,7 +29,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import appeng.api.AEApi;
 import appeng.api.config.AccessRestriction;
@@ -72,10 +71,14 @@ public class MEMonitorIFluidHandler implements IMEMonitor<IAEFluidStack>, ITicki
 		this.listeners.remove( l );
 	}
 
+	private IFluidHandler.FluidAction getActionFromAE(Actionable type) {
+		return type == Actionable.MODULATE ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE;
+	}
+
 	@Override
 	public IAEFluidStack injectItems( final IAEFluidStack input, final Actionable type, final IActionSource src )
 	{
-		final int filled = this.handler.fill( input.getFluidStack(), type == Actionable.MODULATE );
+		final int filled = this.handler.fill( input.createFluidStack(), this.getActionFromAE(type) );
 
 		if( filled == 0 )
 		{
@@ -100,9 +103,9 @@ public class MEMonitorIFluidHandler implements IMEMonitor<IAEFluidStack>, ITicki
 	@Override
 	public IAEFluidStack extractItems( final IAEFluidStack request, final Actionable type, final IActionSource src )
 	{
-		final FluidStack removed = this.handler.drain( request.getFluidStack(), type == Actionable.MODULATE );
+		final FluidStack removed = this.handler.drain( request.createFluidStack(), this.getActionFromAE(type) );
 
-		if( removed == null || removed.amount == 0 )
+		if( removed == null || removed.getAmount() == 0 )
 		{
 			return null;
 		}
@@ -113,7 +116,7 @@ public class MEMonitorIFluidHandler implements IMEMonitor<IAEFluidStack>, ITicki
 		}
 
 		final IAEFluidStack o = request.copy();
-		o.setStackSize( removed.amount );
+		o.setStackSize( removed.getAmount() );
 		return o;
 	}
 
@@ -132,13 +135,13 @@ public class MEMonitorIFluidHandler implements IMEMonitor<IAEFluidStack>, ITicki
 		int high = 0;
 		boolean changed = false;
 
-		final IFluidTankProperties[] props = this.handler.getTankProperties();
-		for( int slot = 0; slot < this.handler.getTankProperties().length; ++slot )
+		for( int slot = 0; slot < this.handler.getTanks(); ++slot )
 		{
 			final CachedFluidStack old = this.memory.get( slot );
 			high = Math.max( high, slot );
 
-			final FluidStack newIS = !props[slot].canDrain() && this.getMode() == StorageFilter.EXTRACTABLE_ONLY ? null : props[slot].getContents();
+//			final FluidStack newIS = !props[slot].canDrain() && this.getMode() == StorageFilter.EXTRACTABLE_ONLY ? null : props[slot].getContents();
+			final FluidStack newIS = this.getMode() == StorageFilter.EXTRACTABLE_ONLY ? null : this.handler.getFluidInTank(slot);
 			final FluidStack oldIS = old == null ? null : old.fluidStack;
 
 			if( isDifferent( newIS, oldIS ) )
@@ -162,8 +165,8 @@ public class MEMonitorIFluidHandler implements IMEMonitor<IAEFluidStack>, ITicki
 			}
 			else
 			{
-				final int newSize = newIS == null ? 0 : newIS.amount;
-				final int diff = newSize - ( oldIS == null ? 0 : oldIS.amount );
+				final int newSize = newIS == null ? 0 : newIS.getAmount();
+				final int diff = newSize - ( oldIS == null ? 0 : oldIS.getAmount() );
 
 				IAEFluidStack stack = null;
 

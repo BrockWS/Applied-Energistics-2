@@ -19,76 +19,63 @@
 package appeng.items.misc;
 
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import appeng.api.util.AEColor;
+import appeng.core.CreativeTab;
 import appeng.core.localization.GuiText;
-import appeng.items.AEBaseItem;
 
+import net.minecraft.item.Item;
 
-public class ItemPaintBall extends AEBaseItem
-{
+public class ItemPaintBall extends Item {
 
-	private static final int DAMAGE_THRESHOLD = 20;
+    private final AEColor color;
+    private final boolean isLumen;
 
-	public ItemPaintBall()
-	{
-		this.setHasSubtypes( true );
+	public ItemPaintBall(AEColor color, boolean isLumen) {
+	    super(new Item.Properties().group(CreativeTab.instance));
+	    this.color = color;
+	    this.isLumen = isLumen;
+		//this.setHasSubtypes( true );
 	}
 
-	@Override
-	public String getItemStackDisplayName( final ItemStack is )
-	{
-		return super.getItemStackDisplayName( is ) + " - " + this.getExtraName( is );
-	}
+    @Nonnull
+    public AEColor getColor() {
+        return this.color;
+    }
 
-	private String getExtraName( final ItemStack is )
-	{
-		return ( is.getItemDamage() >= DAMAGE_THRESHOLD ? GuiText.Lumen.getLocal() + ' ' : "" ) + this.getColor( is );
-	}
+    public boolean isLumen() {
+        return this.isLumen;
+    }
 
-	public AEColor getColor( final ItemStack is )
-	{
-		int dmg = is.getItemDamage();
-		if( dmg >= DAMAGE_THRESHOLD )
-		{
-			dmg -= DAMAGE_THRESHOLD;
-		}
+    @Nonnull
+    public static AEColor getColor(ItemStack stack) {
+	    if (!(stack.getItem() instanceof ItemPaintBall))
+	        return AEColor.TRANSPARENT;
+	    ItemPaintBall item = (ItemPaintBall) stack.getItem();
+	    return item.getColor();
+    }
 
-		if( dmg >= AEColor.values().length )
-		{
-			return AEColor.TRANSPARENT;
-		}
+    public static boolean isLumen(ItemStack stack) {
+        if (!(stack.getItem() instanceof ItemPaintBall))
+            return false;
+        ItemPaintBall item = (ItemPaintBall) stack.getItem();
+        return item.isLumen();
+    }
 
-		return AEColor.values()[dmg];
-	}
-
-	@Override
-	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
-	{
-		for( final AEColor c : AEColor.values() )
-		{
-			if( c != AEColor.TRANSPARENT )
-			{
-				itemStacks.add( new ItemStack( this, 1, c.ordinal() ) );
-			}
-		}
-
-		for( final AEColor c : AEColor.values() )
-		{
-			if( c != AEColor.TRANSPARENT )
-			{
-				itemStacks.add( new ItemStack( this, 1, DAMAGE_THRESHOLD + c.ordinal() ) );
-			}
-		}
-	}
-
-	public static boolean isLumen( final ItemStack is )
-	{
-		final int dmg = is.getItemDamage();
-		return dmg >= DAMAGE_THRESHOLD;
-	}
-
+//
+//	@Override
+//	public String getItemStackDisplayName( final ItemStack is )
+//	{
+//		return super.getItemStackDisplayName( is ) + " - " + this.getExtraName( is );
+//	}
+//
+//	private String getExtraName( final ItemStack is )
+//	{
+//		return ( is.getItemDamage() >= DAMAGE_THRESHOLD ? GuiText.Lumen.getLocal() + ' ' : "" ) + this.getColor( is );
+//	}
 }

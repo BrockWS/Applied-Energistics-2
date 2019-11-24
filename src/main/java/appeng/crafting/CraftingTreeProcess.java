@@ -26,7 +26,8 @@ import java.util.Map.Entry;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.fml.hooks.BasicEventHooks;
 
 import appeng.api.AEApi;
@@ -276,7 +277,7 @@ public class CraftingTreeProcess
 		// more fuzzy!
 		for( final IAEItemStack is : this.details.getCondensedOutputs() )
 		{
-			if( is.getItem() == what2.getItem() && ( is.getItem().isDamageable() || is.getItemDamage() == what2.getItemDamage() ) )
+			if( is.getItem() == what2.getItem() /*&& ( is.getItem().isDamageable() || is.getItemDamage() == what2.getItemDamage() )*/ ) // TODO NBTTag Match?
 			{
 				what2 = is.copy();
 				what2.setStackSize( is.getStackSize() );

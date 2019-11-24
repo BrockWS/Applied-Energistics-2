@@ -331,8 +331,8 @@ public class GridNode implements IGridNode, IPathItem
 	{
 		if( this.myGrid == null )
 		{
-			final CompoundNBT node = nodeData.getCompoundTag( name );
-			this.playerID = node.getInteger( "p" );
+			final CompoundNBT node = nodeData.getCompound( name );
+			this.playerID = node.getInt( "p" );
 			this.setLastSecurityKey( node.getLong( "k" ) );
 
 			final long storageID = node.getLong( "g" );
@@ -352,15 +352,15 @@ public class GridNode implements IGridNode, IPathItem
 		{
 			final CompoundNBT node = new CompoundNBT();
 
-			node.setInteger( "p", this.playerID );
-			node.setLong( "k", this.getLastSecurityKey() );
-			node.setLong( "g", this.myStorage.getID() );
+			node.putInt( "p", this.playerID );
+			node.putLong( "k", this.getLastSecurityKey() );
+			node.putLong( "g", this.myStorage.getID() );
 
-			nodeData.setTag( name, node );
+			nodeData.put( name, node );
 		}
 		else
 		{
-			nodeData.removeTag( name );
+			nodeData.remove( name );
 		}
 	}
 

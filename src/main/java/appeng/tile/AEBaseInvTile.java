@@ -29,10 +29,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
@@ -46,17 +47,17 @@ public abstract class AEBaseInvTile extends AEBaseTile implements IAEAppEngInven
 {
 
 	@Override
-	public void readFromNBT( final CompoundNBT data )
+	public void read( final CompoundNBT data )
 	{
-		super.readFromNBT( data );
+		super.read( data );
 		final IItemHandler inv = this.getInternalInventory();
 		if( inv != EmptyHandler.INSTANCE )
 		{
-			final CompoundNBT opt = data.getCompoundTag( "inv" );
+			final CompoundNBT opt = data.getCompound( "inv" );
 			for( int x = 0; x < inv.getSlots(); x++ )
 			{
-				final CompoundNBT item = opt.getCompoundTag( "item" + x );
-				ItemHandlerUtil.setStackInSlot( inv, x, new ItemStack( item ) );
+				final CompoundNBT item = opt.getCompound( "item" + x );
+				ItemHandlerUtil.setStackInSlot( inv, x, ItemStack.read( item ) );
 			}
 		}
 	}
@@ -64,9 +65,9 @@ public abstract class AEBaseInvTile extends AEBaseTile implements IAEAppEngInven
 	public abstract @Nonnull IItemHandler getInternalInventory();
 
 	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
+	public CompoundNBT write( final CompoundNBT data )
 	{
-		super.writeToNBT( data );
+		super.write( data );
 		final IItemHandler inv = this.getInternalInventory();
 		if( inv != EmptyHandler.INSTANCE )
 		{
@@ -77,11 +78,11 @@ public abstract class AEBaseInvTile extends AEBaseTile implements IAEAppEngInven
 				final ItemStack is = inv.getStackInSlot( x );
 				if( !is.isEmpty() )
 				{
-					is.writeToNBT( item );
+					is.write( item );
 				}
-				opt.setTag( "item" + x, item );
+				opt.put( "item" + x, item );
 			}
-			data.setTag( "inv", opt );
+			data.put( "inv", opt );
 		}
 		return data;
 	}
@@ -104,15 +105,15 @@ public abstract class AEBaseInvTile extends AEBaseTile implements IAEAppEngInven
 	@Override
 	public abstract void onChangeInventory( IItemHandler inv, int slot, InvOperation mc, ItemStack removed, ItemStack added );
 
-	@Override
-	public ITextComponent getDisplayName()
-	{
-		if( this.hasCustomInventoryName() )
-		{
-			return new TextComponentString( this.getCustomInventoryName() );
-		}
-		return new TextComponentTranslation( this.getBlockType().getUnlocalizedName() );
-	}
+//	@Override
+//	public ITextComponent getDisplayName()
+//	{
+//		if( this.hasCustomInventoryName() )
+//		{
+//			return new StringTextComponent( this.getCustomInventoryName() );
+//		}
+//		return new TranslationTextComponent( this.getBlockType().getUnlocalizedName() );
+//	}
 
 	protected @Nonnull IItemHandler getItemHandlerForSide( @Nonnull Direction side )
 	{
@@ -120,35 +121,17 @@ public abstract class AEBaseInvTile extends AEBaseTile implements IAEAppEngInven
 	}
 
 	@Override
-	public boolean hasCapability( Capability<?> capability, Direction facing )
+	public <T> LazyOptional<T> getCapability( Capability<T> capability, @Nullable Direction facing )
 	{
 		if( capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY )
 		{
 			if( facing == null )
 			{
-				return this.getInternalInventory() != EmptyHandler.INSTANCE;
+				return LazyOptional.of(this::getInternalInventory).cast();
 			}
 			else
 			{
-				return this.getItemHandlerForSide( facing ) != EmptyHandler.INSTANCE;
-			}
-		}
-		return super.hasCapability( capability, facing );
-	}
-
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public <T> T getCapability( Capability<T> capability, @Nullable Direction facing )
-	{
-		if( capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY )
-		{
-			if( facing == null )
-			{
-				return (T) this.getInternalInventory();
-			}
-			else
-			{
-				return (T) this.getItemHandlerForSide( facing );
+				return LazyOptional.of(() -> this.getItemHandlerForSide( facing )).cast();
 			}
 		}
 		return super.getCapability( capability, facing );

@@ -20,20 +20,18 @@ package appeng.bootstrap;
 
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 
 public interface IModelRegistry
 {
-	void registerItemVariants( Item item, ResourceLocation... names );
-
-	void setCustomModelResourceLocation( Item item, int metadata, ModelResourceLocation model );
-
-	void setCustomMeshDefinition( Item item, ItemMeshDefinition meshDefinition );
-
-	void setCustomStateMapper( Block block, IStateMapper mapper );
+//	void registerItemVariants( Item item, ResourceLocation... names );
+//
+//	void setCustomModelResourceLocation( Item item, int metadata, ModelResourceLocation model );
+//
+//	void setCustomMeshDefinition( Item item, ItemMeshDefinition meshDefinition );
+//
+//	void setCustomStateMapper( Block block, IStateMapper mapper );
 }

@@ -37,77 +37,85 @@ import appeng.block.AEBaseBlock;
 
 public class BlockQuartzOre extends AEBaseBlock
 {
+	/*
+		Drop Chance
+		Fortune Level
+	  	0 1-2
+		1 (1,2) * (1,1,2)
+		2 (1,2) * (1,1,2,3)
+		3 (1,2) * (1,1,2,3,4)
+	*/
 	public BlockQuartzOre()
 	{
 		super( Material.ROCK );
-		this.setHardness( 3.0F );
-		this.setResistance( 5.0F );
+//		this.setHardness( 3.0F );
+//		this.setResistance( 5.0F );
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer()
+	public BlockRenderLayer getRenderLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
 	}
-
-	@Override
-	public int quantityDropped( BlockState state, int fortune, Random rand )
-	{
-		if( fortune > 0 && Item.getItemFromBlock( this ) != this.getItemDropped( null, rand, fortune ) )
-		{
-			int j = rand.nextInt( fortune + 2 ) - 1;
-
-			if( j < 0 )
-			{
-				j = 0;
-			}
-
-			return this.quantityDropped( rand ) * ( j + 1 );
-		}
-		else
-		{
-			return this.quantityDropped( rand );
-		}
-	}
-
-	@Override
-	public int quantityDropped( final Random rand )
-	{
-		return 1 + rand.nextInt( 2 );
-	}
-
-	@Override
-	public int getExpDrop( BlockState state, IEnviromentBlockReader world, BlockPos pos, int fortune )
-	{
-		Random rand = world instanceof World ? ( (World) world ).rand : new Random();
-
-		if( this.getItemDropped( state, rand, fortune ) != Item.getItemFromBlock( this ) )
-		{
-			return MathHelper.getInt( rand, 2, 5 );
-		}
-		return super.getExpDrop( state, world, pos, fortune );
-	}
-
-	@Override
-	public Item getItemDropped( final BlockState state, final Random rand, final int fortune )
-	{
-		return AEApi.instance()
-				.definitions()
-				.materials()
-				.certusQuartzCrystal()
-				.maybeItem()
-				.orElseThrow( () -> new MissingDefinitionException( "Tried to access certus quartz crystal, even though they are disabled" ) );
-	}
-
-	@Override
-	public int damageDropped( final BlockState state )
-	{
-		return AEApi.instance()
-				.definitions()
-				.materials()
-				.certusQuartzCrystal()
-				.maybeStack( 1 )
-				.orElseThrow( () -> new MissingDefinitionException( "Tried to access certus quartz crystal, even though they are disabled" ) )
-				.getItemDamage();
-	}
+//
+//	@Override
+//	public int quantityDropped( BlockState state, int fortune, Random rand )
+//	{
+//		if( fortune > 0 && Item.getItemFromBlock( this ) != this.getItemDropped( null, rand, fortune ) )
+//		{
+//			int j = rand.nextInt( fortune + 2 ) - 1;
+//
+//			if( j < 0 )
+//			{
+//				j = 0;
+//			}
+//
+//			return this.quantityDropped( rand ) * ( j + 1 );
+//		}
+//		else
+//		{
+//			return this.quantityDropped( rand );
+//		}
+//	}
+//
+//	@Override
+//	public int quantityDropped( final Random rand )
+//	{
+//		return 1 + rand.nextInt( 2 );
+//	}
+//
+//	@Override
+//	public int getExpDrop( BlockState state, IEnviromentBlockReader world, BlockPos pos, int fortune )
+//	{
+//		Random rand = world instanceof World ? ( (World) world ).rand : new Random();
+//
+//		if( this.getItemDropped( state, rand, fortune ) != Item.getItemFromBlock( this ) )
+//		{
+//			return MathHelper.getInt( rand, 2, 5 );
+//		}
+//		return super.getExpDrop( state, world, pos, fortune );
+//	}
+//
+//	@Override
+//	public Item getItemDropped( final BlockState state, final Random rand, final int fortune )
+//	{
+//		return AEApi.instance()
+//				.definitions()
+//				.materials()
+//				.certusQuartzCrystal()
+//				.maybeItem()
+//				.orElseThrow( () -> new MissingDefinitionException( "Tried to access certus quartz crystal, even though they are disabled" ) );
+//	}
+//
+//	@Override
+//	public int damageDropped( final BlockState state )
+//	{
+//		return AEApi.instance()
+//				.definitions()
+//				.materials()
+//				.certusQuartzCrystal()
+//				.maybeStack( 1 )
+//				.orElseThrow( () -> new MissingDefinitionException( "Tried to access certus quartz crystal, even though they are disabled" ) )
+//				.getItemDamage();
+//	}
 }

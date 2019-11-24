@@ -18,10 +18,10 @@
 
 package appeng.integration.modules.theoneprobe;
 
-
-import java.util.Locale;
-
-import net.minecraft.util.text.translation.I18n;
+//
+//import java.util.Locale;
+//
+//import net.minecraft.util.text.translation.I18n;
 
 
 public enum TheOneProbeText
@@ -47,21 +47,21 @@ public enum TheOneProbeText
 
 	STORED_ENERGY;
 
-	private final String root;
-
-	TheOneProbeText()
-	{
-		this.root = "theoneprobe.appliedenergistics2";
-	}
-
-	public String getLocal()
-	{
-		return I18n.translateToLocal( this.getUnlocalized() );
-	}
-
-	public String getUnlocalized()
-	{
-		return this.root + '.' + this.name().toLowerCase( Locale.ENGLISH );
-	}
+//	private final String root;
+//
+//	TheOneProbeText()
+//	{
+//		this.root = "theoneprobe.appliedenergistics2";
+//	}
+//
+//	public String getLocal()
+//	{
+//		return I18n.translateToLocal( this.getUnlocalized() );
+//	}
+//
+//	public String getUnlocalized()
+//	{
+//		return this.root + '.' + this.name().toLowerCase( Locale.ENGLISH );
+//	}
 
 }

@@ -18,55 +18,55 @@
 
 package appeng.helpers;
 
+//
+//import net.minecraft.util.Direction;
+//import net.minecraft.world.IEnviromentBlockReader;
+//
+//import appeng.api.util.IOrientable;
 
-import net.minecraft.util.Direction;
-import net.minecraft.world.IEnviromentBlockReader;
 
-import appeng.api.util.IOrientable;
-
-
-public class LocationRotation implements IOrientable
+public class LocationRotation //implements IOrientable
 {
-
-	private final IEnviromentBlockReader w;
-	private final int x;
-	private final int y;
-	private final int z;
-
-	public LocationRotation( final IEnviromentBlockReader world, final int x, final int y, final int z )
-	{
-		this.w = world;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	@Override
-	public boolean canBeRotated()
-	{
-		return false;
-	}
-
-	@Override
-	public Direction getForward()
-	{
-		if( this.getUp().getFrontOffsetY() == 0 )
-		{
-			return Direction.UP;
-		}
-		return Direction.SOUTH;
-	}
-
-	@Override
-	public Direction getUp()
-	{
-		final int num = Math.abs( this.x + this.y + this.z ) % 6;
-		return Direction.VALUES[num];
-	}
-
-	@Override
-	public void setOrientation( final Direction forward, final Direction up )
-	{
-
-	}
+//
+//	private final IEnviromentBlockReader w;
+//	private final int x;
+//	private final int y;
+//	private final int z;
+//
+//	public LocationRotation( final IEnviromentBlockReader world, final int x, final int y, final int z )
+//	{
+//		this.w = world;
+//		this.x = x;
+//		this.y = y;
+//		this.z = z;
+//	}
+//
+//	@Override
+//	public boolean canBeRotated()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public Direction getForward()
+//	{
+//		if( this.getUp().getFrontOffsetY() == 0 )
+//		{
+//			return Direction.UP;
+//		}
+//		return Direction.SOUTH;
+//	}
+//
+//	@Override
+//	public Direction getUp()
+//	{
+//		final int num = Math.abs( this.x + this.y + this.z ) % 6;
+//		return Direction.VALUES[num];
+//	}
+//
+//	@Override
+//	public void setOrientation( final Direction forward, final Direction up )
+//	{
+//
+//	}
 }

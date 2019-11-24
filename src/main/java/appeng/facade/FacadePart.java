@@ -21,8 +21,8 @@ package appeng.facade;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,7 +65,7 @@ public class FacadePart implements IFacadePart, IBoxProvider
 	@Override
 	public void getBoxes( final IPartCollisionHelper ch, final Entity e )
 	{
-		if( e instanceof EntityLivingBase )
+		if( e instanceof LivingEntity )
 		{
 			// prevent weird snag behavior
 			ch.addBox( 0.0, 0.0, 14, 16.0, 16.0, 16.0 );
@@ -102,7 +102,7 @@ public class FacadePart implements IFacadePart, IBoxProvider
 		{
 			return 0;
 		}
-		return is.getItemDamage();
+		return is.getDamage();
 	}
 
 	@Override

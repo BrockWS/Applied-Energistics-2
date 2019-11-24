@@ -184,11 +184,13 @@ public interface IAEStack<T extends IAEStack<T>>
 	/**
 	 * @return true if the stack is a {@link IAEItemStack}
 	 */
+	@Deprecated
 	boolean isItem();
 
 	/**
 	 * @return true if the stack is a {@link IAEFluidStack}
 	 */
+	@Deprecated
 	boolean isFluid();
 
 	/**
@@ -202,4 +204,19 @@ public interface IAEStack<T extends IAEStack<T>>
 	 * @return itemstack
 	 */
 	ItemStack asItemStackRepresentation();
+
+	/**
+	 * Is there NBT Data for this stack?
+	 *
+	 * @return if there is
+	 */
+	boolean hasTagCompound();
+
+	String getModId(); // Probably not
+
+	String getModName();
+
+	String getStackName();
+
+	// TODO: Tags
 }

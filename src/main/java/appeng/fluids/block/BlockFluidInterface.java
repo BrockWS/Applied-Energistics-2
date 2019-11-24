@@ -18,49 +18,49 @@
 
 package appeng.fluids.block;
 
+//
+//import javax.annotation.Nullable;
+//
+//import net.minecraft.block.material.Material;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.tileentity.TileEntity;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.Hand;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.World;
+//
+//import appeng.api.util.AEPartLocation;
+//import appeng.block.AEBaseTileBlock;
+//import appeng.core.sync.GuiBridge;
+//import appeng.fluids.tile.TileFluidInterface;
+//import appeng.util.Platform;
 
-import javax.annotation.Nullable;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import appeng.api.util.AEPartLocation;
-import appeng.block.AEBaseTileBlock;
-import appeng.core.sync.GuiBridge;
-import appeng.fluids.tile.TileFluidInterface;
-import appeng.util.Platform;
-
-
-public class BlockFluidInterface extends AEBaseTileBlock
+public class BlockFluidInterface //extends AEBaseTileBlock
 {
-	public BlockFluidInterface()
-	{
-		super( Material.IRON );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		if( p.isSneaking() )
-		{
-			return false;
-		}
-
-		final TileEntity tg = this.getTileEntity( w, pos );
-		if( tg instanceof TileFluidInterface )
-		{
-			if( Platform.isServer() )
-			{
-				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_FLUID_INTERFACE );
-			}
-			return true;
-		}
-		return false;
-	}
+//	public BlockFluidInterface()
+//	{
+//		super( Material.IRON );
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		if( p.isSneaking() )
+//		{
+//			return false;
+//		}
+//
+//		final TileEntity tg = this.getTileEntity( w, pos );
+//		if( tg instanceof TileFluidInterface )
+//		{
+//			if( Platform.isServer() )
+//			{
+//				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_FLUID_INTERFACE );
+//			}
+//			return true;
+//		}
+//		return false;
+//	}
 }

@@ -20,32 +20,31 @@ package appeng.block;
 
 
 import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 
-public final class UnlistedBlockAccess implements IUnlistedProperty<IEnviromentBlockReader>
+public final class UnlistedBlockAccess// implements IUnlistedProperty<IEnviromentBlockReader>
 {
-	@Override
-	public String getName()
-	{
-		return "ba";
-	}
-
-	@Override
-	public boolean isValid( final IEnviromentBlockReader value )
-	{
-		return true;
-	}
-
-	@Override
-	public Class<IEnviromentBlockReader> getType()
-	{
-		return IEnviromentBlockReader.class;
-	}
-
-	@Override
-	public String valueToString( final IEnviromentBlockReader value )
-	{
-		return null;
-	}
+//	@Override
+//	public String getName()
+//	{
+//		return "ba";
+//	}
+//
+//	@Override
+//	public boolean isValid( final IEnviromentBlockReader value )
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public Class<IEnviromentBlockReader> getType()
+//	{
+//		return IEnviromentBlockReader.class;
+//	}
+//
+//	@Override
+//	public String valueToString( final IEnviromentBlockReader value )
+//	{
+//		return null;
+//	}
 }

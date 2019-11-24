@@ -19,34 +19,52 @@
 package appeng.core.sync.network;
 
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.ThreadQuickExitException;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLEventChannel;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.ThreadQuickExitException;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.dimension.DimensionType;
+
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.*;
+import net.minecraftforge.fml.network.NetworkEvent.ClientCustomPayloadEvent;
+import net.minecraftforge.fml.network.NetworkEvent.ServerCustomPayloadEvent;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraftforge.fml.network.event.EventNetworkChannel;
+
+import appeng.core.AELog;
+import appeng.core.AppEng;
+import appeng.core.config.AEConfig;
+import appeng.core.features.AEFeature;
 import appeng.core.sync.AppEngPacket;
+
+import io.netty.buffer.Unpooled;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 public class NetworkHandler
 {
+	private static final String PROTOCOL_VERSION = "1";
 	private static NetworkHandler instance;
 
-	private final FMLEventChannel ec;
-	private final String myChannelName;
+	private final EventNetworkChannel ec;
+	private final ResourceLocation myChannelName;
 
 	private final IPacketHandler clientHandler;
 	private final IPacketHandler serveHandler;
 
 	public NetworkHandler( final String channelName )
 	{
-		FMLCommonHandler.instance().bus().register( this );
-		this.ec = NetworkRegistry.INSTANCE.newEventDrivenChannel( this.myChannelName = channelName );
-		this.ec.register( this );
+		this.ec = NetworkRegistry.newEventChannel(
+				this.myChannelName = new ResourceLocation(AppEng.MOD_ID, channelName),
+				() -> PROTOCOL_VERSION,
+				PROTOCOL_VERSION::equals,
+				PROTOCOL_VERSION::equals);
+		this.ec.registerObject(this);
 
 		this.clientHandler = this.createClientSide();
 		this.serveHandler = this.createServerSide();
@@ -87,14 +105,14 @@ public class NetworkHandler
 	}
 
 	@SubscribeEvent
-	public void serverPacket( final ServerCustomPacketEvent ev )
+	public void serverPacket( final ServerCustomPayloadEvent ev )
 	{
-		final NetHandlerPlayServer srv = (NetHandlerPlayServer) ev.getPacket().handler();
+		final Context context = ev.getSource().get();
 		if( this.serveHandler != null )
 		{
 			try
 			{
-				this.serveHandler.onPacketData( null, ev.getHandler(), ev.getPacket(), srv.player );
+				this.serveHandler.onPacketData( null, context.getNetworkManager().getNetHandler(), ev.getPayload(), context.getSender() );
 			}
 			catch( final ThreadQuickExitException ignored )
 			{
@@ -104,13 +122,14 @@ public class NetworkHandler
 	}
 
 	@SubscribeEvent
-	public void clientPacket( final ClientCustomPacketEvent ev )
+	public void clientPacket( final ClientCustomPayloadEvent ev )
 	{
+		final Context context = ev.getSource().get();
 		if( this.clientHandler != null )
 		{
 			try
 			{
-				this.clientHandler.onPacketData( null, ev.getHandler(), ev.getPacket(), null );
+				this.clientHandler.onPacketData( null, context.getNetworkManager().getNetHandler(), ev.getPayload(), null );
 			}
 			catch( final ThreadQuickExitException ignored )
 			{
@@ -119,33 +138,48 @@ public class NetworkHandler
 		}
 	}
 
-	public String getChannel()
+	public ResourceLocation getChannel()
 	{
 		return this.myChannelName;
 	}
 
 	public void sendToAll( final AppEngPacket message )
 	{
-		this.ec.sendToAll( message.getProxy() );
+		PacketDistributor.ALL.noArg().send(this.buildPacket(NetworkDirection.PLAY_TO_SERVER, message));
 	}
 
 	public void sendTo( final AppEngPacket message, final ServerPlayerEntity player )
 	{
-		this.ec.sendTo( message.getProxy(), player );
+		PacketDistributor.PLAYER.with(() -> player).send(this.buildPacket(NetworkDirection.PLAY_TO_SERVER, message));
 	}
 
-	public void sendToAllAround( final AppEngPacket message, final NetworkRegistry.TargetPoint point )
+	public void sendToAllAround( final AppEngPacket message, final PacketDistributor.TargetPoint point )
 	{
-		this.ec.sendToAllAround( message.getProxy(), point );
+		PacketDistributor.NEAR.with(() -> point).send(this.buildPacket(NetworkDirection.PLAY_TO_SERVER, message));
 	}
 
 	public void sendToDimension( final AppEngPacket message, final int dimensionId )
 	{
-		this.ec.sendToDimension( message.getProxy(), dimensionId );
+		PacketDistributor.DIMENSION.with(() -> DimensionType.getById(dimensionId)).send(this.buildPacket(NetworkDirection.PLAY_TO_SERVER, message));
 	}
 
 	public void sendToServer( final AppEngPacket message )
 	{
-		this.ec.sendToServer( message.getProxy() );
+		PacketDistributor.SERVER.noArg().send(this.buildPacket(NetworkDirection.PLAY_TO_SERVER, message));
+	}
+
+	private IPacket<?> buildPacket(NetworkDirection direction, AppEngPacket packet) {
+		PacketBuffer packetBuffer = packet.getPacketBuffer();
+		if( packetBuffer.array().length > 2 * 1024 * 1024 ) // 2k walking room :)
+		{
+			throw new IllegalArgumentException( "Sorry AE2 made a " + packetBuffer.array().length + " byte packet by accident!" );
+		}
+
+		Pair<PacketBuffer, Integer> packetData = Pair.of(packetBuffer, packet.getPacketID());
+		if( AEConfig.instance().isFeatureEnabled( AEFeature.PACKET_LOGGING ) )
+		{
+			AELog.info( this.getClass().getName() + " : " + packetBuffer.readableBytes() );
+		}
+		return direction.buildPacket(packetData, this.getChannel()).getThis();
 	}
 }

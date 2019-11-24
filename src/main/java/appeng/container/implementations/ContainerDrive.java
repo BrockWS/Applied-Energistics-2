@@ -32,16 +32,16 @@ public class ContainerDrive extends AEBaseContainer
 	public ContainerDrive( final PlayerInventory ip, final TileDrive drive )
 	{
 		super( ip, drive, null );
-
-		for( int y = 0; y < 5; y++ )
-		{
-			for( int x = 0; x < 2; x++ )
-			{
-				this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.STORAGE_CELLS, drive
-						.getInternalInventory(), x + y * 2, 71 + x * 18, 14 + y * 18, this.getInventoryPlayer() ) );
-			}
-		}
-
-		this.bindPlayerInventory( ip, 0, 199 - /* height of player inventory */82 );
+//
+//		for( int y = 0; y < 5; y++ )
+//		{
+//			for( int x = 0; x < 2; x++ )
+//			{
+//				this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.STORAGE_CELLS, drive
+//						.getInternalInventory(), x + y * 2, 71 + x * 18, 14 + y * 18, this.getInventoryPlayer() ) );
+//			}
+//		}
+//
+//		this.bindPlayerInventory( ip, 0, 199 - /* height of player inventory */82 );
 	}
 }

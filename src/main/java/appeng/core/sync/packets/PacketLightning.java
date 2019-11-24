@@ -24,11 +24,11 @@ import io.netty.buffer.Unpooled;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.client.render.effects.LightningFX;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.sync.AppEngPacket;
 import appeng.core.sync.network.INetworkInfo;
@@ -68,15 +68,15 @@ public class PacketLightning extends AppEngPacket
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public void clientPacketData( final INetworkInfo network, final AppEngPacket packet, final PlayerEntity player )
 	{
 		try
 		{
 			if( Platform.isClient() && AEConfig.instance().isEnableEffects() )
 			{
-				final LightningFX fx = new LightningFX( AppEng.proxy.getWorld(), this.x, this.y, this.z, 0.0f, 0.0f, 0.0f );
-				Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//				final LightningFX fx = new LightningFX( AppEng.proxy.getWorld(), this.x, this.y, this.z, 0.0f, 0.0f, 0.0f );
+//				Minecraft.getInstance().effectRenderer.addEffect( fx );
 			}
 		}
 		catch( final Exception ignored )
@@ -84,3 +84,4 @@ public class PacketLightning extends AppEngPacket
 		}
 	}
 }
+

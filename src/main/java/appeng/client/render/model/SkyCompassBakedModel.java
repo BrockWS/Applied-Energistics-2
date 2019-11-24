@@ -19,209 +19,209 @@
 package appeng.client.render.model;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-import javax.vecmath.AxisAngle4f;
-import javax.vecmath.Matrix4f;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
-import net.minecraftforge.common.property.IExtendedBlockState;
-
-import appeng.block.misc.BlockSkyCompass;
-import appeng.hooks.CompassManager;
-import appeng.hooks.CompassResult;
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.List;
+//
+//import javax.annotation.Nullable;
+//import javax.vecmath.AxisAngle4f;
+//import javax.vecmath.Matrix4f;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.entity.EntityPlayerSP;
+//import net.minecraft.client.renderer.model.BakedQuad;
+//import net.minecraft.client.renderer.model.IBakedModel;
+//import net.minecraft.client.renderer.model.ItemCameraTransforms;
+//import net.minecraft.client.renderer.model.ItemOverrideList;
+//import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+//import net.minecraft.entity.EntityLivingBase;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.World;
+//import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+//import net.minecraftforge.common.property.IExtendedBlockState;
+//
+//import appeng.block.misc.BlockSkyCompass;
+//import appeng.hooks.CompassManager;
+//import appeng.hooks.CompassResult;
 
 
 /**
  * This baked model combines the quads of a compass base and the quads of a compass pointer, which will be rotated
  * around the Y-axis to get the compass to point in the right direction.
  */
-public class SkyCompassBakedModel implements IBakedModel
+public class SkyCompassBakedModel //implements IBakedModel
 {
-
-	private final IBakedModel base;
-
-	private final IBakedModel pointer;
-
-	private float fallbackRotation = 0;
-
-	public SkyCompassBakedModel( IBakedModel base, IBakedModel pointer )
-	{
-		this.base = base;
-		this.pointer = pointer;
-	}
-
-	@Override
-	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
-	{
-		float rotation = 0;
-		// Get rotation from the special block state
-		if( state instanceof IExtendedBlockState )
-		{
-			Float rotationOpt = ( (IExtendedBlockState) state ).getValue( BlockSkyCompass.ROTATION );
-			if( rotationOpt != null )
-			{
-				rotation = rotationOpt;
-			}
-		}
-		else if( state == null )
-		{
-			// This is used to render a compass pointing in a specific direction when being held in hand
-			rotation = this.fallbackRotation;
-		}
-
-		// Pre-compute the quad count to avoid list resizes
-		List<BakedQuad> quads = new ArrayList<>();
-
-		quads.addAll( this.base.getQuads( state, side, rand ) );
-
-		// We'll add the pointer as "sideless"
-		if( side == null )
-		{
-			// Set up the rotation around the Y-axis for the pointer
-			Matrix4f matrix = new Matrix4f();
-			matrix.setIdentity();
-			matrix.setRotation( new AxisAngle4f( 0, 1, 0, rotation ) );
-
-			MatrixVertexTransformer transformer = new MatrixVertexTransformer( matrix );
-			for( BakedQuad bakedQuad : this.pointer.getQuads( state, side, rand ) )
-			{
-				UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder( bakedQuad.getFormat() );
-
-				transformer.setParent( builder );
-				transformer.setVertexFormat( builder.getVertexFormat() );
-				bakedQuad.pipe( transformer );
-				builder.setQuadOrientation( null ); // After rotation, facing a specific side cannot be guaranteed
-													// anymore
-				BakedQuad q = builder.build();
-				quads.add( q );
-			}
-		}
-
-		return quads;
-	}
-
-	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return this.base.isAmbientOcclusion();
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return false;
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return this.base.getParticleTexture();
-	}
-
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms()
-	{
-		return this.base.getItemCameraTransforms();
-	}
-
-	@Override
-	public ItemOverrideList getOverrides()
-	{
-		/*
-		 * This handles setting the rotation of the compass when being held in hand. If it's not held in hand, it'll
-		 * animate using the
-		 * spinning animation.
-		 */
-		return new ItemOverrideList( Collections.emptyList() )
-		{
-
-			@Override
-			public IBakedModel handleItemState( IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity )
-			{
-				if( world != null && entity instanceof EntityPlayerSP )
-				{
-					PlayerEntity player = (PlayerEntity) entity;
-
-					float offRads = (float) ( player.rotationYaw / 180.0f * (float) Math.PI + Math.PI );
-
-					SkyCompassBakedModel.this.fallbackRotation = offRads + getAnimatedRotation( player.getPosition(), true );
-				}
-				else
-				{
-					SkyCompassBakedModel.this.fallbackRotation = getAnimatedRotation( null, false );
-				}
-
-				return originalModel;
-			}
-		};
-	}
-
-	/**
-	 * Gets the effective, animated rotation for the compass given the current position of the compass.
-	 */
-	public static float getAnimatedRotation( @Nullable BlockPos pos, boolean prefetch )
-	{
-
-		// Only query for a meteor position if we know our own position
-		if( pos != null )
-		{
-			CompassResult cr = CompassManager.INSTANCE.getCompassDirection( 0, pos.getX(), pos.getY(), pos.getZ() );
-
-			// Prefetch meteor positions from the server for adjacent blocks so they are available more quickly when
-			// we're moving
-			if( prefetch )
-			{
-				for( int i = 0; i < 3; i++ )
-				{
-					for( int j = 0; j < 3; j++ )
-					{
-						CompassManager.INSTANCE.getCompassDirection( 0, pos.getX() + i - 1, pos.getY(), pos.getZ() + j - 1 );
-					}
-				}
-			}
-
-			if( cr.isValidResult() )
-			{
-				if( cr.isSpin() )
-				{
-					long timeMillis = System.currentTimeMillis();
-					// .5 seconds per full rotation
-					timeMillis %= 500;
-					return timeMillis / 500.f * (float) Math.PI * 2;
-				}
-				else
-				{
-					return (float) cr.getRad();
-				}
-			}
-		}
-
-		long timeMillis = System.currentTimeMillis();
-		// 3 seconds per full rotation
-		timeMillis %= 3000;
-		return timeMillis / 3000.f * (float) Math.PI * 2;
-	}
+//
+//	private final IBakedModel base;
+//
+//	private final IBakedModel pointer;
+//
+//	private float fallbackRotation = 0;
+//
+//	public SkyCompassBakedModel( IBakedModel base, IBakedModel pointer )
+//	{
+//		this.base = base;
+//		this.pointer = pointer;
+//	}
+//
+//	@Override
+//	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
+//	{
+//		float rotation = 0;
+//		// Get rotation from the special block state
+//		if( state instanceof IExtendedBlockState )
+//		{
+//			Float rotationOpt = ( (IExtendedBlockState) state ).getValue( BlockSkyCompass.ROTATION );
+//			if( rotationOpt != null )
+//			{
+//				rotation = rotationOpt;
+//			}
+//		}
+//		else if( state == null )
+//		{
+//			// This is used to render a compass pointing in a specific direction when being held in hand
+//			rotation = this.fallbackRotation;
+//		}
+//
+//		// Pre-compute the quad count to avoid list resizes
+//		List<BakedQuad> quads = new ArrayList<>();
+//
+//		quads.addAll( this.base.getQuads( state, side, rand ) );
+//
+//		// We'll add the pointer as "sideless"
+//		if( side == null )
+//		{
+//			// Set up the rotation around the Y-axis for the pointer
+//			Matrix4f matrix = new Matrix4f();
+//			matrix.setIdentity();
+//			matrix.setRotation( new AxisAngle4f( 0, 1, 0, rotation ) );
+//
+//			MatrixVertexTransformer transformer = new MatrixVertexTransformer( matrix );
+//			for( BakedQuad bakedQuad : this.pointer.getQuads( state, side, rand ) )
+//			{
+//				UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder( bakedQuad.getFormat() );
+//
+//				transformer.setParent( builder );
+//				transformer.setVertexFormat( builder.getVertexFormat() );
+//				bakedQuad.pipe( transformer );
+//				builder.setQuadOrientation( null ); // After rotation, facing a specific side cannot be guaranteed
+//													// anymore
+//				BakedQuad q = builder.build();
+//				quads.add( q );
+//			}
+//		}
+//
+//		return quads;
+//	}
+//
+//	@Override
+//	public boolean isAmbientOcclusion()
+//	{
+//		return this.base.isAmbientOcclusion();
+//	}
+//
+//	@Override
+//	public boolean isGui3d()
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isBuiltInRenderer()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public TextureAtlasSprite getParticleTexture()
+//	{
+//		return this.base.getParticleTexture();
+//	}
+//
+//	@Override
+//	public ItemCameraTransforms getItemCameraTransforms()
+//	{
+//		return this.base.getItemCameraTransforms();
+//	}
+//
+//	@Override
+//	public ItemOverrideList getOverrides()
+//	{
+//		/*
+//		 * This handles setting the rotation of the compass when being held in hand. If it's not held in hand, it'll
+//		 * animate using the
+//		 * spinning animation.
+//		 */
+//		return new ItemOverrideList( Collections.emptyList() )
+//		{
+//
+//			@Override
+//			public IBakedModel handleItemState( IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity )
+//			{
+//				if( world != null && entity instanceof EntityPlayerSP )
+//				{
+//					PlayerEntity player = (PlayerEntity) entity;
+//
+//					float offRads = (float) ( player.rotationYaw / 180.0f * (float) Math.PI + Math.PI );
+//
+//					SkyCompassBakedModel.this.fallbackRotation = offRads + getAnimatedRotation( player.getPosition(), true );
+//				}
+//				else
+//				{
+//					SkyCompassBakedModel.this.fallbackRotation = getAnimatedRotation( null, false );
+//				}
+//
+//				return originalModel;
+//			}
+//		};
+//	}
+//
+//	/**
+//	 * Gets the effective, animated rotation for the compass given the current position of the compass.
+//	 */
+//	public static float getAnimatedRotation( @Nullable BlockPos pos, boolean prefetch )
+//	{
+//
+//		// Only query for a meteor position if we know our own position
+//		if( pos != null )
+//		{
+//			CompassResult cr = CompassManager.INSTANCE.getCompassDirection( 0, pos.getX(), pos.getY(), pos.getZ() );
+//
+//			// Prefetch meteor positions from the server for adjacent blocks so they are available more quickly when
+//			// we're moving
+//			if( prefetch )
+//			{
+//				for( int i = 0; i < 3; i++ )
+//				{
+//					for( int j = 0; j < 3; j++ )
+//					{
+//						CompassManager.INSTANCE.getCompassDirection( 0, pos.getX() + i - 1, pos.getY(), pos.getZ() + j - 1 );
+//					}
+//				}
+//			}
+//
+//			if( cr.isValidResult() )
+//			{
+//				if( cr.isSpin() )
+//				{
+//					long timeMillis = System.currentTimeMillis();
+//					// .5 seconds per full rotation
+//					timeMillis %= 500;
+//					return timeMillis / 500.f * (float) Math.PI * 2;
+//				}
+//				else
+//				{
+//					return (float) cr.getRad();
+//				}
+//			}
+//		}
+//
+//		long timeMillis = System.currentTimeMillis();
+//		// 3 seconds per full rotation
+//		timeMillis %= 3000;
+//		return timeMillis / 3000.f * (float) Math.PI * 2;
+//	}
 }

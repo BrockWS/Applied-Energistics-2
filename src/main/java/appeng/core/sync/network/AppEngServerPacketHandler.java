@@ -26,8 +26,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.INetHandler;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.PacketThreadUtil;
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 import appeng.core.AELog;
 import appeng.core.sync.AppEngPacket;
@@ -39,14 +39,12 @@ public final class AppEngServerPacketHandler extends AppEngPacketHandlerBase imp
 {
 
 	@Override
-	public void onPacketData( final INetworkInfo manager, final INetHandler handler, final FMLProxyPacket packet, final PlayerEntity player )
+	public void onPacketData( final INetworkInfo manager, final INetHandler handler, final PacketBuffer packet, final PlayerEntity player )
 	{
-		final ByteBuf stream = packet.payload();
-
 		try
 		{
-			final int packetType = stream.readInt();
-			final AppEngPacket pack = PacketTypes.getPacket( packetType ).parsePacket( stream );
+			final int packetType = packet.readInt();
+			final AppEngPacket pack = PacketTypes.getPacket( packetType ).parsePacket( packet );
 
 			final PacketCallState callState = new PacketCallState()
 			{

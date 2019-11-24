@@ -24,7 +24,8 @@
 package appeng.api.storage.data;
 
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
+
 import net.minecraftforge.fluids.FluidStack;
 
 
@@ -47,7 +48,7 @@ public interface IAEFluidStack extends IAEStack<IAEFluidStack>
 	 *
 	 * @return new FluidStack
 	 */
-	FluidStack getFluidStack();
+	FluidStack createFluidStack();
 
 	/**
 	 * Combines two IAEItemStacks via addition.

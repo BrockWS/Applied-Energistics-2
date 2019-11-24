@@ -67,15 +67,15 @@ public final class PacketConfigButton extends AppEngPacket
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
 		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
-		if( sender.openContainer instanceof AEBaseContainer )
-		{
-			final AEBaseContainer baseContainer = (AEBaseContainer) sender.openContainer;
-			if( baseContainer.getTarget() instanceof IConfigurableObject )
-			{
-				final IConfigManager cm = ( (IConfigurableObject) baseContainer.getTarget() ).getConfigManager();
-				final Enum<?> newState = Platform.rotateEnum( cm.getSetting( this.option ), this.rotationDirection, this.option.getPossibleValues() );
-				cm.putSetting( this.option, newState );
-			}
-		}
+//		if( sender.openContainer instanceof AEBaseContainer )
+//		{
+//			final AEBaseContainer baseContainer = (AEBaseContainer) sender.openContainer;
+//			if( baseContainer.getTarget() instanceof IConfigurableObject )
+//			{
+//				final IConfigManager cm = ( (IConfigurableObject) baseContainer.getTarget() ).getConfigManager();
+//				final Enum<?> newState = Platform.rotateEnum( cm.getSetting( this.option ), this.rotationDirection, this.option.getPossibleValues() );
+//				cm.putSetting( this.option, newState );
+//			}
+//		}
 	}
 }

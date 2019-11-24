@@ -32,7 +32,7 @@ import appeng.api.networking.events.MENetworkEventSubscribe;
 import appeng.api.networking.spatial.ISpatialCache;
 import appeng.api.util.DimensionalCoord;
 import appeng.api.util.IReadOnlyCollection;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.me.cluster.implementations.SpatialPylonCluster;
 import appeng.tile.spatial.TileSpatialIOPort;
 import appeng.tile.spatial.TileSpatialPylon;

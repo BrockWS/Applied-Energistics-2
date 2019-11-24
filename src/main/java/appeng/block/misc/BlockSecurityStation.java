@@ -41,63 +41,63 @@ import appeng.tile.misc.TileSecurityStation;
 import appeng.util.Platform;
 
 
-public class BlockSecurityStation extends AEBaseTileBlock
+public class BlockSecurityStation //extends AEBaseTileBlock
 {
-
-	private static final BooleanProperty POWERED = BooleanProperty.create( "powered" );
-
-	public BlockSecurityStation()
-	{
-		super( Material.IRON );
-
-		this.setDefaultState( this.getDefaultState().withProperty( POWERED, false ) );
-	}
-
-	@Override
-	protected IProperty[] getAEStates()
-	{
-		return new IProperty[] { POWERED };
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public BlockState getActualState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
-	{
-		boolean powered = false;
-		TileSecurityStation te = this.getTileEntity( world, pos );
-		if( te != null )
-		{
-			powered = te.isActive();
-		}
-
-		return super.getActualState( state, world, pos )
-				.withProperty( POWERED, powered );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		if( p.isSneaking() )
-		{
-			return false;
-		}
-
-		final TileSecurityStation tg = this.getTileEntity( w, pos );
-		if( tg != null )
-		{
-			if( Platform.isClient() )
-			{
-				return true;
-			}
-
-			Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_SECURITY );
-			return true;
-		}
-		return false;
-	}
+//
+//	private static final BooleanProperty POWERED = BooleanProperty.create( "powered" );
+//
+//	public BlockSecurityStation()
+//	{
+//		super( Material.IRON );
+//
+//		this.setDefaultState( this.getDefaultState().withProperty( POWERED, false ) );
+//	}
+//
+//	@Override
+//	protected IProperty[] getAEStates()
+//	{
+//		return new IProperty[] { POWERED };
+//	}
+//
+//	@Override
+//	public BlockRenderLayer getBlockLayer()
+//	{
+//		return BlockRenderLayer.CUTOUT;
+//	}
+//
+//	@Override
+//	public BlockState getActualState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
+//	{
+//		boolean powered = false;
+//		TileSecurityStation te = this.getTileEntity( world, pos );
+//		if( te != null )
+//		{
+//			powered = te.isActive();
+//		}
+//
+//		return super.getActualState( state, world, pos )
+//				.withProperty( POWERED, powered );
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		if( p.isSneaking() )
+//		{
+//			return false;
+//		}
+//
+//		final TileSecurityStation tg = this.getTileEntity( w, pos );
+//		if( tg != null )
+//		{
+//			if( Platform.isClient() )
+//			{
+//				return true;
+//			}
+//
+//			Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_SECURITY );
+//			return true;
+//		}
+//		return false;
+//	}
 }

@@ -19,28 +19,28 @@
 package appeng.container.slot;
 
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraftforge.items.IItemHandler;
 
 
-public class SlotDisabled extends AppEngSlot
+public class SlotDisabled //extends AppEngSlot
 {
-
-	public SlotDisabled( final IItemHandler par1iInventory, final int slotIndex, final int x, final int y )
-	{
-		super( par1iInventory, slotIndex, x, y );
-	}
-
-	@Override
-	public boolean isItemValid( final ItemStack par1ItemStack )
-	{
-		return false;
-	}
-
-	@Override
-	public boolean canTakeStack( final PlayerEntity par1EntityPlayer )
-	{
-		return false;
-	}
+//
+//	public SlotDisabled( final IItemHandler par1iInventory, final int slotIndex, final int x, final int y )
+//	{
+//		super( par1iInventory, slotIndex, x, y );
+//	}
+//
+//	@Override
+//	public boolean isItemValid( final ItemStack par1ItemStack )
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean canTakeStack( final PlayerEntity par1EntityPlayer )
+//	{
+//		return false;
+//	}
 }

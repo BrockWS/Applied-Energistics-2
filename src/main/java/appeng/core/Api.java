@@ -20,8 +20,10 @@ package appeng.core;
 
 
 import appeng.api.IAppEngApi;
+import appeng.api.definitions.IDefinitions;
 import appeng.api.features.IRegistryContainer;
 import appeng.api.networking.IGridHelper;
+import appeng.api.parts.IPartHelper;
 import appeng.api.storage.IStorageHelper;
 import appeng.api.util.IClientHelper;
 import appeng.core.api.ApiClientHelper;
@@ -36,23 +38,25 @@ public final class Api implements IAppEngApi
 {
 	public static final Api INSTANCE = new Api();
 
-	private final ApiPart partHelper;
+	private ApiPart partHelper;
 
 	// private MovableTileRegistry MovableRegistry = new MovableTileRegistry();
-	private final IRegistryContainer registryContainer;
-	private final IStorageHelper storageHelper;
-	private final IGridHelper networkHelper;
-	private final ApiDefinitions definitions;
-	private final IClientHelper client;
+	private IRegistryContainer registryContainer;
+	private IStorageHelper storageHelper;
+	private IGridHelper networkHelper;
+	private ApiDefinitions definitions;
+	private IClientHelper client;
 
 	private Api()
 	{
-		this.storageHelper = new ApiStorage();
-		this.networkHelper = new ApiGrid();
+		AELog.info("Initialization Api");
+//		this.storageHelper = new ApiStorage();
+//		this.networkHelper = new ApiGrid();
 		this.registryContainer = new RegistryContainer();
 		this.partHelper = new ApiPart();
 		this.definitions = new ApiDefinitions( (PartModels) this.registryContainer.partModels() );
-		this.client = new ApiClientHelper();
+//		this.definitions = new ApiDefinitions( null );
+//		this.client = new ApiClientHelper();
 	}
 
 	public PartModels getPartModels()
@@ -79,13 +83,13 @@ public final class Api implements IAppEngApi
 	}
 
 	@Override
-	public ApiPart partHelper()
+	public IPartHelper partHelper()
 	{
 		return this.partHelper;
 	}
 
 	@Override
-	public ApiDefinitions definitions()
+	public IDefinitions definitions()
 	{
 		return this.definitions;
 	}

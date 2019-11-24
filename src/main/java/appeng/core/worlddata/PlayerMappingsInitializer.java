@@ -23,11 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Property;
-
 import appeng.core.AELog;
 import appeng.util.UUIDMatcher;
+
+import com.electronwill.nightconfig.core.Config;
 
 
 /**
@@ -50,7 +49,7 @@ class PlayerMappingsInitializer
 	 *
 	 * @param playerList the category for the player list, generally extracted using the "players" tag
 	 */
-	PlayerMappingsInitializer( final ConfigCategory playerList )
+	PlayerMappingsInitializer( final Config playerList )
 	{
 		// Matcher for UUIDs
 		final UUIDMatcher matcher = new UUIDMatcher();
@@ -62,10 +61,10 @@ class PlayerMappingsInitializer
 		this.playerMappings = new HashMap<>( capacity );
 
 		// Iterates through every pair of UUID to ID
-		for( final Map.Entry<String, Property> entry : playerList.getValues().entrySet() )
+		for( final Map.Entry<String, Object> entry : playerList.valueMap().entrySet() )
 		{
 			final String maybeUUID = entry.getKey();
-			final int id = entry.getValue().getInt();
+			final int id = playerList.get(maybeUUID);
 
 			if( matcher.isUUID( maybeUUID ) )
 			{

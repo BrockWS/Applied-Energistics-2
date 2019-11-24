@@ -26,26 +26,26 @@ import net.minecraft.block.Blocks;
 
 public class MeteoriteBlockPutter
 {
-	public boolean put( final IMeteoriteWorld w, final int i, final int j, final int k, final Block blk )
-	{
-		final Block original = w.getBlock( i, j, k );
-
-		if( original == Blocks.BEDROCK || original == blk )
-		{
-			return false;
-		}
-
-		w.setBlock( i, j, k, blk );
-		return true;
-	}
-
-	void put( final IMeteoriteWorld w, final int i, final int j, final int k, final BlockState state, final int meta )
-	{
-		if( w.getBlock( i, j, k ) == Blocks.BEDROCK )
-		{
-			return;
-		}
-
-		w.setBlock( i, j, k, state, 3 );
-	}
+//	public boolean put( final IMeteoriteWorld w, final int i, final int j, final int k, final Block blk )
+//	{
+//		final Block original = w.getBlock( i, j, k );
+//
+//		if( original == Blocks.BEDROCK || original == blk )
+//		{
+//			return false;
+//		}
+//
+//		w.setBlock( i, j, k, blk );
+//		return true;
+//	}
+//
+//	void put( final IMeteoriteWorld w, final int i, final int j, final int k, final BlockState state, final int meta )
+//	{
+//		if( w.getBlock( i, j, k ) == Blocks.BEDROCK )
+//		{
+//			return;
+//		}
+//
+//		w.setBlock( i, j, k, state, 3 );
+//	}
 }

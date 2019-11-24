@@ -19,36 +19,36 @@
 package appeng.core.features.registries.cell;
 
 
-import net.minecraft.item.ItemStack;
+//import net.minecraft.item.ItemStack;
+//
+//import appeng.api.storage.ICellHandler;
+//import appeng.api.storage.ICellInventory;
+//import appeng.api.storage.ICellInventoryHandler;
+//import appeng.api.storage.ISaveProvider;
+//import appeng.api.storage.IStorageChannel;
+//import appeng.api.storage.data.IAEStack;
+//import appeng.me.storage.BasicCellInventory;
+//import appeng.me.storage.BasicCellInventoryHandler;
 
-import appeng.api.storage.ICellHandler;
-import appeng.api.storage.ICellInventory;
-import appeng.api.storage.ICellInventoryHandler;
-import appeng.api.storage.ISaveProvider;
-import appeng.api.storage.IStorageChannel;
-import appeng.api.storage.data.IAEStack;
-import appeng.me.storage.BasicCellInventory;
-import appeng.me.storage.BasicCellInventoryHandler;
 
-
-public class BasicCellHandler implements ICellHandler
+public class BasicCellHandler// implements ICellHandler
 {
-
-	@Override
-	public boolean isCell( final ItemStack is )
-	{
-		return BasicCellInventory.isCell( is );
-	}
-
-	@Override
-	public <T extends IAEStack<T>> ICellInventoryHandler<T> getCellInventory( final ItemStack is, final ISaveProvider container, final IStorageChannel<T> channel )
-	{
-		final ICellInventory<T> inv = BasicCellInventory.createInventory( is, container );
-		if( inv == null || inv.getChannel() != channel )
-		{
-			return null;
-		}
-		return new BasicCellInventoryHandler<>( inv, channel );
-	}
+//
+//	@Override
+//	public boolean isCell( final ItemStack is )
+//	{
+//		return BasicCellInventory.isCell( is );
+//	}
+//
+//	@Override
+//	public <T extends IAEStack<T>> ICellInventoryHandler<T> getCellInventory( final ItemStack is, final ISaveProvider container, final IStorageChannel<T> channel )
+//	{
+//		final ICellInventory<T> inv = BasicCellInventory.createInventory( is, container );
+//		if( inv == null || inv.getChannel() != channel )
+//		{
+//			return null;
+//		}
+//		return new BasicCellInventoryHandler<>( inv, channel );
+//	}
 
 }

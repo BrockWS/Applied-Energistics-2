@@ -32,31 +32,31 @@
 package appeng.core.api.imc;
 
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.fml.InterModComms.IMCMessage;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraftforge.fml.InterModComms.IMCMessage;
+//
+//import appeng.api.AEApi;
+//import appeng.core.api.IIMCProcessor;
 
-import appeng.api.AEApi;
-import appeng.core.api.IIMCProcessor;
 
-
-public class IMCMatterCannon implements IIMCProcessor
+public class IMCMatterCannon //implements IIMCProcessor
 {
-
-	@Override
-	public void process( final IMCMessage m )
-	{
-		final CompoundNBT msg = m.getNBTValue();
-		final CompoundNBT item = (CompoundNBT) msg.getTag( "item" );
-
-		final ItemStack ammo = new ItemStack( item );
-		final double weight = msg.getDouble( "weight" );
-
-		if( ammo.isEmpty() )
-		{
-			throw new IllegalStateException( "invalid item in message " + m );
-		}
-
-		AEApi.instance().registries().matterCannon().registerAmmo( ammo, weight );
-	}
+//
+//	@Override
+//	public void process( final IMCMessage m )
+//	{
+//		final CompoundNBT msg = m.getNBTValue();
+//		final CompoundNBT item = (CompoundNBT) msg.getTag( "item" );
+//
+//		final ItemStack ammo = new ItemStack( item );
+//		final double weight = msg.getDouble( "weight" );
+//
+//		if( ammo.isEmpty() )
+//		{
+//			throw new IllegalStateException( "invalid item in message " + m );
+//		}
+//
+//		AEApi.instance().registries().matterCannon().registerAmmo( ammo, weight );
+//	}
 }

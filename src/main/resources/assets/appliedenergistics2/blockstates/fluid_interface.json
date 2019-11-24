@@ -1,7 +1,7 @@
 {
     "variants": {
-        "normal": {
-            "model": "appliedenergistics2:fluid_interface"
+        "": {
+            "model": "block/appliedenergistics2:fluid_interface"
         }
     }
 }

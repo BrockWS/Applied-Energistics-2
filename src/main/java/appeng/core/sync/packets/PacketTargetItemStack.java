@@ -81,10 +81,10 @@ public class PacketTargetItemStack extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		if( player.openContainer instanceof AEBaseContainer )
-		{
-			( (AEBaseContainer) player.openContainer ).setTargetStack( this.stack );
-		}
+//		if( player.openContainer instanceof AEBaseContainer )
+//		{
+//			( (AEBaseContainer) player.openContainer ).setTargetStack( this.stack );
+//		}
 	}
 
 }

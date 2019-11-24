@@ -24,10 +24,10 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Items;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
+
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IDefinitions;
@@ -97,10 +97,10 @@ public class SlotRestrictedInput extends AppEngSlot
 	@Override
 	public boolean isItemValid( final ItemStack i )
 	{
-		if( !this.getContainer().isValidForSlot( this, i ) )
-		{
-			return false;
-		}
+//		if( !this.getContainer().isValidForSlot( this, i ) )
+//		{
+//			return false;
+//		}
 
 		if( i.isEmpty() )
 		{
@@ -196,7 +196,7 @@ public class SlotRestrictedInput extends AppEngSlot
 			case ORE:
 				return appeng.api.AEApi.instance().registries().grinder().getRecipeForInput( i ) != null;
 			case FUEL:
-				return TileEntityFurnace.getItemBurnTime( i ) > 0;
+				return ForgeHooks.getBurnTime( i ) > 0;
 			case POWERED_TOOL:
 				return Platform.isChargeable( i );
 			case QE_SINGULARITY:
@@ -242,19 +242,19 @@ public class SlotRestrictedInput extends AppEngSlot
 	@Override
 	public ItemStack getDisplayStack()
 	{
-		if( Platform.isClient() && ( this.which == PlacableItemType.ENCODED_PATTERN ) )
-		{
-			final ItemStack is = super.getStack();
-			if( !is.isEmpty() && is.getItem() instanceof ItemEncodedPattern )
-			{
-				final ItemEncodedPattern iep = (ItemEncodedPattern) is.getItem();
-				final ItemStack out = iep.getOutput( is );
-				if( !out.isEmpty() )
-				{
-					return out;
-				}
-			}
-		}
+//		if( Platform.isClient() && ( this.which == PlacableItemType.ENCODED_PATTERN ) )
+//		{
+//			final ItemStack is = super.getStack();
+//			if( !is.isEmpty() && is.getItem() instanceof ItemEncodedPattern )
+//			{
+//				final ItemEncodedPattern iep = (ItemEncodedPattern) is.getItem();
+//				final ItemStack out = iep.getOutput( is );
+//				if( !out.isEmpty() )
+//				{
+//					return out;
+//				}
+//			}
+//		}
 		return super.getStack();
 	}
 
@@ -265,16 +265,16 @@ public class SlotRestrictedInput extends AppEngSlot
 			return true;
 		}
 
-		for( final String name : new String[] { "Copper", "Tin", "Obsidian", "Iron", "Lead", "Bronze", "Brass", "Nickel", "Aluminium" } )
-		{
-			for( final ItemStack ingot : OreDictionary.getOres( "ingot" + name ) )
-			{
-				if( Platform.itemComparisons().isSameItem( i, ingot ) )
-				{
-					return true;
-				}
-			}
-		}
+//		for( final String name : new String[] { "Copper", "Tin", "Obsidian", "Iron", "Lead", "Bronze", "Brass", "Nickel", "Aluminium" } )
+//		{
+//			for( final ItemStack ingot : OreDictionary.getOres( "ingot" + name ) )
+//			{
+//				if( Platform.itemComparisons().isSameItem( i, ingot ) )
+//				{
+//					return true;
+//				}
+//			}
+//		}
 
 		return false;
 	}

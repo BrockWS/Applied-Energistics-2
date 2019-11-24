@@ -18,14 +18,14 @@
 
 package appeng.integration.modules.waila.part;
 
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.entity.player.ServerPlayerEntity;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.util.math.RayTraceResult;
+//import net.minecraft.util.math.Vec3d;
+//import net.minecraft.world.World;
 
 
 /**
@@ -37,64 +37,64 @@ import net.minecraft.world.World;
  */
 public final class Tracer
 {
-	/**
-	 * Trace view of players to blocks.
-	 * Ignore all which are out of reach.
-	 *
-	 * @param world word of block
-	 * @param player player viewing block
-	 * @param pos pos of block
-	 *
-	 * @return trace movement. Can be null
-	 */
-	public RayTraceResult retraceBlock( final World world, final ServerPlayerEntity player, BlockPos pos )
-	{
-		BlockState blockState = world.getBlockState( pos );
-
-		final Vec3d headVec = this.getCorrectedHeadVec( player );
-		final Vec3d lookVec = player.getLook( 1.0F );
-		final double reach = this.getBlockReachDistance_server( player );
-		final Vec3d endVec = headVec.addVector( lookVec.x * reach, lookVec.y * reach, lookVec.z * reach );
-
-		return blockState.collisionRayTrace( world, pos, headVec, endVec );
-	}
-
-	/**
-	 * Gets the view point of a player
-	 *
-	 * @param player player with head
-	 *
-	 * @return view point of player
-	 */
-	private Vec3d getCorrectedHeadVec( final PlayerEntity player )
-	{
-		double x = player.posX;
-		double y = player.posY;
-		double z = player.posZ;
-
-		if( player.world.isRemote )
-		{
-			// compatibility with eye height changing mods
-			y += player.getEyeHeight() - player.getDefaultEyeHeight();
-		}
-		else
-		{
-			y += player.getEyeHeight();
-			if( player instanceof ServerPlayerEntity && player.isSneaking() )
-			{
-				y -= 0.08;
-			}
-		}
-		return new Vec3d( x, y, z );
-	}
-
-	/**
-	 * @param player multi-player player
-	 *
-	 * @return block reach distance of player
-	 */
-	private double getBlockReachDistance_server( final ServerPlayerEntity player )
-	{
-		return player.interactionManager.getBlockReachDistance();
-	}
+//	/**
+//	 * Trace view of players to blocks.
+//	 * Ignore all which are out of reach.
+//	 *
+//	 * @param world word of block
+//	 * @param player player viewing block
+//	 * @param pos pos of block
+//	 *
+//	 * @return trace movement. Can be null
+//	 */
+//	public RayTraceResult retraceBlock( final World world, final ServerPlayerEntity player, BlockPos pos )
+//	{
+//		BlockState blockState = world.getBlockState( pos );
+//
+//		final Vec3d headVec = this.getCorrectedHeadVec( player );
+//		final Vec3d lookVec = player.getLook( 1.0F );
+//		final double reach = this.getBlockReachDistance_server( player );
+//		final Vec3d endVec = headVec.addVector( lookVec.x * reach, lookVec.y * reach, lookVec.z * reach );
+//
+//		return blockState.collisionRayTrace( world, pos, headVec, endVec );
+//	}
+//
+//	/**
+//	 * Gets the view point of a player
+//	 *
+//	 * @param player player with head
+//	 *
+//	 * @return view point of player
+//	 */
+//	private Vec3d getCorrectedHeadVec( final PlayerEntity player )
+//	{
+//		double x = player.posX;
+//		double y = player.posY;
+//		double z = player.posZ;
+//
+//		if( player.world.isRemote )
+//		{
+//			// compatibility with eye height changing mods
+//			y += player.getEyeHeight() - player.getDefaultEyeHeight();
+//		}
+//		else
+//		{
+//			y += player.getEyeHeight();
+//			if( player instanceof ServerPlayerEntity && player.isSneaking() )
+//			{
+//				y -= 0.08;
+//			}
+//		}
+//		return new Vec3d( x, y, z );
+//	}
+//
+//	/**
+//	 * @param player multi-player player
+//	 *
+//	 * @return block reach distance of player
+//	 */
+//	private double getBlockReachDistance_server( final ServerPlayerEntity player )
+//	{
+//		return player.interactionManager.getBlockReachDistance();
+//	}
 }

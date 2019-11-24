@@ -23,9 +23,10 @@ import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.AEApi;
@@ -43,7 +44,7 @@ public class ItemCreativeStorageCell extends AEBaseItem implements ICellWorkbenc
 
 	public ItemCreativeStorageCell()
 	{
-		this.setMaxStackSize( 1 );
+		super(new Properties().maxStackSize(1));
 	}
 
 	@Override
@@ -76,9 +77,9 @@ public class ItemCreativeStorageCell extends AEBaseItem implements ICellWorkbenc
 
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag advancedTooltips )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<ITextComponent> lines, final ITooltipFlag advancedTooltips )
 	{
 		final IMEInventoryHandler<?> inventory = AEApi.instance()
 				.registries()

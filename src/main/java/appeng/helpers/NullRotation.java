@@ -24,35 +24,35 @@ import net.minecraft.util.Direction;
 import appeng.api.util.IOrientable;
 
 
-public class NullRotation implements IOrientable
+public class NullRotation //implements IOrientable
 {
-
-	public NullRotation()
-	{
-
-	}
-
-	@Override
-	public boolean canBeRotated()
-	{
-		return false;
-	}
-
-	@Override
-	public Direction getForward()
-	{
-		return Direction.SOUTH;
-	}
-
-	@Override
-	public Direction getUp()
-	{
-		return Direction.UP;
-	}
-
-	@Override
-	public void setOrientation( final Direction forward, final Direction up )
-	{
-
-	}
+//
+//	public NullRotation()
+//	{
+//
+//	}
+//
+//	@Override
+//	public boolean canBeRotated()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public Direction getForward()
+//	{
+//		return Direction.SOUTH;
+//	}
+//
+//	@Override
+//	public Direction getUp()
+//	{
+//		return Direction.UP;
+//	}
+//
+//	@Override
+//	public void setOrientation( final Direction forward, final Direction up )
+//	{
+//
+//	}
 }

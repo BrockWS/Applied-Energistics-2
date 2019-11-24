@@ -19,7 +19,6 @@
 package appeng.block.crafting;
 
 
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -27,63 +26,58 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.util.AEColor;
 import appeng.client.UnlistedProperty;
 import appeng.tile.crafting.TileCraftingMonitorTile;
 
 
-public class BlockCraftingMonitor extends BlockCraftingUnit
+public class BlockCraftingMonitor //extends BlockCraftingUnit
 {
-
-	public static final UnlistedProperty<AEColor> COLOR = new UnlistedProperty<>( "color", AEColor.class );
-
-	public BlockCraftingMonitor()
-	{
-		super( CraftingUnitType.MONITOR );
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] {
-				STATE,
-				COLOR,
-				FORWARD,
-				UP
-		} );
-	}
-
-	@Override
-	public IExtendedBlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
-	{
-		AEColor color = AEColor.TRANSPARENT;
-		Direction forward = Direction.NORTH;
-		Direction up = Direction.UP;
-
-		TileCraftingMonitorTile te = this.getTileEntity( world, pos );
-		if( te != null )
-		{
-			color = te.getColor();
-			forward = te.getForward();
-			up = te.getUp();
-		}
-
-		return super.getExtendedState( state, world, pos )
-				.withProperty( COLOR, color )
-				.withProperty( FORWARD, forward )
-				.withProperty( UP, up );
-	}
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public void getSubBlocks( final ItemGroup tabs, final NonNullList<ItemStack> itemStacks )
-	{
-		itemStacks.add( new ItemStack( this, 1, 0 ) );
-	}
+//
+//	public static final UnlistedProperty<AEColor> COLOR = new UnlistedProperty<>( "color", AEColor.class );
+//
+//	public BlockCraftingMonitor()
+//	{
+//		super( CraftingUnitType.MONITOR );
+//	}
+//
+//	@Override
+//	protected BlockStateContainer createBlockState()
+//	{
+//		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] {
+//				STATE,
+//				COLOR,
+//				FORWARD,
+//				UP
+//		} );
+//	}
+//
+//	@Override
+//	public IExtendedBlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
+//	{
+//		AEColor color = AEColor.TRANSPARENT;
+//		Direction forward = Direction.NORTH;
+//		Direction up = Direction.UP;
+//
+//		TileCraftingMonitorTile te = this.getTileEntity( world, pos );
+//		if( te != null )
+//		{
+//			color = te.getColor();
+//			forward = te.getForward();
+//			up = te.getUp();
+//		}
+//
+//		return super.getExtendedState( state, world, pos )
+//				.withProperty( COLOR, color )
+//				.withProperty( FORWARD, forward )
+//				.withProperty( UP, up );
+//	}
+//
+//	@Override
+//	@OnlyIn( Dist.CLIENT )
+//	public void getSubBlocks( final ItemGroup tabs, final NonNullList<ItemStack> itemStacks )
+//	{
+//		itemStacks.add( new ItemStack( this, 1, 0 ) );
+//	}
 }

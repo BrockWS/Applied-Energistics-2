@@ -19,10 +19,10 @@
 package appeng.client.render;
 
 
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fml.client.FMLClientHandler;
+//import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+//import net.minecraft.client.renderer.vertex.VertexFormat;
+//import net.minecraftforge.common.ForgeModContainer;
+//import net.minecraftforge.fml.client.FMLClientHandler;
 
 
 /**
@@ -30,40 +30,40 @@ import net.minecraftforge.fml.client.FMLClientHandler;
  */
 public final class VertexFormats
 {
-
-	// Standard item format extended with lightmap coordinates
-	private static final VertexFormat itemFormatWithLightMap = new VertexFormat( DefaultVertexFormats.ITEM ).addElement( DefaultVertexFormats.TEX_2S );
-
-	private VertexFormats()
-	{
-	}
-
-	public static VertexFormat getFormatWithLightMap( VertexFormat format )
-	{
-		// Do not use this when Optifine is present or if the vanilla lighting pipeline is used
-		if( FMLClientHandler.instance().hasOptifine() || !ForgeModContainer.forgeLightPipelineEnabled )
-		{
-			return format;
-		}
-
-		VertexFormat result;
-		if( format == DefaultVertexFormats.BLOCK )
-		{
-			result = DefaultVertexFormats.BLOCK;
-		}
-		else if( format == DefaultVertexFormats.ITEM )
-		{
-			result = itemFormatWithLightMap;
-		}
-		else if( !format.hasUvOffset( 1 ) )
-		{
-			result = new VertexFormat( format );
-			result.addElement( DefaultVertexFormats.TEX_2S );
-		}
-		else
-		{
-			result = format; // Already has the needed UV, so keep it
-		}
-		return result;
-	}
+//
+//	// Standard item format extended with lightmap coordinates
+//	private static final VertexFormat itemFormatWithLightMap = new VertexFormat( DefaultVertexFormats.ITEM ).addElement( DefaultVertexFormats.TEX_2S );
+//
+//	private VertexFormats()
+//	{
+//	}
+//
+//	public static VertexFormat getFormatWithLightMap( VertexFormat format )
+//	{
+//		// Do not use this when Optifine is present or if the vanilla lighting pipeline is used
+//		if( FMLClientHandler.instance().hasOptifine() || !ForgeModContainer.forgeLightPipelineEnabled )
+//		{
+//			return format;
+//		}
+//
+//		VertexFormat result;
+//		if( format == DefaultVertexFormats.BLOCK )
+//		{
+//			result = DefaultVertexFormats.BLOCK;
+//		}
+//		else if( format == DefaultVertexFormats.ITEM )
+//		{
+//			result = itemFormatWithLightMap;
+//		}
+//		else if( !format.hasUvOffset( 1 ) )
+//		{
+//			result = new VertexFormat( format );
+//			result.addElement( DefaultVertexFormats.TEX_2S );
+//		}
+//		else
+//		{
+//			result = format; // Already has the needed UV, so keep it
+//		}
+//		return result;
+//	}
 }

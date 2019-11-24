@@ -18,88 +18,88 @@
 
 package appeng.items.tools.quartz;
 
+//
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.ActionResult;
+//import net.minecraft.util.ActionResultType;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.Hand;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.World;
+//
+//import appeng.api.implementations.guiobjects.IGuiItem;
+//import appeng.api.implementations.guiobjects.IGuiItemObject;
+//import appeng.api.util.AEPartLocation;
+//import appeng.core.features.AEFeature;
+//import appeng.core.sync.GuiBridge;
+//import appeng.items.AEBaseItem;
+//import appeng.items.contents.QuartzKnifeObj;
+//import appeng.util.Platform;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
-import appeng.api.implementations.guiobjects.IGuiItem;
-import appeng.api.implementations.guiobjects.IGuiItemObject;
-import appeng.api.util.AEPartLocation;
-import appeng.core.features.AEFeature;
-import appeng.core.sync.GuiBridge;
-import appeng.items.AEBaseItem;
-import appeng.items.contents.QuartzKnifeObj;
-import appeng.util.Platform;
-
-
-public class ToolQuartzCuttingKnife extends AEBaseItem implements IGuiItem
+public class ToolQuartzCuttingKnife //extends AEBaseItem implements IGuiItem
 {
-	private final AEFeature type;
-
-	public ToolQuartzCuttingKnife( final AEFeature type )
-	{
-		this.type = type;
-		this.setMaxDamage( 50 );
-		this.setMaxStackSize( 1 );
-	}
-
-	@Override
-	public ActionResultType onItemUse( final PlayerEntity p, final World worldIn, final BlockPos pos, final Hand hand, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		if( Platform.isServer() )
-		{
-			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_QUARTZ_KNIFE );
-		}
-		return ActionResultType.SUCCESS;
-	}
-
-	@Override
-	public ActionResult<ItemStack> onItemRightClick( final World w, final PlayerEntity p, final Hand hand )
-	{
-		if( Platform.isServer() )
-		{
-			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_QUARTZ_KNIFE );
-		}
-		p.swingArm( hand );
-		return new ActionResult<>( ActionResultType.SUCCESS, p.getHeldItem( hand ) );
-	}
-
-	@Override
-	public boolean getIsRepairable( final ItemStack a, final ItemStack b )
-	{
-		return Platform.canRepair( this.type, a, b );
-	}
-
-	@Override
-	public boolean isRepairable()
-	{
-		return false;
-	}
-
-	@Override
-	public ItemStack getContainerItem( final ItemStack itemStack )
-	{
-		ItemStack copy = itemStack.copy();
-		copy.setItemDamage( itemStack.getItemDamage() + 1 );
-
-		return copy;
-	}
-
-	@Override
-	public boolean hasContainerItem( final ItemStack stack )
-	{
-		return true;
-	}
-
-	@Override
-	public IGuiItemObject getGuiObject( final ItemStack is, final World world, final BlockPos pos )
-	{
-		return new QuartzKnifeObj( is );
-	}
+//	private final AEFeature type;
+//
+//	public ToolQuartzCuttingKnife( final AEFeature type )
+//	{
+//		this.type = type;
+//		this.setMaxDamage( 50 );
+//		this.setMaxStackSize( 1 );
+//	}
+//
+//	@Override
+//	public ActionResultType onItemUse( final PlayerEntity p, final World worldIn, final BlockPos pos, final Hand hand, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		if( Platform.isServer() )
+//		{
+//			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_QUARTZ_KNIFE );
+//		}
+//		return ActionResultType.SUCCESS;
+//	}
+//
+//	@Override
+//	public ActionResult<ItemStack> onItemRightClick( final World w, final PlayerEntity p, final Hand hand )
+//	{
+//		if( Platform.isServer() )
+//		{
+//			Platform.openGUI( p, null, AEPartLocation.INTERNAL, GuiBridge.GUI_QUARTZ_KNIFE );
+//		}
+//		p.swingArm( hand );
+//		return new ActionResult<>( ActionResultType.SUCCESS, p.getHeldItem( hand ) );
+//	}
+//
+//	@Override
+//	public boolean getIsRepairable( final ItemStack a, final ItemStack b )
+//	{
+//		return Platform.canRepair( this.type, a, b );
+//	}
+//
+//	@Override
+//	public boolean isRepairable()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public ItemStack getContainerItem( final ItemStack itemStack )
+//	{
+//		ItemStack copy = itemStack.copy();
+//		copy.setItemDamage( itemStack.getItemDamage() + 1 );
+//
+//		return copy;
+//	}
+//
+//	@Override
+//	public boolean hasContainerItem( final ItemStack stack )
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public IGuiItemObject getGuiObject( final ItemStack is, final World world, final BlockPos pos )
+//	{
+//		return new QuartzKnifeObj( is );
+//	}
 }

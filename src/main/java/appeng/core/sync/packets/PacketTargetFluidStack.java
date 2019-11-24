@@ -47,7 +47,7 @@ public class PacketTargetFluidStack extends AppEngPacket
 		{
 			if( stream.readableBytes() > 0 )
 			{
-				this.stack = (AEFluidStack) AEFluidStack.fromPacket( stream );
+//				this.stack = (AEFluidStack) AEFluidStack.fromPacket( stream );
 			}
 			else
 			{
@@ -73,7 +73,7 @@ public class PacketTargetFluidStack extends AppEngPacket
 		{
 			try
 			{
-				stack.writeToPacket( data );
+//				stack.writeToPacket( data );
 			}
 			catch( Exception ex )
 			{
@@ -86,9 +86,9 @@ public class PacketTargetFluidStack extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		if( player.openContainer instanceof ContainerFluidTerminal )
-		{
-			( (ContainerFluidTerminal) player.openContainer ).setTargetStack( this.stack );
-		}
+//		if( player.openContainer instanceof ContainerFluidTerminal )
+//		{
+//			( (ContainerFluidTerminal) player.openContainer ).setTargetStack( this.stack );
+//		}
 	}
 }

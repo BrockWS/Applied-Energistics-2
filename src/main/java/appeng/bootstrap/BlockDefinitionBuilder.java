@@ -31,12 +31,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.definitions.IBlockDefinition;
 import appeng.block.AEBaseBlock;
@@ -44,19 +45,15 @@ import appeng.block.AEBaseBlockItem;
 import appeng.block.AEBaseTileBlock;
 import appeng.bootstrap.components.IBlockRegistrationComponent;
 import appeng.bootstrap.components.IItemRegistrationComponent;
-import appeng.bootstrap.components.IPreInitComponent;
 import appeng.bootstrap.definitions.TileEntityDefinition;
-import appeng.core.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.CreativeTab;
+import appeng.core.config.AEConfig;
 import appeng.core.features.AEFeature;
-import appeng.core.features.ActivityState;
 import appeng.core.features.BlockDefinition;
-import appeng.core.features.BlockStackSrc;
 import appeng.core.features.TileDefinition;
 import appeng.tile.AEBaseTile;
 import appeng.util.Platform;
-
 
 class BlockDefinitionBuilder implements IBlockBuilder
 {
@@ -79,10 +76,10 @@ class BlockDefinitionBuilder implements IBlockBuilder
 
 	private Function<Block, BlockItem> itemFactory;
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private BlockRendering blockRendering;
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private ItemRendering itemRendering;
 
 	BlockDefinitionBuilder( FeatureFactory factory, String id, Supplier<? extends Block> blockSupplier )
@@ -144,11 +141,11 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		this.rendering( new BlockRenderingCustomizer()
 		{
 			@Override
-			@SideOnly( Side.CLIENT )
+			@OnlyIn( Dist.CLIENT )
 			public void customize( IBlockRendering rendering, IItemRendering itemRendering )
 			{
 				ModelResourceLocation model = new ModelResourceLocation( new ResourceLocation( AppEng.MOD_ID, BlockDefinitionBuilder.this.registryName ), "inventory" );
-				itemRendering.model( model ).variants( model );
+				itemRendering.models( model );
 			}
 		} );
 
@@ -169,7 +166,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		return this;
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private void customizeForClient( BlockRenderingCustomizer callback )
 	{
 		callback.customize( this.blockRendering, this.itemRendering );
@@ -187,7 +184,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		// Create block and matching item, and set factory name of both
 		Block block = this.blockSupplier.get();
 		block.setRegistryName( AppEng.MOD_ID, this.registryName );
-		block.setUnlocalizedName( "appliedenergistics2." + this.registryName );
+//		block.setUnlocalizedName( "appliedenergistics2." + this.registryName );
 
 		BlockItem item = this.constructItemFromBlock( block );
 		if( item != null )
@@ -196,24 +193,24 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		}
 
 		// Register the item and block with the game
-		this.factory.addBootstrapComponent( (IBlockRegistrationComponent) ( side, registry ) -> registry.register( block ) );
+		this.factory.addBootstrapComponent( (IBlockRegistrationComponent) ( registry ) -> registry.register( block ) );
 		if( item != null )
 		{
-			this.factory.addBootstrapComponent( (IItemRegistrationComponent) ( side, registry ) -> registry.register( item ) );
+			this.factory.addBootstrapComponent( (IItemRegistrationComponent) ( registry ) -> registry.register( item ) );
 		}
 
-		block.setCreativeTab( this.creativeTab );
+//		block.setCreativeTab( this.creativeTab );
 
 		// Register all extra handlers
 		this.bootstrapComponents.forEach( component -> this.factory.addBootstrapComponent( component.apply( block, item ) ) );
 
-		if( this.tileEntityDefinition != null && block instanceof AEBaseTileBlock )
+		if( this.tileEntityDefinition != null && block instanceof AEBaseTileBlock)
 		{
-			( (AEBaseTileBlock) block ).setTileEntity( this.tileEntityDefinition.getTileEntityClass() );
-			if( this.tileEntityDefinition.getName() == null )
-			{
-				this.tileEntityDefinition.setName( this.registryName );
-			}
+//			( (AEBaseTileBlock) block ).setTileEntity( this.tileEntityDefinition.getTileEntityClass() );
+//			if( this.tileEntityDefinition.getName() == null )
+//			{
+//				this.tileEntityDefinition.setName( this.registryName );
+//			}
 
 		}
 
@@ -222,7 +219,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 			if( block instanceof AEBaseTileBlock )
 			{
 				AEBaseTileBlock tileBlock = (AEBaseTileBlock) block;
-				this.blockRendering.apply( this.factory, block, tileBlock.getTileEntityClass() );
+//				this.blockRendering.apply( this.factory, block, tileBlock.getTileEntityClass() );
 			}
 			else
 			{
@@ -237,17 +234,17 @@ class BlockDefinitionBuilder implements IBlockBuilder
 
 		if( block instanceof AEBaseTileBlock )
 		{
-			this.factory.addBootstrapComponent( (IPreInitComponent) side ->
-			{
-				AEBaseTile.registerTileItem(
-						this.tileEntityDefinition == null ? ( (AEBaseTileBlock) block ).getTileEntityClass() : this.tileEntityDefinition.getTileEntityClass(),
-						new BlockStackSrc( block, 0, ActivityState.Enabled ) );
-			} );
-
-			if( this.tileEntityDefinition != null )
-			{
-				this.factory.tileEntityComponent.addTileEntity( this.tileEntityDefinition );
-			}
+//			this.factory.addBootstrapComponent( (IPreInitComponent) side ->
+//			{
+//				AEBaseTile.registerTileItem(
+//						this.tileEntityDefinition == null ? ( (AEBaseTileBlock) block ).getTileEntityClass() : this.tileEntityDefinition.getTileEntityClass(),
+//						new BlockStackSrc( block, 0, ActivityState.Enabled ) );
+//			} );
+//
+//			if( this.tileEntityDefinition != null )
+//			{
+//				this.factory.tileEntityComponent.addTileEntity( this.tileEntityDefinition );
+//			}
 
 			return (T) new TileDefinition( this.registryName, (AEBaseTileBlock) block, item );
 		}
@@ -275,7 +272,7 @@ class BlockDefinitionBuilder implements IBlockBuilder
 		}
 		else
 		{
-			return new BlockItem( block );
+			return new BlockItem( block, new Item.Properties().group(CreativeTab.instance) );
 		}
 	}
 }

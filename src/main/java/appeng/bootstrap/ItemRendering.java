@@ -20,137 +20,140 @@ package appeng.bootstrap;
 
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
 
-import com.google.common.collect.ImmutableMap;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
+//import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+//import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import appeng.bootstrap.components.ItemColorComponent;
-import appeng.bootstrap.components.ItemMeshDefinitionComponent;
-import appeng.bootstrap.components.ItemModelComponent;
-import appeng.bootstrap.components.ItemVariantsComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ModelLoader;
+
+import appeng.bootstrap.components.*;
 
 
 class ItemRendering implements IItemRendering
 {
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private IItemColor itemColor;
 
-	@SideOnly( Side.CLIENT )
-	private ItemMeshDefinition itemMeshDefinition;
+//	@OnlyIn( Dist.CLIENT )
+//	private ItemMeshDefinition itemMeshDefinition;
 
-	@SideOnly( Side.CLIENT )
-	private Map<Integer, ModelResourceLocation> itemModels = new HashMap<>();
+	@OnlyIn( Dist.CLIENT )
+	private Function<Item, ResourceLocation> modelSelector;
 
-	@SideOnly( Side.CLIENT )
-	private Set<ResourceLocation> variants = new HashSet<>();
+	@OnlyIn( Dist.CLIENT )
+	private Collection<ResourceLocation> itemModels;
 
-	@SideOnly( Side.CLIENT )
-	private Map<String, IModel> builtInModels = new HashMap<>();
+//	@OnlyIn( Dist.CLIENT )
+//	private Set<ResourceLocation> variants = new HashSet<>();
+//
+//	@OnlyIn( Dist.CLIENT )
+//	private Map<String, IModel> builtInModels = new HashMap<>();
+//
+//	@Override
+//	@OnlyIn( Dist.CLIENT )
+//	public IItemRendering meshDefinition( ItemMeshDefinition meshDefinition )
+//	{
+//		this.itemMeshDefinition = meshDefinition;
+//		return this;
+//	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
-	public IItemRendering meshDefinition( ItemMeshDefinition meshDefinition )
-	{
-		this.itemMeshDefinition = meshDefinition;
+	public IItemRendering modelSelector(Function<Item, ResourceLocation> selector) {
+		this.modelSelector = selector;
 		return this;
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
-	public IItemRendering model( int meta, ModelResourceLocation model )
+	@OnlyIn( Dist.CLIENT )
+	public IItemRendering models( Collection<ResourceLocation> models )
 	{
-		this.itemModels.put( meta, model );
+		this.itemModels = models;
 		return this;
 	}
 
-	@Override
-	public IItemRendering variants( Collection<ResourceLocation> resources )
-	{
-		this.variants.addAll( resources );
-		return this;
-	}
+//	@Override
+//	public IItemRendering variants( Collection<ResourceLocation> resources )
+//	{
+//		this.variants.addAll( resources );
+//		return this;
+//	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public IItemRendering color( IItemColor itemColor )
 	{
 		this.itemColor = itemColor;
 		return this;
 	}
 
-	@Override
-	public IItemRendering builtInModel( String name, IModel model )
-	{
-		this.builtInModels.put( name, model );
-		return this;
-	}
+//	@Override
+//	public IItemRendering builtInModel( String name, IModel model )
+//	{
+//		this.builtInModels.put( name, model );
+//		return this;
+//	}
 
 	void apply( FeatureFactory factory, Item item )
 	{
-		if( this.itemMeshDefinition != null )
+//		if( this.itemMeshDefinition != null )
+//		{
+//			factory.addBootstrapComponent( new ItemMeshDefinitionComponent( item, this.itemMeshDefinition ) );
+//		}
+
+		if( this.itemModels != null && !this.itemModels.isEmpty() && this.modelSelector != null )
 		{
-			factory.addBootstrapComponent( new ItemMeshDefinitionComponent( item, this.itemMeshDefinition ) );
+			factory.addBootstrapComponent( (IModelRegistrationComponent) () -> this.itemModels.forEach(ModelLoader::addSpecialModel));
+			factory.addBootstrapComponent((IModelBakeComponent) (modelManager, modelLoader, modelRegistry) -> {
+				IBakedModel model = modelRegistry.get(this.modelSelector.apply(item));
+				modelRegistry.put(new ModelResourceLocation(item.getRegistryName(), "inventory"), model);
+			});
 		}
 
-		if( !this.itemModels.isEmpty() )
-		{
-			factory.addBootstrapComponent( new ItemModelComponent( item, this.itemModels ) );
-		}
-
-		Set<ResourceLocation> resources = new HashSet<>( this.variants );
-
-		// Register a default item model if neither items by meta nor an item mesh definition exist
-		if( this.itemMeshDefinition == null && this.itemModels.isEmpty() )
-		{
-			ModelResourceLocation model;
-
-			// For block items, the default will try to use the default state of the associated block
-			if( item instanceof BlockItem )
-			{
-				Block block = ( (BlockItem) item ).getBlock();
-
-				// We can only do this once the blocks are actually registered...
-				StateMapperHelper helper = new StateMapperHelper( item.getRegistryName() );
-				model = helper.getModelResourceLocation( block.getDefaultState() );
-			}
-			else
-			{
-				model = new ModelResourceLocation( item.getRegistryName(), "inventory" );
-			}
-			factory.addBootstrapComponent( new ItemModelComponent( item, ImmutableMap.of( 0, model ) ) );
-		}
-
-		// TODO : 1.12
-		this.builtInModels.forEach( factory::addBuiltInModel );
-
-		if( !resources.isEmpty() )
-		{
-			factory.addBootstrapComponent( new ItemVariantsComponent( item, resources ) );
-		}
-		else if( this.itemMeshDefinition != null )
-		{
-			// Adding an empty variant list here will prevent Vanilla from trying to load the default item model in this
-			// case
-			factory.addBootstrapComponent( new ItemVariantsComponent( item, Collections.emptyList() ) );
-		}
+//		Set<ResourceLocation> resources = new HashSet<>( this.variants );
+//
+//		// Register a default item model if neither items by meta nor an item mesh definition exist
+//		if( this.itemMeshDefinition == null && this.itemModels.isEmpty() )
+//		{
+//			ModelResourceLocation model;
+//
+//			// For block items, the default will try to use the default state of the associated block
+//			if( item instanceof BlockItem )
+//			{
+//				Block block = ( (BlockItem) item ).getBlock();
+//
+//				// We can only do this once the blocks are actually registered...
+//				StateMapperHelper helper = new StateMapperHelper( item.getRegistryName() );
+//				model = helper.getModelResourceLocation( block.getDefaultState() );
+//			}
+//			else
+//			{
+//				model = new ModelResourceLocation( item.getRegistryName(), "inventory" );
+//			}
+//			factory.addBootstrapComponent( new ItemModelComponent( item, ImmutableMap.of( 0, model ) ) );
+//		}
+//
+//		// TODO : 1.12
+//		this.builtInModels.forEach( factory::addBuiltInModel );
+//
+//		if( !resources.isEmpty() )
+//		{
+//			factory.addBootstrapComponent( new ItemVariantsComponent( item, resources ) );
+//		}
+//		else if( this.itemMeshDefinition != null )
+//		{
+//			// Adding an empty variant list here will prevent Vanilla from trying to load the default item model in this
+//			// case
+//			factory.addBootstrapComponent( new ItemVariantsComponent( item, Collections.emptyList() ) );
+//		}
 
 		if( this.itemColor != null )
 		{
@@ -158,20 +161,20 @@ class ItemRendering implements IItemRendering
 		}
 	}
 
-	private static class StateMapperHelper extends StateMapperBase
-	{
-
-		private final ResourceLocation registryName;
-
-		public StateMapperHelper( ResourceLocation registryName )
-		{
-			this.registryName = registryName;
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation( BlockState state )
-		{
-			return new ModelResourceLocation( this.registryName, this.getPropertyString( state.getProperties() ) );
-		}
-	}
+//	private static class StateMapperHelper extends StateMapperBase
+//	{
+//
+//		private final ResourceLocation registryName;
+//
+//		public StateMapperHelper( ResourceLocation registryName )
+//		{
+//			this.registryName = registryName;
+//		}
+//
+//		@Override
+//		protected ModelResourceLocation getModelResourceLocation( BlockState state )
+//		{
+//			return new ModelResourceLocation( this.registryName, this.getPropertyString( state.getProperties() ) );
+//		}
+//	}
 }

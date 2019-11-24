@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.ParticleStatus;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,13 +36,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
+
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,7 +60,7 @@ import appeng.client.render.effects.VibrantFX;
 import appeng.client.render.model.UVLModelLoader;
 import appeng.client.render.tesr.InscriberTESR;
 import appeng.client.render.textures.ParticleTextures;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AELog;
 import appeng.core.AppEng;
 import appeng.core.sync.network.NetworkHandler;
@@ -86,24 +88,24 @@ public class ClientHelper extends ServerHelper
 	{
 		MinecraftForge.EVENT_BUS.register( this );
 		// Do not register the Fullbright hacks if Optifine is present or if the Forge lighting is disabled
-		if( !FMLClientHandler.instance().hasOptifine() && ForgeModContainer.forgeLightPipelineEnabled )
+		if( /*!FMLClientHandler.instance().hasOptifine() &&*/ ForgeConfig.CLIENT.forgeLightPipelineEnabled.get() )
 		{
-			ModelLoaderRegistry.registerLoader( UVLModelLoader.INSTANCE );
+//			ModelLoaderRegistry.registerLoader( UVLModelLoader.INSTANCE );
 		}
 
-		RenderingRegistry.registerEntityRenderingHandler( EntityTinyTNTPrimed.class, manager -> new RenderTinyTNTPrimed( manager ) );
-		RenderingRegistry.registerEntityRenderingHandler( EntityFloatingItem.class, manager -> new RenderFloatingItem( manager ) );
+//		RenderingRegistry.registerEntityRenderingHandler( EntityTinyTNTPrimed.class, manager -> new RenderTinyTNTPrimed( manager ) );
+//		RenderingRegistry.registerEntityRenderingHandler( EntityFloatingItem.class, manager -> new RenderFloatingItem( manager ) );
 	}
 
 	@Override
 	public void init()
 	{
-		for( ActionKey key : ActionKey.values() )
-		{
-			final KeyBinding binding = new KeyBinding( key.getTranslationKey(), key.getDefaultKey(), KEY_CATEGORY );
-			ClientRegistry.registerKeyBinding( binding );
-			this.bindings.put( key, binding );
-		}
+//		for( ActionKey key : ActionKey.values() )
+//		{
+//			final KeyBinding binding = new KeyBinding( key.getTranslationKey(), key.getDefaultKey(), KEY_CATEGORY );
+//			ClientRegistry.registerKeyBinding( binding );
+//			this.bindings.put( key, binding );
+//		}
 	}
 
 	@Override
@@ -111,7 +113,7 @@ public class ClientHelper extends ServerHelper
 	{
 		if( Platform.isClient() )
 		{
-			return Minecraft.getMinecraft().world;
+			return Minecraft.getInstance().world;
 		}
 		else
 		{
@@ -131,7 +133,7 @@ public class ClientHelper extends ServerHelper
 		if( Platform.isClient() )
 		{
 			final List<PlayerEntity> o = new ArrayList<>();
-			o.add( Minecraft.getMinecraft().player );
+			o.add( Minecraft.getInstance().player );
 			return o;
 		}
 		else
@@ -173,22 +175,22 @@ public class ClientHelper extends ServerHelper
 	@Override
 	public boolean shouldAddParticles( final Random r )
 	{
-		final int setting = Minecraft.getMinecraft().gameSettings.particleSetting;
-		if( setting == 2 )
+		final ParticleStatus setting = Minecraft.getInstance().gameSettings.particles;
+		if( setting == ParticleStatus.MINIMAL )
 		{
 			return false;
 		}
-		if( setting == 0 )
+		if( setting == ParticleStatus.ALL )
 		{
 			return true;
 		}
-		return r.nextInt( 2 * ( setting + 1 ) ) == 0;
+		return r.nextInt( 2 * ( setting.func_216832_b() + 1 ) ) == 0;
 	}
 
 	@Override
 	public RayTraceResult getRTR()
 	{
-		return Minecraft.getMinecraft().objectMouseOver;
+		return Minecraft.getInstance().objectMouseOver;
 	}
 
 	@Override
@@ -204,7 +206,7 @@ public class ClientHelper extends ServerHelper
 			return super.getRenderMode();
 		}
 
-		final Minecraft mc = Minecraft.getMinecraft();
+		final Minecraft mc = Minecraft.getInstance();
 		final PlayerEntity player = mc.player;
 
 		return this.renderModeForPlayer( player );
@@ -213,7 +215,7 @@ public class ClientHelper extends ServerHelper
 	@Override
 	public void triggerUpdates()
 	{
-		final Minecraft mc = Minecraft.getMinecraft();
+		final Minecraft mc = Minecraft.getInstance();
 		if( mc == null || mc.player == null || mc.world == null )
 		{
 			return;
@@ -227,7 +229,7 @@ public class ClientHelper extends ServerHelper
 
 		final int range = 16 * 16;
 
-		mc.world.markBlockRangeForRenderUpdate( x - range, y - range, z - range, x + range, y + range, z + range );
+		mc.worldRenderer.markBlockRangeForRenderUpdate( x - range, y - range, z - range, x + range, y + range, z + range );
 	}
 
 	@SubscribeEvent
@@ -241,7 +243,7 @@ public class ClientHelper extends ServerHelper
 			final float r = 0xff & ( col.mediumVariant >> 16 );
 			final float g = 0xff & ( col.mediumVariant >> 8 );
 			final float b = 0xff & ( col.mediumVariant );
-			GlStateManager.color( r / 255.0f, g / 255.0f, b / 255.0f );
+			GlStateManager.color3f( r / 255.0f, g / 255.0f, b / 255.0f );
 		}
 	}
 
@@ -249,8 +251,8 @@ public class ClientHelper extends ServerHelper
 	{
 		final PacketAssemblerAnimation paa = (PacketAssemblerAnimation) o;
 
-		final AssemblerFX fx = new AssemblerFX( world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, paa.rate, paa.is );
-		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//		final AssemblerFX fx = new AssemblerFX( world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, paa.rate, paa.is );
+//		Minecraft.getInstance().effectRenderer.addEffect( fx );
 	}
 
 	private void spawnVibrant( final World w, final double x, final double y, final double z )
@@ -261,8 +263,8 @@ public class ClientHelper extends ServerHelper
 			final double d1 = ( Platform.getRandomFloat() - 0.5F ) * 0.26D;
 			final double d2 = ( Platform.getRandomFloat() - 0.5F ) * 0.26D;
 
-			final VibrantFX fx = new VibrantFX( w, x + d0, y + d1, z + d2, 0.0D, 0.0D, 0.0D );
-			Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//			final VibrantFX fx = new VibrantFX( w, x + d0, y + d1, z + d2, 0.0D, 0.0D, 0.0D );
+//			Minecraft.getMinecraft().effectRenderer.addEffect( fx );
 		}
 	}
 
@@ -272,13 +274,13 @@ public class ClientHelper extends ServerHelper
 		final float y = (float) ( ( ( Platform.getRandomInt() % 100 ) * 0.01 ) - 0.5 ) * 0.7f;
 		final float z = (float) ( ( ( Platform.getRandomInt() % 100 ) * 0.01 ) - 0.5 ) * 0.7f;
 
-		final CraftingFx fx = new CraftingFx( w, posX + x, posY + y, posZ + z, Items.DIAMOND );
-
-		fx.setMotionX( -x * 0.2f );
-		fx.setMotionY( -y * 0.2f );
-		fx.setMotionZ( -z * 0.2f );
-
-		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//		final CraftingFx fx = new CraftingFx( w, posX + x, posY + y, posZ + z, Items.DIAMOND );
+//
+//		fx.setMotionX( -x * 0.2f );
+//		fx.setMotionY( -y * 0.2f );
+//		fx.setMotionZ( -z * 0.2f );
+//
+//		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
 	}
 
 	private void spawnEnergy( final World w, final double posX, final double posY, final double posZ )
@@ -287,36 +289,36 @@ public class ClientHelper extends ServerHelper
 		final float y = (float) ( ( ( Platform.getRandomInt() % 100 ) * 0.01 ) - 0.5 ) * 0.7f;
 		final float z = (float) ( ( ( Platform.getRandomInt() % 100 ) * 0.01 ) - 0.5 ) * 0.7f;
 
-		final EnergyFx fx = new EnergyFx( w, posX + x, posY + y, posZ + z, Items.DIAMOND );
-
-		fx.setMotionX( -x * 0.1f );
-		fx.setMotionY( -y * 0.1f );
-		fx.setMotionZ( -z * 0.1f );
-
-		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//		final EnergyFx fx = new EnergyFx( w, posX + x, posY + y, posZ + z, Items.DIAMOND );
+//
+//		fx.setMotionX( -x * 0.1f );
+//		fx.setMotionY( -y * 0.1f );
+//		fx.setMotionZ( -z * 0.1f );
+//
+//		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
 	}
 
 	private void spawnLightning( final World world, final double posX, final double posY, final double posZ )
 	{
-		final LightningFX fx = new LightningFX( world, posX, posY + 0.3f, posZ, 0.0f, 0.0f, 0.0f );
-		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//		final LightningFX fx = new LightningFX( world, posX, posY + 0.3f, posZ, 0.0f, 0.0f, 0.0f );
+//		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
 	}
 
 	private void spawnLightningArc( final World world, final double posX, final double posY, final double posZ, final Vec3d second )
 	{
-		final LightningFX fx = new LightningArcFX( world, posX, posY, posZ, second.x, second.y, second.z, 0.0f, 0.0f, 0.0f );
-		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//		final LightningFX fx = new LightningArcFX( world, posX, posY, posZ, second.x, second.y, second.z, 0.0f, 0.0f, 0.0f );
+//		Minecraft.getMinecraft().effectRenderer.addEffect( fx );
 	}
 
 	@SubscribeEvent
-	public void wheelEvent( final MouseInputEvent me )
+	public void wheelEvent( final GuiScreenEvent.MouseDragEvent me )
 	{
-		if( me.getDwheel() == 0 )
+		if( me.getMouseX() == 0 )
 		{
 			return;
 		}
 
-		final Minecraft mc = Minecraft.getMinecraft();
+		final Minecraft mc = Minecraft.getInstance();
 		final PlayerEntity player = mc.player;
 		if( player.isSneaking() )
 		{
@@ -327,7 +329,7 @@ public class ClientHelper extends ServerHelper
 			{
 				try
 				{
-					NetworkHandler.instance().sendToServer( new PacketValueConfig( "Item", me.getDwheel() > 0 ? "WheelUp" : "WheelDown" ) );
+					NetworkHandler.instance().sendToServer( new PacketValueConfig( "Item", me.getMouseX() > 0 ? "WheelUp" : "WheelDown" ) );
 					me.setCanceled( true );
 				}
 				catch( final IOException e )
@@ -354,6 +356,7 @@ public class ClientHelper extends ServerHelper
 	@Override
 	public boolean isActionKey( ActionKey key, int pressedKeyCode )
 	{
-		return this.bindings.get( key ).isActiveAndMatches( pressedKeyCode );
+//		return this.bindings.get( key ).isActiveAndMatches( pressedKeyCode );
+		return false;
 	}
 }

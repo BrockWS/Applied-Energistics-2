@@ -20,20 +20,23 @@ package appeng.items.storage;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.AEApi;
@@ -46,7 +49,7 @@ import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.features.AEFeature;
 import appeng.core.localization.GuiText;
 import appeng.items.AEBaseItem;
@@ -64,19 +67,19 @@ import appeng.util.Platform;
  */
 public abstract class AbstractStorageCell<T extends IAEStack<T>> extends AEBaseItem implements IStorageCell<T>, IItemGroup
 {
-	protected final MaterialType component;
+	protected final int component;
 	protected final int totalBytes;
 
-	public AbstractStorageCell( final MaterialType whichCell, final int kilobytes )
+	public AbstractStorageCell( final int whichCell, final int kilobytes )
 	{
-		this.setMaxStackSize( 1 );
+		super(new Properties().maxStackSize(1));
 		this.totalBytes = kilobytes * 1024;
 		this.component = whichCell;
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	@Override
-	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag advancedTooltips )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<ITextComponent> lines, final ITooltipFlag advancedTooltips )
 	{
 		AEApi.instance()
 				.client()
@@ -154,7 +157,7 @@ public abstract class AbstractStorageCell<T extends IAEStack<T>> extends AEBaseI
 	@Override
 	public void setFuzzyMode( final ItemStack is, final FuzzyMode fzMode )
 	{
-		Platform.openNbtData( is ).setString( "FuzzyMode", fzMode.name() );
+		Platform.openNbtData( is ).putString( "FuzzyMode", fzMode.name() );
 	}
 
 	@Override
@@ -184,7 +187,24 @@ public abstract class AbstractStorageCell<T extends IAEStack<T>> extends AEBaseI
 					playerInventory.setInventorySlotContents( playerInventory.currentItem, ItemStack.EMPTY );
 
 					// drop core
-					final ItemStack extraB = ia.addItems( this.component.stack( 1 ) );
+					Optional<ItemStack> core;
+					switch (this.component) {
+						case 0:
+							core = AEApi.instance().definitions().materials().cell1kPart().maybeStack(1);
+							break;
+						case 1:
+							core = AEApi.instance().definitions().materials().cell4kPart().maybeStack(1);
+							break;
+						case 2:
+							core = AEApi.instance().definitions().materials().cell16kPart().maybeStack(1);
+							break;
+						case 3:
+							core = AEApi.instance().definitions().materials().cell64kPart().maybeStack(1);
+							break;
+						default:
+							throw new IllegalStateException("Unknown component type " + this.component);
+					}
+					final ItemStack extraB = ia.addItems( core.orElseThrow(RuntimeException::new) );
 					if( !extraB.isEmpty() )
 					{
 						player.dropItem( extraB, false );
@@ -205,9 +225,9 @@ public abstract class AbstractStorageCell<T extends IAEStack<T>> extends AEBaseI
 					// drop empty storage cell case
 					this.dropEmptyStorageCellCase( ia, player );
 
-					if( player.inventoryContainer != null )
+					if( player.openContainer != null )
 					{
-						player.inventoryContainer.detectAndSendChanges();
+						player.openContainer.detectAndSendChanges();
 					}
 
 					return true;
@@ -220,9 +240,9 @@ public abstract class AbstractStorageCell<T extends IAEStack<T>> extends AEBaseI
 	protected abstract void dropEmptyStorageCellCase( final InventoryAdaptor ia, final PlayerEntity player );
 
 	@Override
-	public ActionResultType onItemUseFirst( final PlayerEntity player, final World world, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ, final Hand hand )
+	public ActionResultType onItemUseFirst( final ItemStack stack, final ItemUseContext context )
 	{
-		return this.disassembleDrive( player.getHeldItem( hand ), world, player ) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+		return this.disassembleDrive( stack, context.getWorld(), context.getPlayer() ) ? ActionResultType.SUCCESS : ActionResultType.PASS;
 	}
 
 	@Override

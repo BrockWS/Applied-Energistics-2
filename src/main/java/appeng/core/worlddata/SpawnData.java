@@ -64,7 +64,7 @@ final class SpawnData implements IWorldSpawnData
 			final CompoundNBT data = this.loadSpawnData( dim, chunkX, chunkZ );
 
 			// edit.
-			data.setBoolean( chunkX + "," + chunkZ, true );
+			data.putBoolean( chunkX + "," + chunkZ, true );
 
 			this.writeSpawnData( dim, chunkX, chunkZ, data );
 		}
@@ -88,9 +88,9 @@ final class SpawnData implements IWorldSpawnData
 			final CompoundNBT data = this.loadSpawnData( dim, chunkX, chunkZ );
 
 			// edit.
-			final int size = data.getInteger( "num" );
-			data.setTag( String.valueOf( size ), newData );
-			data.setInteger( "num", size + 1 );
+			final int size = data.getInt( "num" );
+			data.put( String.valueOf( size ), newData );
+			data.putInt( "num", size + 1 );
 
 			this.writeSpawnData( dim, chunkX, chunkZ, data );
 
@@ -117,10 +117,10 @@ final class SpawnData implements IWorldSpawnData
 					if( data != null )
 					{
 						// edit.
-						final int size = data.getInteger( "num" );
+						final int size = data.getInt( "num" );
 						for( int s = 0; s < size; s++ )
 						{
-							ll.add( data.getCompoundTag( String.valueOf( s ) ) );
+							ll.add( data.getCompound( String.valueOf( s ) ) );
 						}
 					}
 				}

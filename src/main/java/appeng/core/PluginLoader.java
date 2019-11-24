@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
+//import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
 import appeng.api.AEInjectable;
 import appeng.api.AEPlugin;
@@ -40,43 +40,43 @@ import appeng.api.AEPlugin;
 class PluginLoader
 {
 
-	public void loadPlugins( Collection<Object> injectables, ASMDataTable asmDataTable )
-	{
-		Map<Class<?>, Object> injectableMap = mapInjectables( injectables );
-		findAndInstantiatePlugins( asmDataTable, injectableMap );
-	}
-
-	private static void findAndInstantiatePlugins( ASMDataTable dataTable, Map<Class<?>, Object> injectableMap )
-	{
-		Set<ASMDataTable.ASMData> allAnnotated = dataTable.getAll( AEPlugin.class.getCanonicalName() );
-
-		for( ASMDataTable.ASMData candidate : allAnnotated )
-		{
-
-			Class<?> aClass;
-			try
-			{
-				aClass = Class.forName( candidate.getClassName() );
-			}
-			catch( ClassNotFoundException e )
-			{
-				AELog.error( e, "Couldn't find annotated AE plugin class " + candidate.getClassName() );
-				throw new RuntimeException( "Couldn't find annotated AE plugin class " + candidate.getClassName(), e );
-			}
-
-			// Try instantiating the plugin
-			try
-			{
-				Object plugin = instantiatePlugin( aClass, injectableMap );
-				AELog.info( "Loaded AE2 Plugin {}", plugin.getClass() );
-			}
-			catch( Exception e )
-			{
-				AELog.error( e, "Unable to instantiate AE plugin " + candidate.getClassName() );
-				throw new RuntimeException( "Unable to instantiate AE plugin " + candidate.getClassName(), e );
-			}
-		}
-	}
+//	public void loadPlugins( Collection<Object> injectables, ASMDataTable asmDataTable )
+//	{
+//		Map<Class<?>, Object> injectableMap = mapInjectables( injectables );
+//		findAndInstantiatePlugins( asmDataTable, injectableMap );
+//	}
+//
+//	private static void findAndInstantiatePlugins( ASMDataTable dataTable, Map<Class<?>, Object> injectableMap )
+//	{
+//		Set<ASMDataTable.ASMData> allAnnotated = dataTable.getAll( AEPlugin.class.getCanonicalName() );
+//
+//		for( ASMDataTable.ASMData candidate : allAnnotated )
+//		{
+//
+//			Class<?> aClass;
+//			try
+//			{
+//				aClass = Class.forName( candidate.getClassName() );
+//			}
+//			catch( ClassNotFoundException e )
+//			{
+//				AELog.error( e, "Couldn't find annotated AE plugin class " + candidate.getClassName() );
+//				throw new RuntimeException( "Couldn't find annotated AE plugin class " + candidate.getClassName(), e );
+//			}
+//
+//			// Try instantiating the plugin
+//			try
+//			{
+//				Object plugin = instantiatePlugin( aClass, injectableMap );
+//				AELog.info( "Loaded AE2 Plugin {}", plugin.getClass() );
+//			}
+//			catch( Exception e )
+//			{
+//				AELog.error( e, "Unable to instantiate AE plugin " + candidate.getClassName() );
+//				throw new RuntimeException( "Unable to instantiate AE plugin " + candidate.getClassName(), e );
+//			}
+//		}
+//	}
 
 	private static Object instantiatePlugin( Class<?> aClass, Map<Class<?>, Object> injectableMap ) throws Exception
 	{

@@ -21,20 +21,19 @@ package appeng.block.storage;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
@@ -47,54 +46,34 @@ import appeng.util.Platform;
 public class BlockDrive extends AEBaseTileBlock
 {
 
-	public static final UnlistedProperty<DriveSlotsState> SLOTS_STATE = new UnlistedProperty<>( "drive_slots_state", DriveSlotsState.class );
-
 	public BlockDrive()
 	{
 		super( Material.IRON );
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer()
+	public BlockRenderLayer getRenderLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] {
-				SLOTS_STATE,
-				FORWARD,
-				UP
-		} );
-	}
-
-	@Override
-	public BlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
-	{
-		TileDrive te = this.getTileEntity( world, pos );
-		IExtendedBlockState extState = (IExtendedBlockState) super.getExtendedState( state, world, pos );
-		return extState.withProperty( SLOTS_STATE, te == null ? DriveSlotsState.createEmpty( 10 ) : DriveSlotsState.fromChestOrDrive( te ) );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+	public boolean onBlockActivated( BlockState state, World w, BlockPos pos, PlayerEntity p, Hand hand, BlockRayTraceResult resulthitZ )
 	{
 		if( p.isSneaking() )
 		{
 			return false;
 		}
 
-		final TileDrive tg = this.getTileEntity( w, pos );
-		if( tg != null )
-		{
-			if( Platform.isServer() )
-			{
-				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_DRIVE );
-			}
-			return true;
-		}
+//		final TileDrive tg = this.getTileEntity( w, pos );
+//		if( tg != null )
+//		{
+//			if( Platform.isServer() )
+//			{
+//				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_DRIVE );
+//			}
+//			return true;
+//		}
 		return false;
 	}
 }

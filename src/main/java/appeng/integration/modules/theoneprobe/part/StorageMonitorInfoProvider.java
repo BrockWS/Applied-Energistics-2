@@ -18,50 +18,50 @@
 
 package appeng.integration.modules.theoneprobe.part;
 
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
-
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.api.implementations.parts.IPartStorageMonitor;
-import appeng.api.parts.IPart;
-import appeng.api.storage.data.IAEFluidStack;
-import appeng.api.storage.data.IAEItemStack;
-import appeng.api.storage.data.IAEStack;
-import appeng.integration.modules.theoneprobe.TheOneProbeText;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.api.implementations.parts.IPartStorageMonitor;
+//import appeng.api.parts.IPart;
+//import appeng.api.storage.data.IAEFluidStack;
+//import appeng.api.storage.data.IAEItemStack;
+//import appeng.api.storage.data.IAEStack;
+//import appeng.integration.modules.theoneprobe.TheOneProbeText;
 
 
 public class StorageMonitorInfoProvider implements IPartProbInfoProvider
 {
-
-	@Override
-	public void addProbeInfo( IPart part, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
-	{
-		if( part instanceof IPartStorageMonitor )
-		{
-			final IPartStorageMonitor monitor = (IPartStorageMonitor) part;
-
-			final IAEStack<?> displayed = monitor.getDisplayed();
-			final boolean isLocked = monitor.isLocked();
-
-			// TODO: generalize
-			if( displayed instanceof IAEItemStack )
-			{
-				final IAEItemStack ais = (IAEItemStack) displayed;
-				probeInfo.text( TheOneProbeText.SHOWING.getLocal() + ": " + ais.asItemStackRepresentation().getDisplayName() );
-			}
-			else if( displayed instanceof IAEFluidStack )
-			{
-				final IAEFluidStack ais = (IAEFluidStack) displayed;
-				probeInfo.text( TheOneProbeText.SHOWING.getLocal() + ": " + ais.getFluid().getLocalizedName( ais.getFluidStack() ) );
-			}
-
-			probeInfo.text( isLocked ? TheOneProbeText.LOCKED.getLocal() : TheOneProbeText.UNLOCKED.getLocal() );
-		}
-	}
+//
+//	@Override
+//	public void addProbeInfo( IPart part, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
+//	{
+//		if( part instanceof IPartStorageMonitor )
+//		{
+//			final IPartStorageMonitor monitor = (IPartStorageMonitor) part;
+//
+//			final IAEStack<?> displayed = monitor.getDisplayed();
+//			final boolean isLocked = monitor.isLocked();
+//
+//			// TODO: generalize
+//			if( displayed instanceof IAEItemStack )
+//			{
+//				final IAEItemStack ais = (IAEItemStack) displayed;
+//				probeInfo.text( TheOneProbeText.SHOWING.getLocal() + ": " + ais.asItemStackRepresentation().getDisplayName() );
+//			}
+//			else if( displayed instanceof IAEFluidStack )
+//			{
+//				final IAEFluidStack ais = (IAEFluidStack) displayed;
+//				probeInfo.text( TheOneProbeText.SHOWING.getLocal() + ": " + ais.getFluid().getLocalizedName( ais.getFluidStack() ) );
+//			}
+//
+//			probeInfo.text( isLocked ? TheOneProbeText.LOCKED.getLocal() : TheOneProbeText.UNLOCKED.getLocal() );
+//		}
+//	}
 
 }

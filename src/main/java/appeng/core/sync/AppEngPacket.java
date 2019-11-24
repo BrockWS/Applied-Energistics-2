@@ -26,18 +26,17 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AELog;
 import appeng.core.features.AEFeature;
 import appeng.core.sync.network.INetworkInfo;
 import appeng.core.sync.network.NetworkHandler;
 
 
-public abstract class AppEngPacket implements Packet
+public abstract class AppEngPacket implements IPacket
 {
 	private PacketBuffer p;
 	private PacketCallState caller;
@@ -60,24 +59,11 @@ public abstract class AppEngPacket implements Packet
 	protected void configureWrite( final ByteBuf data )
 	{
 		data.capacity( data.readableBytes() );
-		this.p = new PacketBuffer( data );
+		this.p = data instanceof PacketBuffer ? (PacketBuffer) data : new PacketBuffer( data );
 	}
 
-	public FMLProxyPacket getProxy()
-	{
-		if( this.p.array().length > 2 * 1024 * 1024 ) // 2k walking room :)
-		{
-			throw new IllegalArgumentException( "Sorry AE2 made a " + this.p.array().length + " byte packet by accident!" );
-		}
-
-		final FMLProxyPacket pp = new FMLProxyPacket( this.p, NetworkHandler.instance().getChannel() );
-
-		if( AEConfig.instance().isFeatureEnabled( AEFeature.PACKET_LOGGING ) )
-		{
-			AELog.info( this.getClass().getName() + " : " + pp.payload().readableBytes() );
-		}
-
-		return pp;
+	public PacketBuffer getPacketBuffer() {
+		return this.p;
 	}
 
 	@Override
@@ -94,26 +80,26 @@ public abstract class AppEngPacket implements Packet
 
 	// TODO: Figure out why Forge/Minecraft on the server sets the stream data buffer to PooledUnsafeDirectByteBuf
 
-	public ByteArrayInputStream getPacketByteArray( ByteBuf stream, int readerIndex, int readableBytes )
-	{
-		final ByteArrayInputStream bytes;
-		if( stream.hasArray() )
-		{
-			bytes = new ByteArrayInputStream( stream.array(), readerIndex, readableBytes );
-		}
-		else
-		{
-			byte[] data = new byte[stream.capacity()];
-			stream.getBytes( readerIndex, data, 0, readableBytes );
-			bytes = new ByteArrayInputStream( data );
-		}
-		return bytes;
-	}
-
-	public ByteArrayInputStream getPacketByteArray( ByteBuf stream )
-	{
-		return this.getPacketByteArray( stream, 0, stream.readableBytes() );
-	}
+//	public ByteArrayInputStream getPacketByteArray( ByteBuf stream, int readerIndex, int readableBytes )
+//	{
+//		final ByteArrayInputStream bytes;
+//		if( stream.hasArray() )
+//		{
+//			bytes = new ByteArrayInputStream( stream.array(), readerIndex, readableBytes );
+//		}
+//		else
+//		{
+//			byte[] data = new byte[stream.capacity()];
+//			stream.getBytes( readerIndex, data, 0, readableBytes );
+//			bytes = new ByteArrayInputStream( data );
+//		}
+//		return bytes;
+//	}
+//
+//	public ByteArrayInputStream getPacketByteArray( ByteBuf stream )
+//	{
+//		return this.getPacketByteArray( stream, 0, stream.readableBytes() );
+//	}
 
 	public void setCallParam( final PacketCallState call )
 	{

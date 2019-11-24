@@ -22,10 +22,11 @@ package appeng.core.api.definitions;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+//import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+//import net.minecraftforge.api.distmarker.Dist;
+//import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.IMaterials;
@@ -33,7 +34,11 @@ import appeng.bootstrap.FeatureFactory;
 import appeng.bootstrap.IItemRendering;
 import appeng.bootstrap.ItemRenderingCustomizer;
 import appeng.bootstrap.components.IEntityRegistrationComponent;
+import appeng.core.AELog;
+import appeng.core.CreativeTab;
+import appeng.core.features.AEFeature;
 import appeng.core.features.DamagedItemDefinition;
+import appeng.core.features.ItemDefinition;
 import appeng.entity.EntityChargedQuartz;
 import appeng.entity.EntityIds;
 import appeng.entity.EntitySingularity;
@@ -50,7 +55,7 @@ public final class ApiMaterials implements IMaterials
 	private final IItemDefinition cell16SpatialPart;
 	private final IItemDefinition cell128SpatialPart;
 
-	private final IItemDefinition silicon;
+    private final IItemDefinition silicon;
 	private final IItemDefinition skyDust;
 
 	private final IItemDefinition calcProcessorPress;
@@ -124,124 +129,227 @@ public final class ApiMaterials implements IMaterials
 
 	public ApiMaterials( FeatureFactory registry )
 	{
-		final ItemMaterial materials = new ItemMaterial();
-		registry.item( "material", () -> materials )
-				.rendering( new ItemRenderingCustomizer()
-				{
-					@Override
-					@SideOnly( Side.CLIENT )
-					public void customize( IItemRendering rendering )
-					{
-						rendering.meshDefinition( is -> materials.getTypeByStack( is ).getModel() );
-						// Register a resource location for every material type
-						rendering.variants( Arrays.stream( MaterialType.values() )
-								.map( MaterialType::getModel )
-								.collect( Collectors.toList() ) );
-					}
-				} )
-				.bootstrap( item -> (IEntityRegistrationComponent) r ->
-				{
-					r.register( EntityEntryBuilder.create()
-							.entity( EntitySingularity.class )
-							.id( new ResourceLocation( "appliedenergistics2", EntitySingularity.class.getName() ), EntityIds.get( EntitySingularity.class ) )
-							.name( EntitySingularity.class.getSimpleName() )
-							.tracker( 16, 4, true )
-							.build() );
-					r.register( EntityEntryBuilder.create()
-							.entity( EntityChargedQuartz.class )
-							.id( new ResourceLocation( "appliedenergistics2", EntityChargedQuartz.class.getName() ),
-									EntityIds.get( EntityChargedQuartz.class ) )
-							.name( EntityChargedQuartz.class.getSimpleName() )
-							.tracker( 16, 4, true )
-							.build() );
-				} )
+//		final ItemMaterial materials = new ItemMaterial();
+//		registry.item( "material", () -> materials )
+//				.rendering( new ItemRenderingCustomizer()
+//				{
+//					@Override
+//					@OnlyIn( Dist.CLIENT )
+//					public void customize( IItemRendering rendering )
+//					{
+//						rendering.meshDefinition( is -> materials.getTypeByStack( is ).getModel() );
+//						// Register a resource location for every material type
+//						rendering.variants( Arrays.stream( MaterialType.values() )
+//								.map( MaterialType::getModel )
+//								.collect( Collectors.toList() ) );
+//					}
+//				} )
+//				.bootstrap( item -> (IEntityRegistrationComponent) r ->
+//				{
+//					r.register( EntityEntryBuilder.create()
+//							.entity( EntitySingularity.class )
+//							.id( new ResourceLocation( "appliedenergistics2", EntitySingularity.class.getName() ), EntityIds.get( EntitySingularity.class ) )
+//							.name( EntitySingularity.class.getSimpleName() )
+//							.tracker( 16, 4, true )
+//							.build() );
+//					r.register( EntityEntryBuilder.create()
+//							.entity( EntityChargedQuartz.class )
+//							.id( new ResourceLocation( "appliedenergistics2", EntityChargedQuartz.class.getName() ),
+//									EntityIds.get( EntityChargedQuartz.class ) )
+//							.name( EntityChargedQuartz.class.getSimpleName() )
+//							.tracker( 16, 4, true )
+//							.build() );
+//				} )
+//				.build();
+//
+		this.cell2SpatialPart = registry.features()
+				.item( "cell2_spatial_part", ItemMaterial::new)
+				.build();
+		this.cell16SpatialPart = registry.features()
+				.item( "cell16_spatial_part", ItemMaterial::new)
+				.build();
+		this.cell128SpatialPart = registry.features()
+				.item( "cell128_spatial_part", ItemMaterial::new)
 				.build();
 
-		this.cell2SpatialPart = new DamagedItemDefinition( "material.cell.spatial.2", materials.createMaterial( MaterialType.CELL2_SPATIAL_PART ) );
-		this.cell16SpatialPart = new DamagedItemDefinition( "material.cell.spatial.16", materials.createMaterial( MaterialType.CELL16_SPATIAL_PART ) );
-		this.cell128SpatialPart = new DamagedItemDefinition( "material.cell.spatial.128", materials.createMaterial( MaterialType.CELL128_SPATIAL_PART ) );
+		this.silicon = registry.features()
+				.item( "silicon", ItemMaterial::new)
+				.build();
+		this.skyDust = registry.features()
+				.item( "sky_dust", ItemMaterial::new)
+				.build();
 
-		this.silicon = new DamagedItemDefinition( "material.silicon", materials.createMaterial( MaterialType.SILICON ) );
-		this.skyDust = new DamagedItemDefinition( "material.dust.sky_stone", materials.createMaterial( MaterialType.SKY_DUST ) );
+		this.calcProcessorPress = registry.features()
+				.item( "calculation_processor_press", ItemMaterial::new)
+				.build();
+		this.engProcessorPress = registry.features()
+				.item( "engineering_processor_press", ItemMaterial::new)
+				.build();
+		this.logicProcessorPress = registry.features()
+				.item( "logic_processor_press", ItemMaterial::new)
+				.build();
+		this.siliconPress = registry.features()
+				.item( "silicon_press", ItemMaterial::new)
+				.build();
+		this.namePress = registry.features()
+				.item( "name_press", ItemMaterial::new)
+				.build();
 
-		this.calcProcessorPress = new DamagedItemDefinition( "material.press.processor.calculation", materials
-				.createMaterial( MaterialType.CALCULATION_PROCESSOR_PRESS ) );
-		this.engProcessorPress = new DamagedItemDefinition( "material.press.processor.engineering", materials
-				.createMaterial( MaterialType.ENGINEERING_PROCESSOR_PRESS ) );
-		this.logicProcessorPress = new DamagedItemDefinition( "material.press.processor.logic", materials
-				.createMaterial( MaterialType.LOGIC_PROCESSOR_PRESS ) );
-		this.siliconPress = new DamagedItemDefinition( "material.press.silicon", materials.createMaterial( MaterialType.SILICON_PRESS ) );
-		this.namePress = new DamagedItemDefinition( "material.press.name", materials.createMaterial( MaterialType.NAME_PRESS ) );
+		this.calcProcessorPrint = registry.features()
+				.item( "calculation_processor_print", ItemMaterial::new)
+				.build();
+		this.engProcessorPrint = registry.features()
+				.item( "engineering_processor_print", ItemMaterial::new)
+				.build();
+		this.logicProcessorPrint = registry.features()
+				.item( "logic_processor_print", ItemMaterial::new)
+				.build();
+		this.siliconPrint = registry.features()
+				.item( "silicon_print", ItemMaterial::new)
+				.build();
 
-		this.calcProcessorPrint = new DamagedItemDefinition( "material.print.processor.calculation", materials
-				.createMaterial( MaterialType.CALCULATION_PROCESSOR_PRINT ) );
-		this.engProcessorPrint = new DamagedItemDefinition( "material.print.processor.engineering", materials
-				.createMaterial( MaterialType.ENGINEERING_PROCESSOR_PRINT ) );
-		this.logicProcessorPrint = new DamagedItemDefinition( "material.print.processor.logic", materials
-				.createMaterial( MaterialType.LOGIC_PROCESSOR_PRINT ) );
-		this.siliconPrint = new DamagedItemDefinition( "material.print.silicon", materials.createMaterial( MaterialType.SILICON_PRINT ) );
+		this.logicProcessor = registry.features()
+				.item( "logic_processor", ItemMaterial::new)
+				.build();
+		this.calcProcessor = registry.features()
+				.item( "calculation_processor", ItemMaterial::new)
+				.build();
+		this.engProcessor = registry.features()
+				.item( "engineering_processor", ItemMaterial::new)
+				.build();
 
-		this.logicProcessor = new DamagedItemDefinition( "material.processor.logic", materials.createMaterial( MaterialType.LOGIC_PROCESSOR ) );
-		this.calcProcessor = new DamagedItemDefinition( "material.processor.calculation", materials.createMaterial( MaterialType.CALCULATION_PROCESSOR ) );
-		this.engProcessor = new DamagedItemDefinition( "material.processor.engineering", materials.createMaterial( MaterialType.ENGINEERING_PROCESSOR ) );
+		this.basicCard = registry.features()
+				.item( "basic_card", ItemMaterial::new)
+				.build();
+		this.advCard = registry.features()
+				.item( "advanced_card", ItemMaterial::new)
+				.build();
 
-		this.basicCard = new DamagedItemDefinition( "material.card.basic", materials.createMaterial( MaterialType.BASIC_CARD ) );
-		this.advCard = new DamagedItemDefinition( "material.card.advanced", materials.createMaterial( MaterialType.ADVANCED_CARD ) );
+		this.purifiedCertusQuartzCrystal = registry.features()
+				.item( "purified_certus_quartz_crystal", ItemMaterial::new)
+				.build();
+		this.purifiedNetherQuartzCrystal = registry.features()
+				.item( "purified_nether_quartz_crystal", ItemMaterial::new)
+				.build();
+		this.purifiedFluixCrystal = registry.features()
+				.item( "purified_fluix_crystal", ItemMaterial::new)
+				.build();
 
-		this.purifiedCertusQuartzCrystal = new DamagedItemDefinition( "material.crystal.quartz.certus.purified", materials
-				.createMaterial( MaterialType.PURIFIED_CERTUS_QUARTZ_CRYSTAL ) );
-		this.purifiedNetherQuartzCrystal = new DamagedItemDefinition( "material.crystal.quartz.nether.purified", materials
-				.createMaterial( MaterialType.PURIFIED_NETHER_QUARTZ_CRYSTAL ) );
-		this.purifiedFluixCrystal = new DamagedItemDefinition( "material.crystal.fluix.purified", materials
-				.createMaterial( MaterialType.PURIFIED_FLUIX_CRYSTAL ) );
+		this.cell1kPart = registry.features()
+				.item( "cell1k_part", ItemMaterial::new)
+				.build();
+		this.cell4kPart = registry.features()
+				.item( "cell4k_part", ItemMaterial::new)
+				.build();
+		this.cell16kPart = registry.features()
+				.item( "cell16k_part", ItemMaterial::new)
+				.build();
+		this.cell64kPart = registry.features()
+				.item( "cell64k_part", ItemMaterial::new)
+				.build();
+		this.emptyStorageCell = registry.features()
+				.item( "empty_storage_cell", ItemMaterial::new)
+				.build();
 
-		this.cell1kPart = new DamagedItemDefinition( "material.cell.storage.1k", materials.createMaterial( MaterialType.CELL1K_PART ) );
-		this.cell4kPart = new DamagedItemDefinition( "material.cell.storage.4k", materials.createMaterial( MaterialType.CELL4K_PART ) );
-		this.cell16kPart = new DamagedItemDefinition( "material.cell.storage.16k", materials.createMaterial( MaterialType.CELL16K_PART ) );
-		this.cell64kPart = new DamagedItemDefinition( "material.cell.storage.64k", materials.createMaterial( MaterialType.CELL64K_PART ) );
-		this.emptyStorageCell = new DamagedItemDefinition( "material.cell.storage.empty", materials.createMaterial( MaterialType.EMPTY_STORAGE_CELL ) );
+		this.cardRedstone = registry.features()
+				.item( "card_redstone", ItemMaterial::new)
+				.build();
+		this.cardSpeed = registry.features()
+				.item( "card_speed", ItemMaterial::new)
+				.build();
+		this.cardCapacity = registry.features()
+				.item( "card_capacity", ItemMaterial::new)
+				.build();
+		this.cardFuzzy = registry.features()
+				.item( "card_fuzzy", ItemMaterial::new)
+				.build();
+		this.cardInverter = registry.features()
+				.item( "card_inverter", ItemMaterial::new)
+				.build();
+		this.cardCrafting = registry.features()
+				.item( "card_crafting", ItemMaterial::new)
+				.build();
 
-		this.cardRedstone = new DamagedItemDefinition( "material.card.redstone", materials.createMaterial( MaterialType.CARD_REDSTONE ) );
-		this.cardSpeed = new DamagedItemDefinition( "material.card.acceleration", materials.createMaterial( MaterialType.CARD_SPEED ) );
-		this.cardCapacity = new DamagedItemDefinition( "material.card.capacity", materials.createMaterial( MaterialType.CARD_CAPACITY ) );
-		this.cardFuzzy = new DamagedItemDefinition( "material.card.fuzzy", materials.createMaterial( MaterialType.CARD_FUZZY ) );
-		this.cardInverter = new DamagedItemDefinition( "material.card.inverter", materials.createMaterial( MaterialType.CARD_INVERTER ) );
-		this.cardCrafting = new DamagedItemDefinition( "material.card.crafting", materials.createMaterial( MaterialType.CARD_CRAFTING ) );
 
-		this.enderDust = new DamagedItemDefinition( "material.dust.ender", materials.createMaterial( MaterialType.ENDER_DUST ) );
-		this.flour = new DamagedItemDefinition( "material.flour", materials.createMaterial( MaterialType.FLOUR ) );
-		this.goldDust = new DamagedItemDefinition( "material.dust.gold", materials.createMaterial( MaterialType.GOLD_DUST ) );
-		this.ironDust = new DamagedItemDefinition( "material.dust.iron", materials.createMaterial( MaterialType.IRON_DUST ) );
-		this.fluixDust = new DamagedItemDefinition( "material.dust.fluix", materials.createMaterial( MaterialType.FLUIX_DUST ) );
-		this.certusQuartzDust = new DamagedItemDefinition( "material.dust.quartz.certus", materials.createMaterial( MaterialType.CERTUS_QUARTZ_DUST ) );
-		this.netherQuartzDust = new DamagedItemDefinition( "material.dust.quartz.nether", materials.createMaterial( MaterialType.NETHER_QUARTZ_DUST ) );
+		this.enderDust = registry.features()
+				.item( "ender_dust", ItemMaterial::new)
+				.build();
+		this.flour = registry.features()
+				.item( "flour", ItemMaterial::new)
+				.build();
+		this.goldDust = registry.features()
+				.item( "gold_dust", ItemMaterial::new)
+				.build();
+		this.ironDust = registry.features()
+				.item("iron_dust", ItemMaterial::new)
+				.build();
+		this.fluixDust = registry.features()
+				.item( "fluix_dust", ItemMaterial::new)
+				.build();
+		this.certusQuartzDust = registry.features()
+				.item( "certus_quartz_dust", ItemMaterial::new)
+				.build();
+		this.netherQuartzDust = registry.features()
+				.item( "nether_quartz_dust", ItemMaterial::new)
+				.build();
 
-		this.matterBall = new DamagedItemDefinition( "material.ammo.matter_ball", materials.createMaterial( MaterialType.MATTER_BALL ) );
+		this.matterBall = registry.features()
+				.item( "matter_ball", ItemMaterial::new)
+				.build();
 
-		this.certusQuartzCrystal = new DamagedItemDefinition( "material.crystal.quartz.certus", materials
-				.createMaterial( MaterialType.CERTUS_QUARTZ_CRYSTAL ) );
-		this.certusQuartzCrystalCharged = new DamagedItemDefinition( "material.crystal.quartz.certus.charged", materials
-				.createMaterial( MaterialType.CERTUS_QUARTZ_CRYSTAL_CHARGED ) );
-		this.fluixCrystal = new DamagedItemDefinition( "material.crystal.fluix", materials.createMaterial( MaterialType.FLUIX_CRYSTAL ) );
-		this.fluixPearl = new DamagedItemDefinition( "material.pearl.fluix", materials.createMaterial( MaterialType.FLUIX_PEARL ) );
+		this.certusQuartzCrystal = registry.features()
+				.item( "certus_quartz_crystal", ItemMaterial::new)
+				.build();
+		this.certusQuartzCrystalCharged = registry.features()
+				.item( "certus_quartz_crystal_charged", ItemMaterial::new)
+				.build();
+		this.fluixCrystal = registry.features()
+				.item( "fluix_crystal", ItemMaterial::new)
+				.build();
+		this.fluixPearl = registry.features()
+				.item( "fluix_pearl", ItemMaterial::new)
+				.build();
 
-		this.woodenGear = new DamagedItemDefinition( "material.gear.wooden", materials.createMaterial( MaterialType.WOODEN_GEAR ) );
+		this.woodenGear = registry.features()
+				.item( "wooden_gear", ItemMaterial::new)
+				.build();
 
-		this.wirelessReceiver = new DamagedItemDefinition( "material.wireless.receiver", materials.createMaterial( MaterialType.WIRELESS ) );
-		this.wirelessBooster = new DamagedItemDefinition( "material.wireless.booster", materials.createMaterial( MaterialType.WIRELESS_BOOSTER ) );
+		this.wirelessReceiver = registry.features()
+				.item( "wireless", ItemMaterial::new)
+				.build();
+		this.wirelessBooster = registry.features()
+				.item( "wireless_booster", ItemMaterial::new)
+				.build();
 
-		this.annihilationCore = new DamagedItemDefinition( "material.core.annihilation", materials.createMaterial( MaterialType.ANNIHILATION_CORE ) );
-		this.formationCore = new DamagedItemDefinition( "material.core.formation", materials.createMaterial( MaterialType.FORMATION_CORE ) );
+		this.annihilationCore = registry.features()
+				.item( "annihilation_core", ItemMaterial::new)
+				.build();
+		this.formationCore = registry.features()
+				.item( "formation_core", ItemMaterial::new)
+				.build();
 
-		this.singularity = new DamagedItemDefinition( "material.singularity", materials.createMaterial( MaterialType.SINGULARITY ) );
-		this.qESingularity = new DamagedItemDefinition( "material.singularity.entangled.quantum", materials
-				.createMaterial( MaterialType.QUANTUM_ENTANGLED_SINGULARITY ) );
-		this.blankPattern = new DamagedItemDefinition( "material.pattern.blank", materials.createMaterial( MaterialType.BLANK_PATTERN ) );
+		this.singularity = registry.features()
+				.item( "singularity", ItemMaterial::new)
+				.build();
+		this.qESingularity = registry.features()
+				.item( "quantum_entangled_singularity", ItemMaterial::new)
+				.build();
+		this.blankPattern = registry.features()
+				.item( "blank_pattern", ItemMaterial::new)
+				.build();
 
-		this.fluidCell1kPart = new DamagedItemDefinition( "material.cell.storage.1k", materials.createMaterial( MaterialType.FLUID_CELL1K_PART ) );
-		this.fluidCell4kPart = new DamagedItemDefinition( "material.cell.storage.4k", materials.createMaterial( MaterialType.FLUID_CELL4K_PART ) );
-		this.fluidCell16kPart = new DamagedItemDefinition( "material.cell.storage.16k", materials.createMaterial( MaterialType.FLUID_CELL16K_PART ) );
-		this.fluidCell64kPart = new DamagedItemDefinition( "material.cell.storage.64k", materials.createMaterial( MaterialType.FLUID_CELL64K_PART ) );
+		this.fluidCell1kPart = registry.features()
+				.item( "fluid_cell1k_part", ItemMaterial::new)
+				.build();
+		this.fluidCell4kPart = registry.features()
+				.item( "fluid_cell4k_part", ItemMaterial::new)
+				.build();
+		this.fluidCell16kPart = registry.features()
+				.item( "fluid_cell16k_part", ItemMaterial::new)
+				.build();
+		this.fluidCell64kPart = registry.features()
+				.item( "fluid_cell64k_part", ItemMaterial::new)
+				.build();
 	}
 
 	@Override

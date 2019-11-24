@@ -314,7 +314,7 @@ public class Quad implements IVertexProducer, ISmartVertexConsumer
 	 */
 	public BakedQuad bake()
 	{
-		int[] packedData = new int[this.format.format.getNextOffset()];
+		int[] packedData = new int[this.format.format.getSize()];
 		for( int v = 0; v < 4; v++ )
 		{
 			for( int e = 0; e < this.format.elementCount; e++ )

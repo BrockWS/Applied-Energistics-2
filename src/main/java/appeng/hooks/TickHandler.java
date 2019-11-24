@@ -36,18 +36,16 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.world.World;
+
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import appeng.api.AEApi;
 import appeng.api.networking.IGridNode;
 import appeng.api.parts.CableRenderMode;
 import appeng.api.util.AEColor;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AELog;
 import appeng.core.AppEng;
 import appeng.core.sync.packets.PacketPaintedEntity;
@@ -173,7 +171,7 @@ public class TickHandler
 	public void onTick( final TickEvent ev )
 	{
 
-		if( ev.type == Type.CLIENT && ev.phase == Phase.START )
+		if( ev.type == TickEvent.Type.CLIENT && ev.phase == TickEvent.Phase.START )
 		{
 			this.tickColors( this.cliPlayerColors );
 			final CableRenderMode currentMode = AEApi.instance().partHelper().getCableRenderMode();
@@ -184,9 +182,9 @@ public class TickHandler
 			}
 		}
 
-		if( ev.type == Type.WORLD && ev.phase == Phase.END )
+		if( ev.type == TickEvent.Type.WORLD && ev.phase == TickEvent.Phase.END )
 		{
-			final WorldTickEvent wte = (WorldTickEvent) ev;
+			final TickEvent.WorldTickEvent wte = (TickEvent.WorldTickEvent) ev;
 			synchronized( this.craftingJobs )
 			{
 				final Collection<CraftingJob> jobSet = this.craftingJobs.get( wte.world );
@@ -207,7 +205,7 @@ public class TickHandler
 		}
 
 		// for no there is no reason to care about this on the client...
-		else if( ev.type == Type.SERVER && ev.phase == Phase.END )
+		else if( ev.type == TickEvent.Type.SERVER && ev.phase == TickEvent.Phase.END )
 		{
 			this.tickColors( this.srvPlayerColors );
 			// ready tiles.
@@ -215,7 +213,7 @@ public class TickHandler
 			while( !repo.tiles.isEmpty() )
 			{
 				final AEBaseTile bt = repo.tiles.poll();
-				if( !bt.isInvalid() )
+				if( !bt.isRemoved() )
 				{
 					bt.onReady();
 				}
@@ -233,9 +231,9 @@ public class TickHandler
 		}
 
 		// world synced queue(s)
-		if( ev.type == Type.WORLD && ev.phase == Phase.START )
+		if( ev.type == TickEvent.Type.WORLD && ev.phase == TickEvent.Phase.START )
 		{
-			final World world = ( (WorldTickEvent) ev ).world;
+			final World world = ( (TickEvent.WorldTickEvent) ev ).world;
 			final Queue<IWorldCallable<?>> queue = this.callQueue.get( world );
 			this.processQueue( queue, world );
 		}

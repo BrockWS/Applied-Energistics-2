@@ -18,39 +18,39 @@
 
 package appeng.hooks;
 
+//
+//import net.minecraft.block.BlockDispenser;
+//import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+//import net.minecraft.dispenser.IBlockSource;
+//import net.minecraft.item.Item;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.Hand;
+//import net.minecraft.world.World;
+//import net.minecraft.world.ServerWorld;
+//
+//import appeng.util.Platform;
 
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
 
-import appeng.util.Platform;
-
-
-public final class DispenserBlockTool extends BehaviorDefaultDispenseItem
+public final class DispenserBlockTool //extends BehaviorDefaultDispenseItem
 {
-
-	@Override
-	protected ItemStack dispenseStack( final IBlockSource dispenser, final ItemStack dispensedItem )
-	{
-		final Item i = dispensedItem.getItem();
-		if( i instanceof IBlockTool )
-		{
-			final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
-			final IBlockTool tm = (IBlockTool) i;
-
-			final World w = dispenser.getWorld();
-			if( w instanceof ServerWorld )
-			{
-				tm.onItemUse( dispensedItem, Platform.getPlayer( (ServerWorld) w ), w, dispenser.getBlockPos().offset( enumfacing ), Hand.MAIN_HAND,
-						enumfacing, 0.5f, 0.5f, 0.5f );
-			}
-		}
-		return dispensedItem;
-	}
+//
+//	@Override
+//	protected ItemStack dispenseStack( final IBlockSource dispenser, final ItemStack dispensedItem )
+//	{
+//		final Item i = dispensedItem.getItem();
+//		if( i instanceof IBlockTool )
+//		{
+//			final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
+//			final IBlockTool tm = (IBlockTool) i;
+//
+//			final World w = dispenser.getWorld();
+//			if( w instanceof ServerWorld )
+//			{
+//				tm.onItemUse( dispensedItem, Platform.getPlayer( (ServerWorld) w ), w, dispenser.getBlockPos().offset( enumfacing ), Hand.MAIN_HAND,
+//						enumfacing, 0.5f, 0.5f, 0.5f );
+//			}
+//		}
+//		return dispensedItem;
+//	}
 }

@@ -74,12 +74,12 @@ public class PacketPartPlacement extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
-		AppEng.proxy.updateRenderMode( sender );
-		PartPlacement.setEyeHeight( this.eyeHeight );
-		PartPlacement.place( sender.getHeldItem( this.hand ), new BlockPos( this.x, this.y, this.z ), Direction.VALUES[this.face], sender, this.hand,
-				sender.world,
-				PartPlacement.PlaceType.INTERACT_FIRST_PASS, 0 );
-		AppEng.proxy.updateRenderMode( null );
+//		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
+//		AppEng.proxy.updateRenderMode( sender );
+//		PartPlacement.setEyeHeight( this.eyeHeight );
+//		PartPlacement.place( sender.getHeldItem( this.hand ), new BlockPos( this.x, this.y, this.z ), Direction.VALUES[this.face], sender, this.hand,
+//				sender.world,
+//				PartPlacement.PlaceType.INTERACT_FIRST_PASS, 0 );
+//		AppEng.proxy.updateRenderMode( null );
 	}
 }

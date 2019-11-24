@@ -19,46 +19,46 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import appeng.core.AppEng;
 
 
-public class QnbFormedModel implements IModel
+public class QnbFormedModel// implements IModel
 {
-
-	private static final ResourceLocation MODEL_RING = new ResourceLocation( AppEng.MOD_ID, "block/qnb/ring" );
-
-	@Override
-	public Collection<ResourceLocation> getDependencies()
-	{
-		return ImmutableList.of( MODEL_RING );
-	}
-
-	@Override
-	public Collection<ResourceLocation> getTextures()
-	{
-		return QnbFormedBakedModel.getRequiredTextures();
-	}
-
-	@Override
-	public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
-	{
-		IBakedModel ringModel = this.getBaseModel( MODEL_RING, state, format, bakedTextureGetter );
-		return new QnbFormedBakedModel( format, ringModel, bakedTextureGetter );
-	}
-
-	@Override
-	public IModelState getDefaultState()
-	{
-		return TRSRTransformation.identity();
-	}
-
-	private IBakedModel getBaseModel( ResourceLocation model, IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
-	{
-		// Load the base model
-		try
-		{
-			return ModelLoaderRegistry.getModel( model ).bake( state, format, bakedTextureGetter );
-		}
-		catch( Exception e )
-		{
-			throw new RuntimeException( e );
-		}
-	}
+//
+//	private static final ResourceLocation MODEL_RING = new ResourceLocation( AppEng.MOD_ID, "block/qnb/ring" );
+//
+//	@Override
+//	public Collection<ResourceLocation> getDependencies()
+//	{
+//		return ImmutableList.of( MODEL_RING );
+//	}
+//
+//	@Override
+//	public Collection<ResourceLocation> getTextures()
+//	{
+//		return QnbFormedBakedModel.getRequiredTextures();
+//	}
+//
+//	@Override
+//	public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+//	{
+//		IBakedModel ringModel = this.getBaseModel( MODEL_RING, state, format, bakedTextureGetter );
+//		return new QnbFormedBakedModel( format, ringModel, bakedTextureGetter );
+//	}
+//
+//	@Override
+//	public IModelState getDefaultState()
+//	{
+//		return TRSRTransformation.identity();
+//	}
+//
+//	private IBakedModel getBaseModel( ResourceLocation model, IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+//	{
+//		// Load the base model
+//		try
+//		{
+//			return ModelLoaderRegistry.getModel( model ).bake( state, format, bakedTextureGetter );
+//		}
+//		catch( Exception e )
+//		{
+//			throw new RuntimeException( e );
+//		}
+//	}
 }

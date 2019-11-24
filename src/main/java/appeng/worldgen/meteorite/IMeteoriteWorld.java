@@ -27,29 +27,29 @@ import net.minecraft.world.World;
 
 public interface IMeteoriteWorld
 {
-	int minX( int in );
-
-	int minZ( int in );
-
-	int maxX( int in );
-
-	int maxZ( int in );
-
-	boolean isNether();
-
-	Block getBlock( int x, int y, int z );
-
-	boolean canBlockSeeTheSky( int i, int j, int k );
-
-	TileEntity getTileEntity( int x, int y, int z );
-
-	World getWorld();
-
-	void setBlock( int i, int j, int k, Block blk );
-
-	void setBlock( int i, int j, int k, BlockState state, int l );
-
-	void done();
-
-	BlockState getBlockState( int x, int y, int z );
+//	int minX( int in );
+//
+//	int minZ( int in );
+//
+//	int maxX( int in );
+//
+//	int maxZ( int in );
+//
+//	boolean isNether();
+//
+//	Block getBlock( int x, int y, int z );
+//
+//	boolean canBlockSeeTheSky( int i, int j, int k );
+//
+//	TileEntity getTileEntity( int x, int y, int z );
+//
+//	World getWorld();
+//
+//	void setBlock( int i, int j, int k, Block blk );
+//
+//	void setBlock( int i, int j, int k, BlockState state, int l );
+//
+//	void done();
+//
+//	BlockState getBlockState( int x, int y, int z );
 }

@@ -19,20 +19,22 @@
 package appeng.items.tools.quartz;
 
 
-import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
+import net.minecraft.item.PickaxeItem;
 
+import appeng.core.CreativeTab;
 import appeng.core.features.AEFeature;
 import appeng.util.Platform;
 
 
-public class ToolQuartzPickaxe extends ItemPickaxe
+public class ToolQuartzPickaxe extends PickaxeItem
 {
 	private final AEFeature type;
 
 	public ToolQuartzPickaxe( final AEFeature type )
 	{
-		super( ToolMaterial.IRON );
+		super( ItemTier.IRON,  1, -2.8f, new Properties().group(CreativeTab.instance));
 		this.type = type;
 	}
 

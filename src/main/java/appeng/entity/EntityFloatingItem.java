@@ -18,58 +18,58 @@
 
 package appeng.entity;
 
+//
+//import net.minecraft.entity.item.ItemEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.world.World;
 
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
-
-public final class EntityFloatingItem extends ItemEntity
+public final class EntityFloatingItem //extends ItemEntity
 {
-
-	private final ICanDie parent;
-	private int superDeath = 0;
-	private float progress = 0;
-
-	public EntityFloatingItem( final ICanDie parent, final World world, final double x, final double y, final double z, final ItemStack stack )
-	{
-		super( world, x, y, z, stack );
-		this.motionX = this.motionY = this.motionZ = 0.0d;
-		this.hoverStart = 0.5f;
-		this.rotationYaw = 0;
-		this.parent = parent;
-	}
-
-	// public boolean isEntityAlive()
-
-	@Override
-	public void onUpdate()
-	{
-		if( !this.isDead && this.parent.isDead() )
-		{
-			this.setDead();
-		}
-
-		if( this.superDeath > 100 )
-		{
-			this.setDead();
-		}
-		this.superDeath++;
-
-		this.setNoDespawn();
-	}
-
-	public void setProgress( final float progress )
-	{
-		this.progress = progress;
-		if( this.progress > 0.99 )
-		{
-			this.setDead();
-		}
-	}
-
-	float getProgress()
-	{
-		return this.progress;
-	}
+//
+//	private final ICanDie parent;
+//	private int superDeath = 0;
+//	private float progress = 0;
+//
+//	public EntityFloatingItem( final ICanDie parent, final World world, final double x, final double y, final double z, final ItemStack stack )
+//	{
+//		super( world, x, y, z, stack );
+//		this.motionX = this.motionY = this.motionZ = 0.0d;
+//		this.hoverStart = 0.5f;
+//		this.rotationYaw = 0;
+//		this.parent = parent;
+//	}
+//
+//	// public boolean isEntityAlive()
+//
+//	@Override
+//	public void onUpdate()
+//	{
+//		if( !this.isDead && this.parent.isDead() )
+//		{
+//			this.setDead();
+//		}
+//
+//		if( this.superDeath > 100 )
+//		{
+//			this.setDead();
+//		}
+//		this.superDeath++;
+//
+//		this.setNoDespawn();
+//	}
+//
+//	public void setProgress( final float progress )
+//	{
+//		this.progress = progress;
+//		if( this.progress > 0.99 )
+//		{
+//			this.setDead();
+//		}
+//	}
+//
+//	float getProgress()
+//	{
+//		return this.progress;
+//	}
 }

@@ -20,15 +20,11 @@ package appeng.block.spatial;
 
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.client.render.spatial.SpatialPylonStateProperty;
@@ -36,67 +32,67 @@ import appeng.helpers.AEGlassMaterial;
 import appeng.tile.spatial.TileSpatialPylon;
 
 
-public class BlockSpatialPylon extends AEBaseTileBlock
+public class BlockSpatialPylon //extends AEBaseTileBlock
 {
-
-	public static final SpatialPylonStateProperty STATE = new SpatialPylonStateProperty();
-
-	public BlockSpatialPylon()
-	{
-		super( AEGlassMaterial.INSTANCE );
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] { STATE } );
-	}
-
-	@Override
-	public BlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
-	{
-		IExtendedBlockState extState = (IExtendedBlockState) state;
-
-		return extState.withProperty( STATE, this.getDisplayState( world, pos ) );
-	}
-
-	@Override
-	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
-	{
-		final TileSpatialPylon tsp = this.getTileEntity( world, pos );
-		if( tsp != null )
-		{
-			tsp.neighborChanged();
-		}
-	}
-
-	@Override
-	public int getLightValue( final BlockState state, final IEnviromentBlockReader w, final BlockPos pos )
-	{
-		final TileSpatialPylon tsp = this.getTileEntity( w, pos );
-		if( tsp != null )
-		{
-			return tsp.getLightValue();
-		}
-		return super.getLightValue( state, w, pos );
-	}
-
-	private int getDisplayState( IEnviromentBlockReader world, BlockPos pos )
-	{
-		TileSpatialPylon te = this.getTileEntity( world, pos );
-
-		if( te == null )
-		{
-			return 0;
-		}
-
-		return te.getDisplayBits();
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.CUTOUT;
-	}
+//
+//	public static final SpatialPylonStateProperty STATE = new SpatialPylonStateProperty();
+//
+//	public BlockSpatialPylon()
+//	{
+//		super( AEGlassMaterial.INSTANCE );
+//	}
+//
+//	@Override
+//	protected BlockStateContainer createBlockState()
+//	{
+//		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] { STATE } );
+//	}
+//
+//	@Override
+//	public BlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
+//	{
+//		IExtendedBlockState extState = (IExtendedBlockState) state;
+//
+//		return extState.withProperty( STATE, this.getDisplayState( world, pos ) );
+//	}
+//
+//	@Override
+//	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
+//	{
+//		final TileSpatialPylon tsp = this.getTileEntity( world, pos );
+//		if( tsp != null )
+//		{
+//			tsp.neighborChanged();
+//		}
+//	}
+//
+//	@Override
+//	public int getLightValue( final BlockState state, final IEnviromentBlockReader w, final BlockPos pos )
+//	{
+//		final TileSpatialPylon tsp = this.getTileEntity( w, pos );
+//		if( tsp != null )
+//		{
+//			return tsp.getLightValue();
+//		}
+//		return super.getLightValue( state, w, pos );
+//	}
+//
+//	private int getDisplayState( IEnviromentBlockReader world, BlockPos pos )
+//	{
+//		TileSpatialPylon te = this.getTileEntity( world, pos );
+//
+//		if( te == null )
+//		{
+//			return 0;
+//		}
+//
+//		return te.getDisplayBits();
+//	}
+//
+//	@Override
+//	public BlockRenderLayer getBlockLayer()
+//	{
+//		return BlockRenderLayer.CUTOUT;
+//	}
 
 }

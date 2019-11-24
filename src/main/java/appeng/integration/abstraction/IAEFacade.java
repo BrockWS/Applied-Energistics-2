@@ -18,17 +18,17 @@
 
 package appeng.integration.abstraction;
 
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraftforge.fml.common.Optional;
-
-import team.chisel.ctm.api.IFacade;
+//
+//import javax.annotation.Nonnull;
+//import javax.annotation.Nullable;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.IEnviromentBlockReader;
+//import net.minecraftforge.fml.common.Optional;
+//
+//import team.chisel.ctm.api.IFacade;
 
 
 /**
@@ -36,25 +36,25 @@ import team.chisel.ctm.api.IFacade;
  *
  * @author covers1624
  */
-@Optional.Interface( iface = "team.chisel.ctm.api.IFacade", modid = "ctm-api" )
-public interface IAEFacade extends IFacade
+//@Optional.Interface( iface = "team.chisel.ctm.api.IFacade", modid = "ctm-api" )
+public interface IAEFacade //extends IFacade
 {
-
-	BlockState getFacadeState( IEnviromentBlockReader world, BlockPos pos, Direction side );
-
-	@Nonnull
-	@Override
-	@Optional.Method( modid = "ctm-api" )
-	default BlockState getFacade( @Nonnull IEnviromentBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection )
-	{
-		return getFacadeState( world, pos, side );
-	}
-
-	@Nonnull
-	@Override
-	@Optional.Method( modid = "ctm-api" )
-	default BlockState getFacade( @Nonnull IEnviromentBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side )
-	{
-		return getFacadeState( world, pos, side );
-	}
+//
+//	BlockState getFacadeState( IEnviromentBlockReader world, BlockPos pos, Direction side );
+//
+//	@Nonnull
+//	@Override
+//	@Optional.Method( modid = "ctm-api" )
+//	default BlockState getFacade( @Nonnull IEnviromentBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side, @Nonnull BlockPos connection )
+//	{
+//		return getFacadeState( world, pos, side );
+//	}
+//
+//	@Nonnull
+//	@Override
+//	@Optional.Method( modid = "ctm-api" )
+//	default BlockState getFacade( @Nonnull IEnviromentBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side )
+//	{
+//		return getFacadeState( world, pos, side );
+//	}
 }

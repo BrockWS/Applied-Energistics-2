@@ -15,31 +15,31 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 
-class PaintModel implements IModel
+class PaintModel// implements IModel
 {
-
-	@Override
-	public Collection<ResourceLocation> getDependencies()
-	{
-		return Collections.emptyList();
-	}
-
-	@Override
-	public Collection<ResourceLocation> getTextures()
-	{
-		return PaintBakedModel.getRequiredTextures();
-	}
-
-	@Override
-	public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
-	{
-		return new PaintBakedModel( format, bakedTextureGetter );
-	}
-
-	@Override
-	public IModelState getDefaultState()
-	{
-		return TRSRTransformation.identity();
-	}
+//
+//	@Override
+//	public Collection<ResourceLocation> getDependencies()
+//	{
+//		return Collections.emptyList();
+//	}
+//
+//	@Override
+//	public Collection<ResourceLocation> getTextures()
+//	{
+//		return PaintBakedModel.getRequiredTextures();
+//	}
+//
+//	@Override
+//	public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+//	{
+//		return new PaintBakedModel( format, bakedTextureGetter );
+//	}
+//
+//	@Override
+//	public IModelState getDefaultState()
+//	{
+//		return TRSRTransformation.identity();
+//	}
 
 }

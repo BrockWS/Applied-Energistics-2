@@ -72,57 +72,57 @@ public class PacketCraftRequest extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		if( player.openContainer instanceof ContainerCraftAmount )
-		{
-			final ContainerCraftAmount cca = (ContainerCraftAmount) player.openContainer;
-			final Object target = cca.getTarget();
-			if( target instanceof IActionHost )
-			{
-				final IActionHost ah = (IActionHost) target;
-				final IGridNode gn = ah.getActionableNode();
-				if( gn == null )
-				{
-					return;
-				}
-
-				final IGrid g = gn.getGrid();
-				if( g == null || cca.getItemToCraft() == null )
-				{
-					return;
-				}
-
-				cca.getItemToCraft().setStackSize( this.amount );
-
-				Future<ICraftingJob> futureJob = null;
-				try
-				{
-					final ICraftingGrid cg = g.getCache( ICraftingGrid.class );
-					futureJob = cg.beginCraftingJob( cca.getWorld(), cca.getGrid(), cca.getActionSrc(), cca.getItemToCraft(), null );
-
-					final ContainerOpenContext context = cca.getOpenContext();
-					if( context != null )
-					{
-						final TileEntity te = context.getTile();
-						Platform.openGUI( player, te, cca.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_CONFIRM );
-
-						if( player.openContainer instanceof ContainerCraftConfirm )
-						{
-							final ContainerCraftConfirm ccc = (ContainerCraftConfirm) player.openContainer;
-							ccc.setAutoStart( this.heldShift );
-							ccc.setJob( futureJob );
-							cca.detectAndSendChanges();
-						}
-					}
-				}
-				catch( final Throwable e )
-				{
-					if( futureJob != null )
-					{
-						futureJob.cancel( true );
-					}
-					AELog.debug( e );
-				}
-			}
-		}
+//		if( player.openContainer instanceof ContainerCraftAmount )
+//		{
+//			final ContainerCraftAmount cca = (ContainerCraftAmount) player.openContainer;
+//			final Object target = cca.getTarget();
+//			if( target instanceof IActionHost )
+//			{
+//				final IActionHost ah = (IActionHost) target;
+//				final IGridNode gn = ah.getActionableNode();
+//				if( gn == null )
+//				{
+//					return;
+//				}
+//
+//				final IGrid g = gn.getGrid();
+//				if( g == null || cca.getItemToCraft() == null )
+//				{
+//					return;
+//				}
+//
+//				cca.getItemToCraft().setStackSize( this.amount );
+//
+//				Future<ICraftingJob> futureJob = null;
+//				try
+//				{
+//					final ICraftingGrid cg = g.getCache( ICraftingGrid.class );
+//					futureJob = cg.beginCraftingJob( cca.getWorld(), cca.getGrid(), cca.getActionSrc(), cca.getItemToCraft(), null );
+//
+//					final ContainerOpenContext context = cca.getOpenContext();
+//					if( context != null )
+//					{
+//						final TileEntity te = context.getTile();
+//						Platform.openGUI( player, te, cca.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_CONFIRM );
+//
+//						if( player.openContainer instanceof ContainerCraftConfirm )
+//						{
+//							final ContainerCraftConfirm ccc = (ContainerCraftConfirm) player.openContainer;
+//							ccc.setAutoStart( this.heldShift );
+//							ccc.setJob( futureJob );
+//							cca.detectAndSendChanges();
+//						}
+//					}
+//				}
+//				catch( final Throwable e )
+//				{
+//					if( futureJob != null )
+//					{
+//						futureJob.cancel( true );
+//					}
+//					AELog.debug( e );
+//				}
+//			}
+//		}
 	}
 }

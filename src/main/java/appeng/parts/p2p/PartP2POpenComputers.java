@@ -96,7 +96,7 @@ package appeng.parts.p2p;
 // }
 //
 // @Override
-// @SideOnly( Side.CLIENT )
+// @OnlyIn( Dist.CLIENT )
 // public IIcon getTypeTexture()
 // {
 // return Items.get( "adapter" ).block().getBlockTextureFromSide( 2 );

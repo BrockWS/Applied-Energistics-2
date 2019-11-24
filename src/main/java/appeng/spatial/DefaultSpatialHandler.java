@@ -18,46 +18,46 @@
 
 package appeng.spatial;
 
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.tileentity.TileEntity;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.World;
+//import net.minecraft.world.chunk.Chunk;
+//
+//import appeng.api.movable.IMovableHandler;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
-import appeng.api.movable.IMovableHandler;
-
-
-public class DefaultSpatialHandler implements IMovableHandler
+public class DefaultSpatialHandler //implements IMovableHandler
 {
-
-	/**
-	 * never called for the default.
-	 *
-	 * @param tile tile entity
-	 *
-	 * @return true
-	 */
-	@Override
-	public boolean canHandle( final Class<? extends TileEntity> myClass, final TileEntity tile )
-	{
-		return true;
-	}
-
-	@Override
-	public void moveTile( final TileEntity te, final World w, final BlockPos newPosition )
-	{
-		te.setWorld( w );
-		te.setPos( newPosition );
-
-		final Chunk c = w.getChunkFromBlockCoords( newPosition );
-		c.addTileEntity( newPosition, te );
-
-		if( c.isLoaded() )
-		{
-			final BlockState state = w.getBlockState( newPosition );
-			w.addTileEntity( te );
-			w.notifyBlockUpdate( newPosition, state, state, 1 );
-		}
-	}
+//
+//	/**
+//	 * never called for the default.
+//	 *
+//	 * @param tile tile entity
+//	 *
+//	 * @return true
+//	 */
+//	@Override
+//	public boolean canHandle( final Class<? extends TileEntity> myClass, final TileEntity tile )
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public void moveTile( final TileEntity te, final World w, final BlockPos newPosition )
+//	{
+//		te.setWorld( w );
+//		te.setPos( newPosition );
+//
+//		final Chunk c = w.getChunkFromBlockCoords( newPosition );
+//		c.addTileEntity( newPosition, te );
+//
+//		if( c.isLoaded() )
+//		{
+//			final BlockState state = w.getBlockState( newPosition );
+//			w.addTileEntity( te );
+//			w.notifyBlockUpdate( newPosition, state, state, 1 );
+//		}
+//	}
 }

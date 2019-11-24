@@ -19,20 +19,20 @@
 package appeng.client.render;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import appeng.client.render.cablebus.FacadeBuilder;
+//import java.util.ArrayList;
+//import java.util.Collections;
+//import java.util.List;
+//
+//import javax.annotation.Nullable;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.model.BakedQuad;
+//import net.minecraft.client.renderer.model.IBakedModel;
+//import net.minecraft.client.renderer.model.ItemOverrideList;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.Direction;
+//
+//import appeng.client.render.cablebus.FacadeBuilder;
 
 
 /**
@@ -40,52 +40,52 @@ import appeng.client.render.cablebus.FacadeBuilder;
  *
  * @author covers1624
  */
-public class FacadeBakedItemModel extends DelegateBakedModel
+public class FacadeBakedItemModel// extends DelegateBakedModel
 {
-
-	private final ItemStack textureStack;
-	private final FacadeBuilder facadeBuilder;
-	private List<BakedQuad> quads = null;
-
-	protected FacadeBakedItemModel( IBakedModel base, ItemStack textureStack, FacadeBuilder facadeBuilder )
-	{
-		super( base );
-		this.textureStack = textureStack;
-		this.facadeBuilder = facadeBuilder;
-	}
-
-	@Override
-	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
-	{
-		if( side != null )
-		{
-			return Collections.emptyList();
-		}
-		if( quads == null )
-		{
-		    quads = new ArrayList<>();
-            quads.addAll( this.facadeBuilder.buildFacadeItemQuads( this.textureStack, Direction.NORTH ) );
-            quads.addAll( this.getBaseModel().getQuads( state, side, rand ) );
-            quads = Collections.unmodifiableList( quads );
-        }
-		return quads;
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return false;
-	}
-
-	@Override
-	public ItemOverrideList getOverrides()
-	{
-		return ItemOverrideList.NONE;
-	}
+//
+//	private final ItemStack textureStack;
+//	private final FacadeBuilder facadeBuilder;
+//	private List<BakedQuad> quads = null;
+//
+//	protected FacadeBakedItemModel( IBakedModel base, ItemStack textureStack, FacadeBuilder facadeBuilder )
+//	{
+//		super( base );
+//		this.textureStack = textureStack;
+//		this.facadeBuilder = facadeBuilder;
+//	}
+//
+//	@Override
+//	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
+//	{
+//		if( side != null )
+//		{
+//			return Collections.emptyList();
+//		}
+//		if( quads == null )
+//		{
+//		    quads = new ArrayList<>();
+//            quads.addAll( this.facadeBuilder.buildFacadeItemQuads( this.textureStack, Direction.NORTH ) );
+//            quads.addAll( this.getBaseModel().getQuads( state, side, rand ) );
+//            quads = Collections.unmodifiableList( quads );
+//        }
+//		return quads;
+//	}
+//
+//	@Override
+//	public boolean isGui3d()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isBuiltInRenderer()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public ItemOverrideList getOverrides()
+//	{
+//		return ItemOverrideList.NONE;
+//	}
 }

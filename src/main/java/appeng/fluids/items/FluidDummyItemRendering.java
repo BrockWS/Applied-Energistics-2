@@ -19,9 +19,9 @@
 package appeng.fluids.items;
 
 
-import appeng.bootstrap.IItemRendering;
-import appeng.bootstrap.ItemRenderingCustomizer;
-import appeng.client.render.DummyFluidItemModel;
+//import appeng.bootstrap.IItemRendering;
+//import appeng.bootstrap.ItemRenderingCustomizer;
+//import appeng.client.render.DummyFluidItemModel;
 
 
 /**
@@ -29,11 +29,11 @@ import appeng.client.render.DummyFluidItemModel;
  * @version rv6 - 2018-01-22
  * @since rv6 2018-01-22
  */
-public class FluidDummyItemRendering extends ItemRenderingCustomizer
+public class FluidDummyItemRendering //extends ItemRenderingCustomizer
 {
-	@Override
-	public void customize( IItemRendering rendering )
-	{
-		rendering.builtInModel( "models/item/dummy_fluid_item", new DummyFluidItemModel() );
-	}
+//	@Override
+//	public void customize( IItemRendering rendering )
+//	{
+//		rendering.builtInModel( "models/item/dummy_fluid_item", new DummyFluidItemModel() );
+//	}
 }

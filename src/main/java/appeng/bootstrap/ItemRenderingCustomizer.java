@@ -19,9 +19,8 @@
 package appeng.bootstrap;
 
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * A callback that allows the rendering of a item to be customized. Sadly this class is required and no lambdas can be
@@ -31,6 +30,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class ItemRenderingCustomizer
 {
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public abstract void customize( IItemRendering rendering );
 }

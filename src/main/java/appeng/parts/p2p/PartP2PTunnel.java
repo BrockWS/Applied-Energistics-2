@@ -47,7 +47,7 @@ import appeng.api.parts.PartItemStack;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEColor;
 import appeng.api.util.AEPartLocation;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.me.GridAccessException;
 import appeng.me.cache.P2PCache;
 import appeng.me.cache.helpers.TunnelCollection;
@@ -145,8 +145,8 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 	public void writeToNBT( final CompoundNBT data )
 	{
 		super.writeToNBT( data );
-		data.setBoolean( "output", this.isOutput() );
-		data.setShort( "freq", this.getFrequency() );
+		data.putBoolean( "output", this.isOutput() );
+		data.putShort( "freq", this.getFrequency() );
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 			final IMemoryCard mc = (IMemoryCard) is.getItem();
 			final CompoundNBT data = mc.getData( is );
 
-			final ItemStack newType = new ItemStack( data );
+			final ItemStack newType = ItemStack.read( data );
 			final short freq = data.getShort( "freq" );
 
 			if( !newType.isEmpty() )
@@ -362,10 +362,10 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 			this.onTunnelConfigChange();
 
 			final ItemStack p2pItem = this.getItemStack( PartItemStack.WRENCH );
-			final String type = p2pItem.getUnlocalizedName();
+			final String type = p2pItem.getTranslationKey();
 
-			p2pItem.writeToNBT( data );
-			data.setShort( "freq", this.getFrequency() );
+			p2pItem.write( data );
+			data.putShort( "freq", this.getFrequency() );
 
 			final AEColor[] colors = Platform.p2p().toColors( this.getFrequency() );
 			final int[] colorCode = new int[] {
@@ -373,7 +373,7 @@ public abstract class PartP2PTunnel<T extends PartP2PTunnel> extends PartBasicSt
 					colors[2].ordinal(), colors[2].ordinal(), colors[3].ordinal(), colors[3].ordinal(),
 			};
 
-			data.setIntArray( "colorCode", colorCode );
+			data.putIntArray( "colorCode", colorCode );
 
 			mc.setMemoryCardContents( is, type + ".name", data );
 			if( needsNewFrequency )

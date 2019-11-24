@@ -18,56 +18,56 @@
 
 package appeng.hooks;
 
+//
+//import net.minecraft.block.BlockDispenser;
+//import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+//import net.minecraft.dispenser.IBlockSource;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.Item;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.Direction;
+//import net.minecraft.world.World;
+//import net.minecraft.world.ServerWorld;
+//
+//import appeng.api.util.AEPartLocation;
+//import appeng.items.tools.powered.ToolMatterCannon;
+//import appeng.util.Platform;
 
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
-import net.minecraft.world.ServerWorld;
 
-import appeng.api.util.AEPartLocation;
-import appeng.items.tools.powered.ToolMatterCannon;
-import appeng.util.Platform;
-
-
-public final class DispenserMatterCannon extends BehaviorDefaultDispenseItem
+public final class DispenserMatterCannon //extends BehaviorDefaultDispenseItem
 {
-
-	@Override
-	protected ItemStack dispenseStack( final IBlockSource dispenser, ItemStack dispensedItem )
-	{
-		final Item i = dispensedItem.getItem();
-		if( i instanceof ToolMatterCannon )
-		{
-			final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
-			AEPartLocation dir = AEPartLocation.INTERNAL;
-			for( final AEPartLocation d : AEPartLocation.SIDE_LOCATIONS )
-			{
-				if( enumfacing.getFrontOffsetX() == d.xOffset && enumfacing.getFrontOffsetY() == d.yOffset && enumfacing.getFrontOffsetZ() == d.zOffset )
-				{
-					dir = d;
-				}
-			}
-
-			final ToolMatterCannon tm = (ToolMatterCannon) i;
-
-			final World w = dispenser.getWorld();
-			if( w instanceof ServerWorld )
-			{
-				final PlayerEntity p = Platform.getPlayer( (ServerWorld) w );
-				Platform.configurePlayer( p, dir, dispenser.getBlockTileEntity() );
-
-				p.posX += dir.xOffset;
-				p.posY += dir.yOffset;
-				p.posZ += dir.zOffset;
-
-				dispensedItem = tm.onItemRightClick( w, p, null ).getResult();
-			}
-		}
-		return dispensedItem;
-	}
+//
+//	@Override
+//	protected ItemStack dispenseStack( final IBlockSource dispenser, ItemStack dispensedItem )
+//	{
+//		final Item i = dispensedItem.getItem();
+//		if( i instanceof ToolMatterCannon )
+//		{
+//			final Direction enumfacing = dispenser.getBlockState().getValue( BlockDispenser.FACING );
+//			AEPartLocation dir = AEPartLocation.INTERNAL;
+//			for( final AEPartLocation d : AEPartLocation.SIDE_LOCATIONS )
+//			{
+//				if( enumfacing.getFrontOffsetX() == d.xOffset && enumfacing.getFrontOffsetY() == d.yOffset && enumfacing.getFrontOffsetZ() == d.zOffset )
+//				{
+//					dir = d;
+//				}
+//			}
+//
+//			final ToolMatterCannon tm = (ToolMatterCannon) i;
+//
+//			final World w = dispenser.getWorld();
+//			if( w instanceof ServerWorld )
+//			{
+//				final PlayerEntity p = Platform.getPlayer( (ServerWorld) w );
+//				Platform.configurePlayer( p, dir, dispenser.getBlockTileEntity() );
+//
+//				p.posX += dir.xOffset;
+//				p.posY += dir.yOffset;
+//				p.posZ += dir.zOffset;
+//
+//				dispensedItem = tm.onItemRightClick( w, p, null ).getResult();
+//			}
+//		}
+//		return dispensedItem;
+//	}
 }

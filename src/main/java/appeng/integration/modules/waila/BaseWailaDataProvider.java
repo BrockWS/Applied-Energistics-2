@@ -18,19 +18,19 @@
 
 package appeng.integration.modules.waila;
 
-
-import java.util.List;
-
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
+//
+//import java.util.List;
+//
+//import net.minecraft.entity.player.ServerPlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.tileentity.TileEntity;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.World;
+//
+//import mcp.mobius.waila.api.IWailaConfigHandler;
+//import mcp.mobius.waila.api.IWailaDataAccessor;
+//import mcp.mobius.waila.api.IWailaDataProvider;
 
 
 /**
@@ -40,35 +40,35 @@ import mcp.mobius.waila.api.IWailaDataProvider;
  * @version rv2
  * @since rv2
  */
-public abstract class BaseWailaDataProvider implements IWailaDataProvider
+public abstract class BaseWailaDataProvider //implements IWailaDataProvider
 {
-	@Override
-	public ItemStack getWailaStack( final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public List<String> getWailaHead( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		return currentToolTip;
-	}
-
-	@Override
-	public List<String> getWailaBody( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		return currentToolTip;
-	}
-
-	@Override
-	public List<String> getWailaTail( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		return currentToolTip;
-	}
-
-	@Override
-	public CompoundNBT getNBTData( ServerPlayerEntity player, TileEntity te, CompoundNBT tag, World world, BlockPos pos )
-	{
-		return tag;
-	}
+//	@Override
+//	public ItemStack getWailaStack( final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		return ItemStack.EMPTY;
+//	}
+//
+//	@Override
+//	public List<String> getWailaHead( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		return currentToolTip;
+//	}
+//
+//	@Override
+//	public List<String> getWailaBody( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		return currentToolTip;
+//	}
+//
+//	@Override
+//	public List<String> getWailaTail( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		return currentToolTip;
+//	}
+//
+//	@Override
+//	public CompoundNBT getNBTData( ServerPlayerEntity player, TileEntity te, CompoundNBT tag, World world, BlockPos pos )
+//	{
+//		return tag;
+//	}
 }

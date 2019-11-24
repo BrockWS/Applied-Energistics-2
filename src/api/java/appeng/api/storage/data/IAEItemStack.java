@@ -49,13 +49,6 @@ public interface IAEItemStack extends IAEStack<IAEItemStack>
 	ItemStack createItemStack();
 
 	/**
-	 * is there NBT Data for this item?
-	 *
-	 * @return if there is
-	 */
-	boolean hasTagCompound();
-
-	/**
 	 * Combines two IAEItemStacks via addition.
 	 *
 	 * @param option to add to the current one.
@@ -79,22 +72,13 @@ public interface IAEItemStack extends IAEStack<IAEItemStack>
 	Item getItem();
 
 	/**
-	 * @return the items damage value
-	 */
-	int getItemDamage();
-
-	/**
-	 * Compare the Ore Dictionary ID for this to another item.
-	 */
-	boolean sameOre( IAEItemStack is );
-
-	/**
 	 * compare the item/damage/nbt of the stack.
 	 *
 	 * @param otherStack to be compared item
 	 *
 	 * @return true if it is the same type (same item, damage, nbt)
 	 */
+	@Deprecated
 	boolean isSameType( IAEItemStack otherStack );
 
 	/**
@@ -104,6 +88,7 @@ public interface IAEItemStack extends IAEStack<IAEItemStack>
 	 *
 	 * @return true if it is the same type (same item, damage, nbt)
 	 */
+	@Deprecated
 	boolean isSameType( ItemStack stored );
 
 	/**
@@ -111,5 +96,6 @@ public interface IAEItemStack extends IAEStack<IAEItemStack>
 	 * 
 	 * @return definition stack
 	 */
+	@Deprecated
 	ItemStack getDefinition();
 }

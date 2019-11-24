@@ -30,6 +30,6 @@ public class DriveRendering extends BlockRenderingCustomizer
 	@Override
 	public void customize( IBlockRendering rendering, IItemRendering itemRendering )
 	{
-		rendering.builtInModel( "models/block/builtin/drive", new DriveModel() );
+//		rendering.builtInModel( "models/block/builtin/drive", new DriveModel() );
 	}
 }

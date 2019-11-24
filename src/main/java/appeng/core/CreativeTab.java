@@ -21,9 +21,13 @@ package appeng.core;
 
 import java.util.Optional;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.registry.DefaultedRegistry;
+import net.minecraft.util.registry.Registry;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IBlocks;
@@ -48,21 +52,16 @@ public final class CreativeTab extends ItemGroup
 	}
 
 	@Override
-	public ItemStack getTabIconItem()
-	{
-		return this.getIconItemStack();
-	}
-
-	@Override
-	public ItemStack getIconItemStack()
+	public ItemStack createIcon()
 	{
 		final IDefinitions definitions = AEApi.instance().definitions();
-		final IBlocks blocks = definitions.blocks();
-		final IItems items = definitions.items();
+//		final IBlocks blocks = definitions.blocks();
+//		final IItems items = definitions.items();
 		final IMaterials materials = definitions.materials();
 
-		return this.findFirst( blocks.controller(), blocks.chest(), blocks.cellWorkbench(), blocks.fluixBlock(), items.cell1k(), items.networkTool(),
-				materials.fluixCrystal(), materials.certusQuartzCrystal(), materials.skyDust() );
+		return this.findFirst( //blocks.controller(), blocks.chest(), blocks.cellWorkbench(), blocks.fluixBlock(), items.cell1k(), items.networkTool(),
+				materials.fluixCrystal(), materials.certusQuartzCrystal(), materials.skyDust()
+		);
 	}
 
 	private ItemStack findFirst( final IItemDefinition... choices )

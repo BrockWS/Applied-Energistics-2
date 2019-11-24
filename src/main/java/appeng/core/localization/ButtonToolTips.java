@@ -19,8 +19,10 @@
 package appeng.core.localization;
 
 
-import net.minecraft.util.text.translation.I18n;
+//import net.minecraft.util.text.translation.I18n;
 
+
+import net.minecraft.client.resources.I18n;
 
 public enum ButtonToolTips
 {
@@ -164,7 +166,7 @@ public enum ButtonToolTips
 
 	public String getLocal()
 	{
-		return I18n.translateToLocal( this.getUnlocalized() );
+		return I18n.format( this.getUnlocalized() );
 	}
 
 	public String getUnlocalized()

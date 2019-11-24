@@ -19,200 +19,200 @@
 package appeng.parts.p2p;
 
 
-import java.util.List;
+//import java.util.List;
+//
+//import net.minecraft.block.Block;
+//import net.minecraft.block.BlockRedstoneWire;
+//import net.minecraft.block.BlockState;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.IEnviromentBlockReader;
+//import net.minecraft.world.World;
+//
+//import appeng.api.networking.events.MENetworkBootingStatusChange;
+//import appeng.api.networking.events.MENetworkChannelsChanged;
+//import appeng.api.networking.events.MENetworkEventSubscribe;
+//import appeng.api.networking.events.MENetworkPowerStatusChange;
+//import appeng.api.parts.IPartModel;
+//import appeng.items.parts.PartModels;
+//import appeng.me.GridAccessException;
+//import appeng.util.Platform;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraft.world.World;
 
-import appeng.api.networking.events.MENetworkBootingStatusChange;
-import appeng.api.networking.events.MENetworkChannelsChanged;
-import appeng.api.networking.events.MENetworkEventSubscribe;
-import appeng.api.networking.events.MENetworkPowerStatusChange;
-import appeng.api.parts.IPartModel;
-import appeng.items.parts.PartModels;
-import appeng.me.GridAccessException;
-import appeng.util.Platform;
-
-
-public class PartP2PRedstone extends PartP2PTunnel<PartP2PRedstone>
+public class PartP2PRedstone// extends PartP2PTunnel<PartP2PRedstone>
 {
-
-	private static final P2PModels MODELS = new P2PModels( "part/p2p/p2p_tunnel_redstone" );
-
-	@PartModels
-	public static List<IPartModel> getModels()
-	{
-		return MODELS.getModels();
-	}
-
-	private int power;
-	private boolean recursive = false;
-
-	public PartP2PRedstone( final ItemStack is )
-	{
-		super( is );
-	}
-
-	@MENetworkEventSubscribe
-	public void changeStateA( final MENetworkBootingStatusChange bs )
-	{
-		this.setNetworkReady();
-	}
-
-	private void setNetworkReady()
-	{
-		if( this.isOutput() )
-		{
-			final PartP2PRedstone in = this.getInput();
-			if( in != null )
-			{
-				this.putInput( in.power );
-			}
-		}
-	}
-
-	private void putInput( final Object o )
-	{
-		if( this.recursive )
-		{
-			return;
-		}
-
-		this.recursive = true;
-		if( this.isOutput() && this.getProxy().isActive() )
-		{
-			final int newPower = (Integer) o;
-			if( this.power != newPower )
-			{
-				this.power = newPower;
-				this.notifyNeighbors();
-			}
-		}
-		this.recursive = false;
-	}
-
-	private void notifyNeighbors()
-	{
-		final World world = this.getTile().getWorld();
-
-		Platform.notifyBlocksOfNeighbors( world, this.getTile().getPos() );
-
-		// and this cause sometimes it can go thought walls.
-		for( final Direction face : Direction.VALUES )
-		{
-			Platform.notifyBlocksOfNeighbors( world, this.getTile().getPos().offset( face ) );
-		}
-	}
-
-	@MENetworkEventSubscribe
-	public void changeStateB( final MENetworkChannelsChanged bs )
-	{
-		this.setNetworkReady();
-	}
-
-	@MENetworkEventSubscribe
-	public void changeStateC( final MENetworkPowerStatusChange bs )
-	{
-		this.setNetworkReady();
-	}
-
-	@Override
-	public void readFromNBT( final CompoundNBT tag )
-	{
-		super.readFromNBT( tag );
-		this.power = tag.getInteger( "power" );
-	}
-
-	@Override
-	public void writeToNBT( final CompoundNBT tag )
-	{
-		super.writeToNBT( tag );
-		tag.setInteger( "power", this.power );
-	}
-
-	@Override
-	public void onTunnelNetworkChange()
-	{
-		this.setNetworkReady();
-	}
-
-	public float getPowerDrainPerTick()
-	{
-		return 0.5f;
-	}
-
-	@Override
-	public void onNeighborChanged( IEnviromentBlockReader w, BlockPos pos, BlockPos neighbor )
-	{
-		if( !this.isOutput() )
-		{
-			final BlockPos target = this.getTile().getPos().offset( this.getSide().getFacing() );
-
-			final BlockState state = this.getTile().getWorld().getBlockState( target );
-			final Block b = state.getBlock();
-			if( b != null && !this.isOutput() )
-			{
-				Direction srcSide = this.getSide().getFacing();
-				if( b instanceof BlockRedstoneWire )
-				{
-					srcSide = Direction.UP;
-				}
-
-				this.power = b.getWeakPower( state, this.getTile().getWorld(), target, srcSide );
-				this.power = Math.max( this.power, b.getWeakPower( state, this.getTile().getWorld(), target, srcSide ) );
-				this.sendToOutput( this.power );
-			}
-			else
-			{
-				this.sendToOutput( 0 );
-			}
-		}
-	}
-
-	@Override
-	public boolean canConnectRedstone()
-	{
-		return true;
-	}
-
-	@Override
-	public int isProvidingStrongPower()
-	{
-		return this.isOutput() ? this.power : 0;
-	}
-
-	@Override
-	public int isProvidingWeakPower()
-	{
-		return this.isOutput() ? this.power : 0;
-	}
-
-	private void sendToOutput( final int power )
-	{
-		try
-		{
-			for( final PartP2PRedstone rs : this.getOutputs() )
-			{
-				rs.putInput( power );
-			}
-		}
-		catch( final GridAccessException e )
-		{
-			// :P
-		}
-	}
-
-	@Override
-	public IPartModel getStaticModels()
-	{
-		return MODELS.getModel( this.isPowered(), this.isActive() );
-	}
+//
+//	private static final P2PModels MODELS = new P2PModels( "part/p2p/p2p_tunnel_redstone" );
+//
+//	@PartModels
+//	public static List<IPartModel> getModels()
+//	{
+//		return MODELS.getModels();
+//	}
+//
+//	private int power;
+//	private boolean recursive = false;
+//
+//	public PartP2PRedstone( final ItemStack is )
+//	{
+//		super( is );
+//	}
+//
+//	@MENetworkEventSubscribe
+//	public void changeStateA( final MENetworkBootingStatusChange bs )
+//	{
+//		this.setNetworkReady();
+//	}
+//
+//	private void setNetworkReady()
+//	{
+//		if( this.isOutput() )
+//		{
+//			final PartP2PRedstone in = this.getInput();
+//			if( in != null )
+//			{
+//				this.putInput( in.power );
+//			}
+//		}
+//	}
+//
+//	private void putInput( final Object o )
+//	{
+//		if( this.recursive )
+//		{
+//			return;
+//		}
+//
+//		this.recursive = true;
+//		if( this.isOutput() && this.getProxy().isActive() )
+//		{
+//			final int newPower = (Integer) o;
+//			if( this.power != newPower )
+//			{
+//				this.power = newPower;
+//				this.notifyNeighbors();
+//			}
+//		}
+//		this.recursive = false;
+//	}
+//
+//	private void notifyNeighbors()
+//	{
+//		final World world = this.getTile().getWorld();
+//
+//		Platform.notifyBlocksOfNeighbors( world, this.getTile().getPos() );
+//
+//		// and this cause sometimes it can go thought walls.
+//		for( final Direction face : Direction.VALUES )
+//		{
+//			Platform.notifyBlocksOfNeighbors( world, this.getTile().getPos().offset( face ) );
+//		}
+//	}
+//
+//	@MENetworkEventSubscribe
+//	public void changeStateB( final MENetworkChannelsChanged bs )
+//	{
+//		this.setNetworkReady();
+//	}
+//
+//	@MENetworkEventSubscribe
+//	public void changeStateC( final MENetworkPowerStatusChange bs )
+//	{
+//		this.setNetworkReady();
+//	}
+//
+//	@Override
+//	public void readFromNBT( final CompoundNBT tag )
+//	{
+//		super.readFromNBT( tag );
+//		this.power = tag.getInteger( "power" );
+//	}
+//
+//	@Override
+//	public void writeToNBT( final CompoundNBT tag )
+//	{
+//		super.writeToNBT( tag );
+//		tag.setInteger( "power", this.power );
+//	}
+//
+//	@Override
+//	public void onTunnelNetworkChange()
+//	{
+//		this.setNetworkReady();
+//	}
+//
+//	public float getPowerDrainPerTick()
+//	{
+//		return 0.5f;
+//	}
+//
+//	@Override
+//	public void onNeighborChanged( IEnviromentBlockReader w, BlockPos pos, BlockPos neighbor )
+//	{
+//		if( !this.isOutput() )
+//		{
+//			final BlockPos target = this.getTile().getPos().offset( this.getSide().getFacing() );
+//
+//			final BlockState state = this.getTile().getWorld().getBlockState( target );
+//			final Block b = state.getBlock();
+//			if( b != null && !this.isOutput() )
+//			{
+//				Direction srcSide = this.getSide().getFacing();
+//				if( b instanceof BlockRedstoneWire )
+//				{
+//					srcSide = Direction.UP;
+//				}
+//
+//				this.power = b.getWeakPower( state, this.getTile().getWorld(), target, srcSide );
+//				this.power = Math.max( this.power, b.getWeakPower( state, this.getTile().getWorld(), target, srcSide ) );
+//				this.sendToOutput( this.power );
+//			}
+//			else
+//			{
+//				this.sendToOutput( 0 );
+//			}
+//		}
+//	}
+//
+//	@Override
+//	public boolean canConnectRedstone()
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public int isProvidingStrongPower()
+//	{
+//		return this.isOutput() ? this.power : 0;
+//	}
+//
+//	@Override
+//	public int isProvidingWeakPower()
+//	{
+//		return this.isOutput() ? this.power : 0;
+//	}
+//
+//	private void sendToOutput( final int power )
+//	{
+//		try
+//		{
+//			for( final PartP2PRedstone rs : this.getOutputs() )
+//			{
+//				rs.putInput( power );
+//			}
+//		}
+//		catch( final GridAccessException e )
+//		{
+//			// :P
+//		}
+//	}
+//
+//	@Override
+//	public IPartModel getStaticModels()
+//	{
+//		return MODELS.getModel( this.isPowered(), this.isActive() );
+//	}
 
 }

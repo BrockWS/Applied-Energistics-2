@@ -19,85 +19,85 @@
 package appeng.tile.grid;
 
 
-import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.nbt.CompoundNBT;
+//
+//import appeng.api.networking.IGridNode;
+//import appeng.api.networking.security.IActionHost;
+//import appeng.api.util.AEPartLocation;
+//import appeng.me.helpers.AENetworkProxy;
+//import appeng.me.helpers.IGridProxyable;
+//import appeng.tile.AEBaseInvTile;
 
-import appeng.api.networking.IGridNode;
-import appeng.api.networking.security.IActionHost;
-import appeng.api.util.AEPartLocation;
-import appeng.me.helpers.AENetworkProxy;
-import appeng.me.helpers.IGridProxyable;
-import appeng.tile.AEBaseInvTile;
 
-
-public abstract class AENetworkInvTile extends AEBaseInvTile implements IActionHost, IGridProxyable
+public abstract class AENetworkInvTile //extends AEBaseInvTile implements IActionHost, IGridProxyable
 {
-
-	private final AENetworkProxy gridProxy = new AENetworkProxy( this, "proxy", this.getItemFromTile( this ), true );
-
-	@Override
-	public void readFromNBT( final CompoundNBT data )
-	{
-		super.readFromNBT( data );
-		this.getProxy().readFromNBT( data );
-	}
-
-	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
-	{
-		super.writeToNBT( data );
-		this.getProxy().writeToNBT( data );
-		return data;
-	}
-
-	@Override
-	public AENetworkProxy getProxy()
-	{
-		return this.gridProxy;
-	}
-
-	@Override
-	public void gridChanged()
-	{
-
-	}
-
-	@Override
-	public IGridNode getGridNode( final AEPartLocation dir )
-	{
-		return this.getProxy().getNode();
-	}
-
-	@Override
-	public void onChunkUnload()
-	{
-		super.onChunkUnload();
-		this.getProxy().onChunkUnload();
-	}
-
-	@Override
-	public void onReady()
-	{
-		super.onReady();
-		this.getProxy().onReady();
-	}
-
-	@Override
-	public void invalidate()
-	{
-		super.invalidate();
-		this.getProxy().invalidate();
-	}
-
-	@Override
-	public void validate()
-	{
-		super.validate();
-		this.getProxy().validate();
-	}
-
-	@Override
-	public IGridNode getActionableNode()
-	{
-		return this.getProxy().getNode();
-	}
+//
+//	private final AENetworkProxy gridProxy = new AENetworkProxy( this, "proxy", this.getItemFromTile( this ), true );
+//
+//	@Override
+//	public void readFromNBT( final CompoundNBT data )
+//	{
+//		super.readFromNBT( data );
+//		this.getProxy().readFromNBT( data );
+//	}
+//
+//	@Override
+//	public CompoundNBT writeToNBT( final CompoundNBT data )
+//	{
+//		super.writeToNBT( data );
+//		this.getProxy().writeToNBT( data );
+//		return data;
+//	}
+//
+//	@Override
+//	public AENetworkProxy getProxy()
+//	{
+//		return this.gridProxy;
+//	}
+//
+//	@Override
+//	public void gridChanged()
+//	{
+//
+//	}
+//
+//	@Override
+//	public IGridNode getGridNode( final AEPartLocation dir )
+//	{
+//		return this.getProxy().getNode();
+//	}
+//
+//	@Override
+//	public void onChunkUnload()
+//	{
+//		super.onChunkUnload();
+//		this.getProxy().onChunkUnload();
+//	}
+//
+//	@Override
+//	public void onReady()
+//	{
+//		super.onReady();
+//		this.getProxy().onReady();
+//	}
+//
+//	@Override
+//	public void invalidate()
+//	{
+//		super.invalidate();
+//		this.getProxy().invalidate();
+//	}
+//
+//	@Override
+//	public void validate()
+//	{
+//		super.validate();
+//		this.getProxy().validate();
+//	}
+//
+//	@Override
+//	public IGridNode getActionableNode()
+//	{
+//		return this.getProxy().getNode();
+//	}
 }

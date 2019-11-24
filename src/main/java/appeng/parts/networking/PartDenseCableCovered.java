@@ -19,23 +19,23 @@
 package appeng.parts.networking;
 
 
-import net.minecraft.item.ItemStack;
+//import net.minecraft.item.ItemStack;
+//
+//import appeng.api.util.AECableType;
 
-import appeng.api.util.AECableType;
 
-
-public class PartDenseCableCovered extends PartDenseCable
+public class PartDenseCableCovered// extends PartDenseCable
 {
-
-	public PartDenseCableCovered( ItemStack is )
-	{
-		super( is );
-	}
-
-	@Override
-	public AECableType getCableConnectionType()
-	{
-		return AECableType.DENSE_COVERED;
-	}
+//
+//	public PartDenseCableCovered( ItemStack is )
+//	{
+//		super( is );
+//	}
+//
+//	@Override
+//	public AECableType getCableConnectionType()
+//	{
+//		return AECableType.DENSE_COVERED;
+//	}
 
 }

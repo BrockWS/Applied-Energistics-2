@@ -18,17 +18,17 @@
 
 package appeng.integration.modules.theoneprobe.part;
 
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
-
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoProvider;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.api.parts.IPart;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.IProbeInfoProvider;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.api.parts.IPart;
 
 
 /**
@@ -41,5 +41,5 @@ public interface IPartProbInfoProvider
 	/**
 	 * @see IProbeInfoProvider#addProbeInfo(ProbeMode, IProbeInfo, PlayerEntity, World, BlockState, IProbeHitData)
 	 */
-	void addProbeInfo( IPart part, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data );
+	//void addProbeInfo( IPart part, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data );
 }

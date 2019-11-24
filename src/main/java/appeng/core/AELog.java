@@ -28,6 +28,7 @@ import org.apache.logging.log4j.message.ParameterizedMessage;
 
 import net.minecraft.util.math.BlockPos;
 
+import appeng.core.config.AEConfig;
 import appeng.core.features.AEFeature;
 import appeng.tile.AEBaseTile;
 import appeng.util.Platform;

@@ -19,10 +19,12 @@
 package appeng.decorative.solid;
 
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.IProperty;
-import net.minecraft.state.PropertyEnum;
 import net.minecraft.block.BlockState;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
@@ -33,47 +35,24 @@ import appeng.block.AEBaseBlock;
 import appeng.helpers.MetaRotation;
 
 
-public class BlockQuartzPillar extends AEBaseBlock implements IOrientableBlock
+public class BlockQuartzPillar extends AEBaseBlock //implements IOrientableBlock
 {
-	public static final PropertyEnum<Direction.Axis> AXIS_ORIENTATION = PropertyEnum.create( "axis", Direction.Axis.class );
 
 	public BlockQuartzPillar()
 	{
 		super( Material.ROCK );
-		// The upwards facing pillar is the default (i.e. for the item model)
-		this.setDefaultState( this.getDefaultState().withProperty( AXIS_ORIENTATION, Direction.Axis.Y ) );
 	}
 
 	@Override
-	public int getMetaFromState( final BlockState state )
-	{
-		return state.getValue( AXIS_ORIENTATION ).ordinal();
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(BlockStateProperties.AXIS);
 	}
 
-	@Override
-	public BlockState getStateFromMeta( final int meta )
-	{
-		// Simply use the ordinal here
-		Direction.Axis axis = Direction.Axis.values()[meta];
-		return this.getDefaultState().withProperty( AXIS_ORIENTATION, axis );
-	}
-
-	@Override
-	protected IProperty[] getAEStates()
-	{
-		return new IProperty[] { AXIS_ORIENTATION };
-	}
-
-	@Override
-	public boolean usesMetadata()
-	{
-		return true;
-	}
-
-	@Override
-	public IOrientable getOrientable( final IEnviromentBlockReader w, final BlockPos pos )
-	{
-		return new MetaRotation( w, pos, null );
-	}
+//	@Override
+//	public IOrientable getOrientable( final IEnviromentBlockReader w, final BlockPos pos )
+//	{
+//		return new MetaRotation( w, pos, null );
+//	}
 
 }

@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import appeng.api.config.AccessRestriction;
@@ -59,10 +60,10 @@ public abstract class AEBasePoweredTile extends AEBaseInvTile implements IAEPowe
 	public AEBasePoweredTile()
 	{
 		this.forgeEnergyAdapter = new ForgeEnergyAdapter( this );
-		if( Capabilities.TESLA_CONSUMER != null )
-		{
-			this.teslaEnergyAdapter = new TeslaEnergyAdapter( this );
-		}
+//		if( Capabilities.TESLA_CONSUMER != null )
+//		{
+//			this.teslaEnergyAdapter = new TeslaEnergyAdapter( this );
+//		}
 		this.ic2Sink = Integrations.ic2().createPowerSink( this, this );
 		this.ic2Sink.setValidFaces( this.internalPowerSides );
 	}
@@ -80,17 +81,17 @@ public abstract class AEBasePoweredTile extends AEBaseInvTile implements IAEPowe
 	}
 
 	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
+	public CompoundNBT write( final CompoundNBT data )
 	{
-		super.writeToNBT( data );
-		data.setDouble( "internalCurrentPower", this.getInternalCurrentPower() );
+		super.write( data );
+		data.putDouble( "internalCurrentPower", this.getInternalCurrentPower() );
 		return data;
 	}
 
 	@Override
-	public void readFromNBT( final CompoundNBT data )
+	public void read( final CompoundNBT data )
 	{
-		super.readFromNBT( data );
+		super.read( data );
 		this.setInternalCurrentPower( data.getDouble( "internalCurrentPower" ) );
 	}
 
@@ -251,61 +252,60 @@ public abstract class AEBasePoweredTile extends AEBaseInvTile implements IAEPowe
 		this.ic2Sink.onLoad();
 	}
 
-	@Override
-	public void onChunkUnload()
-	{
-		super.onChunkUnload();
+//	@Override
+//	public void onChunkUnload()
+//	{
+//		super.onChunkUnload();
+//
+//		this.ic2Sink.onChunkUnload();
+//	}
 
-		this.ic2Sink.onChunkUnload();
-	}
-
 	@Override
-	public void invalidate()
+	public void remove()
 	{
-		super.invalidate();
+		super.remove();
 
 		this.ic2Sink.invalidate();
 	}
 
+//	@Override
+//	public boolean hasCapability( Capability<?> capability, Direction facing )
+//	{
+//		if( capability == Capabilities.FORGE_ENERGY )
+//		{
+//			if( this.getPowerSides().contains( facing ) )
+//			{
+//				return true;
+//			}
+//		}
+//		else if( capability == Capabilities.TESLA_CONSUMER )
+//		{
+//			if( this.getPowerSides().contains( facing ) )
+//			{
+//				return true;
+//			}
+//		}
+//
+//		return super.hasCapability( capability, facing );
+//	}
+
 	@Override
-	public boolean hasCapability( Capability<?> capability, Direction facing )
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing )
 	{
 		if( capability == Capabilities.FORGE_ENERGY )
 		{
 			if( this.getPowerSides().contains( facing ) )
 			{
-				return true;
+				return LazyOptional.of(() -> this.forgeEnergyAdapter).cast();
 			}
 		}
-		else if( capability == Capabilities.TESLA_CONSUMER )
-		{
-			if( this.getPowerSides().contains( facing ) )
-			{
-				return true;
-			}
-		}
-
-		return super.hasCapability( capability, facing );
-	}
-
-	@SuppressWarnings( "unchecked" )
-	@Override
-	public <T> T getCapability( Capability<T> capability, @Nullable Direction facing )
-	{
-		if( capability == Capabilities.FORGE_ENERGY )
-		{
-			if( this.getPowerSides().contains( facing ) )
-			{
-				return (T) this.forgeEnergyAdapter;
-			}
-		}
-		else if( capability == Capabilities.TESLA_CONSUMER )
-		{
-			if( this.getPowerSides().contains( facing ) )
-			{
-				return (T) this.teslaEnergyAdapter;
-			}
-		}
+//		else if( capability == Capabilities.TESLA_CONSUMER )
+//		{
+//			if( this.getPowerSides().contains( facing ) )
+//			{
+//				return (T) this.teslaEnergyAdapter;
+//			}
+//		}
 
 		return super.getCapability( capability, facing );
 	}

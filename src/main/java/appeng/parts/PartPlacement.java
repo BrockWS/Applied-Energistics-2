@@ -29,21 +29,24 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IBlockDefinition;
@@ -85,7 +88,8 @@ public class PartPlacement
 				return ActionResultType.FAIL;
 			}
 
-			final Block block = world.getBlockState( pos ).getBlock();
+			final BlockState blockState = world.getBlockState( pos );
+			final Block block = blockState.getBlock();
 			final TileEntity tile = world.getTileEntity( pos );
 			IPartHost host = null;
 
@@ -99,13 +103,13 @@ public class PartPlacement
 				if( !world.isRemote )
 				{
 					final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
-					final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
+					final BlockRayTraceResult mop = collisionRayTrace( blockState, world, pos, dir.getA(), dir.getB() );
 
 					if( mop != null )
 					{
 						final List<ItemStack> is = new ArrayList<>();
 						final SelectedPart sp = selectPart( player, host,
-								mop.hitVec.addVector( -mop.getBlockPos().getX(), -mop.getBlockPos().getY(), -mop.getBlockPos().getZ() ) );
+								mop.getHitVec().add( -mop.getPos().getX(), -mop.getPos().getY(), -mop.getPos().getZ() ) );
 
 						if( sp.part != null )
 						{
@@ -171,7 +175,7 @@ public class PartPlacement
 							{
 								host.markForSave();
 								host.markForUpdate();
-								if( !player.capabilities.isCreativeMode )
+								if( !player.abilities.isCreativeMode )
 								{
 									held.grow( -1 );
 									;
@@ -202,15 +206,15 @@ public class PartPlacement
 			if( host != null && player.isSneaking() && block != null )
 			{
 				final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
-				final RayTraceResult mop = block.collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
+				final BlockRayTraceResult mop = collisionRayTrace( world.getBlockState( pos ), world, pos, dir.getA(), dir.getB() );
 
 				if( mop != null )
 				{
-					mop.hitVec = mop.hitVec.addVector( -mop.getBlockPos().getX(), -mop.getBlockPos().getY(), -mop.getBlockPos().getZ() );
-					final SelectedPart sPart = selectPart( player, host, mop.hitVec );
+					Vec3d hitVec = mop.getHitVec().add( -mop.getPos().getX(), -mop.getPos().getY(), -mop.getPos().getZ() );
+					final SelectedPart sPart = selectPart( player, host, hitVec );
 					if( sPart != null && sPart.part != null )
 					{
-						if( sPart.part.onShiftActivate( player, hand, mop.hitVec ) )
+						if( sPart.part.onShiftActivate( player, hand, hitVec ) )
 						{
 							if( world.isRemote )
 							{
@@ -259,7 +263,7 @@ public class PartPlacement
 
 			final boolean hostIsNotPresent = host == null;
 			final boolean multiPartPresent = maybeMultiPartBlock.isPresent() && maybeMultiPartStack.isPresent() && maybeMultiPartBlockItem.isPresent();
-			final boolean canMultiPartBePlaced = maybeMultiPartBlock.get().canPlaceBlockAt( world, te_pos );
+			final boolean canMultiPartBePlaced = maybeMultiPartBlock.get().getDefaultState().isValidPosition( world, te_pos );
 
 			if( hostIsNotPresent && multiPartPresent && canMultiPartBePlaced && maybeMultiPartBlockItem.get()
 					.placeBlockAt( maybeMultiPartStack.get(), player,
@@ -315,16 +319,16 @@ public class PartPlacement
 		{
 			final BlockState state = world.getBlockState( pos );
 			final LookDirection dir = Platform.getPlayerRay( player, getEyeOffset( player ) );
-			final RayTraceResult mop = state.getBlock().collisionRayTrace( state, world, pos, dir.getA(), dir.getB() );
+			final BlockRayTraceResult mop = collisionRayTrace( state, world, pos, dir.getA(), dir.getB() );
 
 			if( mop != null )
 			{
 				final SelectedPart sp = selectPart( player, host,
-						mop.hitVec.addVector( -mop.getBlockPos().getX(), -mop.getBlockPos().getY(), -mop.getBlockPos().getZ() ) );
+						mop.getHitVec().add( -mop.getPos().getX(), -mop.getPos().getY(), -mop.getPos().getZ() ) );
 
 				if( sp.part != null )
 				{
-					if( !player.isSneaking() && sp.part.onActivate( player, hand, mop.hitVec ) )
+					if( !player.isSneaking() && sp.part.onActivate( player, hand, mop.getHitVec() ) )
 					{
 						return ActionResultType.FAIL;
 					}
@@ -347,7 +351,7 @@ public class PartPlacement
 					world.playSound( null, pos, ss.getPlaceSound(), SoundCategory.BLOCKS, ( ss.getVolume() + 1.0F ) / 2.0F, ss.getPitch() * 0.8F );
 				} );
 
-				if( !player.capabilities.isCreativeMode )
+				if( !player.abilities.isCreativeMode )
 				{
 					held.grow( -1 );
 					if( held.getCount() == 0 )
@@ -412,17 +416,17 @@ public class PartPlacement
 		if( event instanceof PlayerInteractEvent.RightClickEmpty && event.getEntityPlayer().world.isRemote )
 		{
 			// re-check to see if this event was already channeled, cause these two events are really stupid...
-			final RayTraceResult mop = Platform.rayTrace( event.getEntityPlayer(), true, false );
-			final Minecraft mc = Minecraft.getMinecraft();
+			final BlockRayTraceResult mop = (BlockRayTraceResult) Platform.rayTrace( event.getEntityPlayer(), true, false );
+			final Minecraft mc = Minecraft.getInstance();
 
 			final float f = 1.0F;
 			final double d0 = mc.playerController.getBlockReachDistance();
-			final Vec3d vec3 = mc.getRenderViewEntity().getPositionEyes( f );
+			final Vec3d vec3 = mc.getRenderViewEntity().getEyePosition( f );
 
-			if( mop != null && mop.hitVec.distanceTo( vec3 ) < d0 )
+			if( mop != null && mop.getHitVec().distanceTo( vec3 ) < d0 )
 			{
 				final World w = event.getEntity().world;
-				final TileEntity te = w.getTileEntity( mop.getBlockPos() );
+				final TileEntity te = w.getTileEntity( mop.getPos() );
 				if( te instanceof IPartHost && this.wasCanceled )
 				{
 					event.setCanceled( true );
@@ -471,6 +475,10 @@ public class PartPlacement
 	public static void setEyeHeight( final float eyeHeight )
 	{
 		PartPlacement.eyeHeight = eyeHeight;
+	}
+
+	private static BlockRayTraceResult collisionRayTrace(BlockState blockState, World world, BlockPos pos, Vec3d start, Vec3d end) {
+		return blockState.getRaytraceShape(world, pos).rayTrace(start, end, pos);
 	}
 
 	public enum PlaceType

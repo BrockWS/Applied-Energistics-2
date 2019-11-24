@@ -22,8 +22,7 @@ package appeng.integration;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import appeng.util.Platform;
 
 
 public enum IntegrationRegistry
@@ -34,12 +33,12 @@ public enum IntegrationRegistry
 
 	public void add( final IntegrationType type )
 	{
-		if( type.side == IntegrationSide.CLIENT && FMLLaunchHandler.side() == Side.SERVER )
+		if( type.side == IntegrationSide.CLIENT && Platform.isServerInstall() )
 		{
 			return;
 		}
 
-		if( type.side == IntegrationSide.SERVER && FMLLaunchHandler.side() == Side.CLIENT )
+		if( type.side == IntegrationSide.SERVER && Platform.isServerInstall() )
 		{
 			return;
 		}

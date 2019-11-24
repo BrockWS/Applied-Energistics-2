@@ -36,9 +36,8 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.core.AELog;
@@ -112,10 +111,10 @@ public class PacketMEFluidInventoryUpdate extends AppEngPacket
 				}
 			}
 
-			while( uncompressed.readableBytes() > 0 )
-			{
-				this.list.add( AEFluidStack.fromPacket( uncompressed ) );
-			}
+//			while( uncompressed.readableBytes() > 0 )
+//			{
+//				this.list.add( AEFluidStack.fromPacket( uncompressed ) );
+//			}
 		}
 
 		this.empty = this.list.isEmpty();
@@ -148,35 +147,35 @@ public class PacketMEFluidInventoryUpdate extends AppEngPacket
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public void clientPacketData( final INetworkInfo network, final AppEngPacket packet, final PlayerEntity player )
 	{
-		final Screen gs = Minecraft.getMinecraft().currentScreen;
-
-		if( gs instanceof GuiFluidTerminal )
-		{
-			( (GuiFluidTerminal) gs ).postUpdate( this.list );
-		}
+//		final Screen gs = Minecraft.getMinecraft().currentScreen;
+//
+//		if( gs instanceof GuiFluidTerminal )
+//		{
+//			( (GuiFluidTerminal) gs ).postUpdate( this.list );
+//		}
 	}
 
-	@Nullable
-	@Override
-	public FMLProxyPacket getProxy()
-	{
-		try
-		{
-			this.compressFrame.close();
-
-			this.configureWrite( this.data );
-			return super.getProxy();
-		}
-		catch( final IOException e )
-		{
-			AELog.debug( e );
-		}
-
-		return null;
-	}
+//	@Nullable
+//	@Override
+//	public FMLProxyPacket getProxy()
+//	{
+//		try
+//		{
+//			this.compressFrame.close();
+//
+//			this.configureWrite( this.data );
+//			return super.getProxy();
+//		}
+//		catch( final IOException e )
+//		{
+//			AELog.debug( e );
+//		}
+//
+//		return null;
+//	}
 
 	public void appendFluid( final IAEFluidStack fs ) throws IOException, BufferOverflowException
 	{

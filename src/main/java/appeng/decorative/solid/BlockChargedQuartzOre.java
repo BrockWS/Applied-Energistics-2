@@ -29,55 +29,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.AEApi;
 import appeng.api.exceptions.MissingDefinitionException;
 import appeng.client.render.effects.ChargedOreFX;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AppEng;
 
 
 public class BlockChargedQuartzOre extends BlockQuartzOre
 {
 	@Override
-	public Item getItemDropped( final BlockState state, final Random rand, final int fortune )
-	{
-		return AEApi.instance()
-				.definitions()
-				.materials()
-				.certusQuartzCrystalCharged()
-				.maybeItem()
-				.orElseThrow( () -> new MissingDefinitionException( "Tried to access charged certus quartz crystal, even though they are disabled" ) );
-	}
-
-	@Override
-	public int damageDropped( final BlockState state )
-	{
-		return AEApi.instance()
-				.definitions()
-				.materials()
-				.certusQuartzCrystalCharged()
-				.maybeStack( 1 )
-				.orElseThrow( () -> new MissingDefinitionException( "Tried to access charged certus quartz crystal, even though they are disabled" ) )
-				.getItemDamage();
-	}
-
-	@Override
-	public ItemStack getPickBlock( BlockState state, RayTraceResult target, World world, BlockPos pos, PlayerEntity player )
-	{
-		return AEApi.instance()
-				.definitions()
-				.blocks()
-				.quartzOreCharged()
-				.maybeStack( 1 )
-				.orElseThrow( () -> new MissingDefinitionException( "Tried to access charged certus quartz ore, even though they are disabled" ) );
-	}
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public void randomDisplayTick( final BlockState state, final World w, final BlockPos pos, final Random r )
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick( final BlockState state, final World w, final BlockPos pos, final Random r )
 	{
 		if( !AEConfig.instance().isEnableEffects() )
 		{
@@ -115,8 +82,8 @@ public class BlockChargedQuartzOre extends BlockQuartzOre
 
 		if( AppEng.proxy.shouldAddParticles( r ) )
 		{
-			final ChargedOreFX fx = new ChargedOreFX( w, pos.getX() + xOff, pos.getY() + yOff, pos.getZ() + zOff, 0.0f, 0.0f, 0.0f );
-			Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//			final ChargedOreFX fx = new ChargedOreFX( w, pos.getX() + xOff, pos.getY() + yOff, pos.getZ() + zOff, 0.0f, 0.0f, 0.0f );
+//			Minecraft.getInstance().effectRenderer.addEffect( fx );
 		}
 	}
 }

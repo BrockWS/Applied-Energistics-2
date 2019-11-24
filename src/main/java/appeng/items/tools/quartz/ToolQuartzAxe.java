@@ -19,20 +19,23 @@
 package appeng.items.tools.quartz;
 
 
-import net.minecraft.item.ItemAxe;
+import net.minecraft.item.AxeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 
+import appeng.core.CreativeTab;
 import appeng.core.features.AEFeature;
 import appeng.util.Platform;
 
 
-public class ToolQuartzAxe extends ItemAxe
+public class ToolQuartzAxe extends AxeItem
 {
 	private final AEFeature type;
 
 	public ToolQuartzAxe( final AEFeature type )
 	{
-		super( ToolMaterial.IRON );
+		super( ItemTier.IRON,  6.0f, -3.1f, new Item.Properties().group(CreativeTab.instance));
 		this.type = type;
 	}
 

@@ -18,30 +18,30 @@
 
 package appeng.entity;
 
+//
+//import java.util.List;
+//
+//import net.minecraft.entity.Entity;
+//import net.minecraft.entity.item.ItemEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.math.AxisAlignedBB;
+//import net.minecraft.world.World;
 
-import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-
-
-public abstract class AEBaseEntityItem extends ItemEntity
+public abstract class AEBaseEntityItem //extends ItemEntity
 {
-	public AEBaseEntityItem( final World world )
-	{
-		super( world );
-	}
-
-	public AEBaseEntityItem( final World world, final double x, final double y, final double z, final ItemStack stack )
-	{
-		super( world, x, y, z, stack );
-	}
-
-	protected List<Entity> getCheckedEntitiesWithinAABBExcludingEntity( final AxisAlignedBB region )
-	{
-		return this.world.getEntitiesWithinAABBExcludingEntity( this, region );
-	}
+//	public AEBaseEntityItem( final World world )
+//	{
+//		super( world );
+//	}
+//
+//	public AEBaseEntityItem( final World world, final double x, final double y, final double z, final ItemStack stack )
+//	{
+//		super( world, x, y, z, stack );
+//	}
+//
+//	protected List<Entity> getCheckedEntitiesWithinAABBExcludingEntity( final AxisAlignedBB region )
+//	{
+//		return this.world.getEntitiesWithinAABBExcludingEntity( this, region );
+//	}
 }

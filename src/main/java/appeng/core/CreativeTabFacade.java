@@ -46,20 +46,14 @@ public final class CreativeTabFacade extends ItemGroup
 	}
 
 	@Override
-	public ItemStack getTabIconItem()
-	{
-		return this.getIconItemStack();
-	}
-
-	@Override
-	public ItemStack getIconItemStack()
+	public ItemStack createIcon()
 	{
 		final Optional<Item> maybeFacade = AEApi.instance().definitions().items().facade().maybeItem();
 		if( maybeFacade.isPresent() )
 		{
-			return ( (ItemFacade) maybeFacade.get() ).getCreativeTabIcon();
+			//return ( (ItemFacade) maybeFacade.get() ).getCreativeTabIcon();
 		}
 
-		return new ItemStack( Blocks.PLANKS );
+		return new ItemStack( Blocks.OAK_PLANKS );
 	}
 }

@@ -470,7 +470,7 @@ public class CraftingGridCache implements ICraftingGrid, ICraftingProviderHelper
 			{
 				for( final IAEItemStack ais : this.craftableItems.keySet() )
 				{
-					if( ais.getItem() == whatToCraft.getItem() && ( !ais.getItem().getHasSubtypes() || ais.getItemDamage() == whatToCraft.getItemDamage() ) )
+					if( ais.getItem() == whatToCraft.getItem() /*&& ( !ais.getItem().getHasSubtypes() || ais.getItemDamage() == whatToCraft.getItemDamage() )*/ )
 					{
 						// TODO: check if OK
 						// TODO: this is slightly hacky, but fine as long as we only deal with itemstacks

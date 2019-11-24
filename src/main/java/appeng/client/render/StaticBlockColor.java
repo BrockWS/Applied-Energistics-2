@@ -19,33 +19,33 @@
 package appeng.client.render;
 
 
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
-
-import appeng.api.util.AEColor;
+//import javax.annotation.Nullable;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.color.IBlockColor;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.IEnviromentBlockReader;
+//
+//import appeng.api.util.AEColor;
 
 
 /**
  * Returns the shades of a single AE color for tint indices 0, 1, and 2.
  */
-public class StaticBlockColor implements IBlockColor
+public class StaticBlockColor //implements IBlockColor
 {
-
-	private final AEColor color;
-
-	public StaticBlockColor( AEColor color )
-	{
-		this.color = color;
-	}
-
-	@Override
-	public int colorMultiplier( BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex )
-	{
-		return this.color.getVariantByTintIndex( tintIndex );
-	}
+//
+//	private final AEColor color;
+//
+//	public StaticBlockColor( AEColor color )
+//	{
+//		this.color = color;
+//	}
+//
+//	@Override
+//	public int colorMultiplier( BlockState state, @Nullable IEnviromentBlockReader worldIn, @Nullable BlockPos pos, int tintIndex )
+//	{
+//		return this.color.getVariantByTintIndex( tintIndex );
+//	}
 
 }

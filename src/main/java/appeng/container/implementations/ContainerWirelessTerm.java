@@ -21,7 +21,7 @@ package appeng.container.implementations;
 
 import net.minecraft.entity.player.PlayerInventory;
 
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.localization.PlayerMessages;
 import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.util.Platform;
@@ -29,32 +29,32 @@ import appeng.util.Platform;
 
 public class ContainerWirelessTerm extends ContainerMEPortableCell
 {
-
-	private final WirelessTerminalGuiObject wirelessTerminalGUIObject;
-
+//
+//	private final WirelessTerminalGuiObject wirelessTerminalGUIObject;
+//
 	public ContainerWirelessTerm( final PlayerInventory ip, final WirelessTerminalGuiObject gui )
 	{
 		super( ip, gui );
-		this.wirelessTerminalGUIObject = gui;
+//		this.wirelessTerminalGUIObject = gui;
 	}
-
-	@Override
-	public void detectAndSendChanges()
-	{
-		super.detectAndSendChanges();
-
-		if( !this.wirelessTerminalGUIObject.rangeCheck() )
-		{
-			if( Platform.isServer() && this.isValidContainer() )
-			{
-				this.getPlayerInv().player.sendMessage( PlayerMessages.OutOfRange.get() );
-			}
-
-			this.setValidContainer( false );
-		}
-		else
-		{
-			this.setPowerMultiplier( AEConfig.instance().wireless_getDrainRate( this.wirelessTerminalGUIObject.getRange() ) );
-		}
-	}
+//
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		super.detectAndSendChanges();
+//
+//		if( !this.wirelessTerminalGUIObject.rangeCheck() )
+//		{
+//			if( Platform.isServer() && this.isValidContainer() )
+//			{
+//				this.getPlayerInv().player.sendMessage( PlayerMessages.OutOfRange.get() );
+//			}
+//
+//			this.setValidContainer( false );
+//		}
+//		else
+//		{
+//			this.setPowerMultiplier( AEConfig.instance().wireless_getDrainRate( this.wirelessTerminalGUIObject.getRange() ) );
+//		}
+//	}
 }

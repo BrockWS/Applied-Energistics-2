@@ -33,67 +33,67 @@ import appeng.tile.misc.TileCondenser;
 import appeng.util.Platform;
 
 
-public class ContainerCondenser extends AEBaseContainer implements IProgressProvider
+public class ContainerCondenser extends AEBaseContainer //implements IProgressProvider
 {
-
-	private final TileCondenser condenser;
-	@GuiSync( 0 )
-	public long requiredEnergy = 0;
-	@GuiSync( 1 )
-	public long storedPower = 0;
-	@GuiSync( 2 )
-	public CondenserOutput output = CondenserOutput.TRASH;
-
+//
+//	private final TileCondenser condenser;
+//	@GuiSync( 0 )
+//	public long requiredEnergy = 0;
+//	@GuiSync( 1 )
+//	public long storedPower = 0;
+//	@GuiSync( 2 )
+//	public CondenserOutput output = CondenserOutput.TRASH;
+//
 	public ContainerCondenser( final PlayerInventory ip, final TileCondenser condenser )
 	{
 		super( ip, condenser, null );
-		this.condenser = condenser;
-
-		IItemHandler inv = condenser.getInternalInventory();
-
-		this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.TRASH, inv, 0, 51, 52, ip ) );
-		this.addSlotToContainer( new SlotOutput( inv, 1, 105, 52, -1 ) );
-		this.addSlotToContainer(
-				( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.STORAGE_COMPONENT, inv, 2, 101, 26, ip ) ).setStackLimit( 1 ) );
-
-		this.bindPlayerInventory( ip, 0, 197 - /* height of player inventory */82 );
+//		this.condenser = condenser;
+//
+//		IItemHandler inv = condenser.getInternalInventory();
+//
+//		this.addSlotToContainer( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.TRASH, inv, 0, 51, 52, ip ) );
+//		this.addSlotToContainer( new SlotOutput( inv, 1, 105, 52, -1 ) );
+//		this.addSlotToContainer(
+//				( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.STORAGE_COMPONENT, inv, 2, 101, 26, ip ) ).setStackLimit( 1 ) );
+//
+//		this.bindPlayerInventory( ip, 0, 197 - /* height of player inventory */82 );
 	}
 
-	@Override
-	public void detectAndSendChanges()
-	{
-		if( Platform.isServer() )
-		{
-			final double maxStorage = this.condenser.getStorage();
-			final double requiredEnergy = this.condenser.getRequiredPower();
-
-			this.requiredEnergy = requiredEnergy == 0 ? (int) maxStorage : (int) Math.min( requiredEnergy, maxStorage );
-			this.storedPower = (int) this.condenser.getStoredPower();
-			this.setOutput( (CondenserOutput) this.condenser.getConfigManager().getSetting( Settings.CONDENSER_OUTPUT ) );
-		}
-
-		super.detectAndSendChanges();
-	}
-
-	@Override
-	public int getCurrentProgress()
-	{
-		return (int) this.storedPower;
-	}
-
-	@Override
-	public int getMaxProgress()
-	{
-		return (int) this.requiredEnergy;
-	}
-
-	public CondenserOutput getOutput()
-	{
-		return this.output;
-	}
-
-	private void setOutput( final CondenserOutput output )
-	{
-		this.output = output;
-	}
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		if( Platform.isServer() )
+//		{
+//			final double maxStorage = this.condenser.getStorage();
+//			final double requiredEnergy = this.condenser.getRequiredPower();
+//
+//			this.requiredEnergy = requiredEnergy == 0 ? (int) maxStorage : (int) Math.min( requiredEnergy, maxStorage );
+//			this.storedPower = (int) this.condenser.getStoredPower();
+//			this.setOutput( (CondenserOutput) this.condenser.getConfigManager().getSetting( Settings.CONDENSER_OUTPUT ) );
+//		}
+//
+//		super.detectAndSendChanges();
+//	}
+//
+//	@Override
+//	public int getCurrentProgress()
+//	{
+//		return (int) this.storedPower;
+//	}
+//
+//	@Override
+//	public int getMaxProgress()
+//	{
+//		return (int) this.requiredEnergy;
+//	}
+//
+//	public CondenserOutput getOutput()
+//	{
+//		return this.output;
+//	}
+//
+//	private void setOutput( final CondenserOutput output )
+//	{
+//		this.output = output;
+//	}
 }

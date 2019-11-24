@@ -73,10 +73,11 @@ public class PartP2PFEPower extends PartP2PTunnel<PartP2PFEPower>
 			final TileEntity self = this.getTile();
 			final TileEntity te = self.getWorld().getTileEntity( self.getPos().offset( this.getSide().getFacing() ) );
 
-			if( te != null && te.hasCapability( Capabilities.FORGE_ENERGY, this.getSide().getOpposite().getFacing() ) )
+			if( te != null )
 			{
-				return te.getCapability( Capabilities.FORGE_ENERGY, this.getSide().getOpposite().getFacing() );
+				return te.getCapability(Capabilities.FORGE_ENERGY, this.getSide().getOpposite().getFacing()).orElse(NULL_ENERGY_STORAGE);
 			}
+
 		}
 		return NULL_ENERGY_STORAGE;
 	}

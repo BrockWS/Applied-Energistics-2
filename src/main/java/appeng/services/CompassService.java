@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.WorldEvent;
@@ -132,7 +133,7 @@ public final class CompassService
 		final int hi_y = low_y + 32;
 
 		// lower level...
-		final Chunk c = w.getChunkFromChunkCoords( cx, cz );
+		final Chunk c = w.getChunk( cx, cz );
 
 		Optional<Block> maybeBlock = AEApi.instance().definitions().blocks().skyStoneBlock().maybeBlock();
 		if( maybeBlock.isPresent() )
@@ -144,7 +145,7 @@ public final class CompassService
 				{
 					for( int k = low_y; k < hi_y; k++ )
 					{
-						final Block blk = c.getBlockState( i, k, j ).getBlock();
+						final Block blk = c.getBlockState( new BlockPos(i, k, j)).getBlock();
 						if( blk == skyStoneBlock )
 						{
 							return this.executor.submit( new CMUpdatePost( w, cx, cz, cdy, true ) );
@@ -185,7 +186,7 @@ public final class CompassService
 
 		if( cr == null )
 		{
-			cr = new CompassReader( w.provider.getDimension(), this.worldCompassFolder );
+			cr = new CompassReader( w.getDimension().getType().getId(), this.worldCompassFolder );
 			this.worldSet.put( w, cr );
 		}
 

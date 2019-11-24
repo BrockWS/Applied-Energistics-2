@@ -24,78 +24,88 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.bootstrap.components.BlockColorComponent;
-import appeng.bootstrap.components.StateMapperComponent;
+import appeng.bootstrap.components.IModelBakeComponent;
+import appeng.bootstrap.components.IModelRegistrationComponent;
 import appeng.bootstrap.components.TesrComponent;
 import appeng.client.render.model.AutoRotatingModel;
+import appeng.client.render.model.GlassBakedModel;
+import appeng.client.render.model.GlassModel;
+import appeng.core.AELog;
 
 
 class BlockRendering implements IBlockRendering
 {
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> modelCustomizer;
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private IBlockColor blockColor;
 
-	@SideOnly( Side.CLIENT )
-	private TileEntitySpecialRenderer<?> tesr;
+	@OnlyIn( Dist.CLIENT )
+	private TileEntityRenderer<?> tesr;
 
-	@SideOnly( Side.CLIENT )
-	private IStateMapper stateMapper;
+//	@OnlyIn( Dist.CLIENT )
+//	private IStateMapper stateMapper;
 
-	@SideOnly( Side.CLIENT )
-	private Map<String, IModel> builtInModels = new HashMap<>();
+	@OnlyIn( Dist.CLIENT )
+	private Map<String, IUnbakedModel> builtInModels = new HashMap<>();
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public IBlockRendering modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer )
 	{
 		this.modelCustomizer = customizer;
 		return this;
 	}
 
-	@SideOnly( Side.CLIENT )
 	@Override
+	@OnlyIn( Dist.CLIENT )
 	public IBlockRendering blockColor( IBlockColor blockColor )
 	{
 		this.blockColor = blockColor;
 		return this;
 	}
 
-	@SideOnly( Side.CLIENT )
 	@Override
-	public IBlockRendering tesr( TileEntitySpecialRenderer<?> tesr )
+	@OnlyIn( Dist.CLIENT )
+	public IBlockRendering tesr( TileEntityRenderer<?> tesr )
 	{
 		this.tesr = tesr;
 		return this;
 	}
 
 	@Override
-	public IBlockRendering builtInModel( String name, IModel model )
+	@OnlyIn( Dist.CLIENT )
+	public IBlockRendering builtInModel( String name, IUnbakedModel model )
 	{
 		this.builtInModels.put( name, model );
 		return this;
 	}
 
-	@SideOnly( Side.CLIENT )
-	@Override
-	public IBlockRendering stateMapper( IStateMapper mapper )
-	{
-		this.stateMapper = mapper;
-		return this;
-	}
+//	@Override
+//	public IBlockRendering stateMapper( IStateMapper mapper )
+//	{
+//		this.stateMapper = mapper;
+//		return this;
+//	}
 
 	void apply( FeatureFactory factory, Block block, Class<?> tileEntityClass )
 	{
@@ -110,26 +120,43 @@ class BlockRendering implements IBlockRendering
 
 		if( this.modelCustomizer != null )
 		{
-			factory.addModelOverride( block.getRegistryName().getResourcePath(), this.modelCustomizer );
+			factory.addModelOverride( block.getRegistryName().getPath(), this.modelCustomizer );
 		}
 		else if( block instanceof AEBaseTileBlock )
 		{
 			// This is a default rotating model if the base-block uses an AE tile entity which exposes UP/FRONT as
 			// extended props
-			factory.addModelOverride( block.getRegistryName().getResourcePath(), ( l, m ) -> new AutoRotatingModel( m ) );
+//			factory.addModelOverride( block.getRegistryName().getPath(), ( l, m ) -> new AutoRotatingModel( m ) );
 		}
 
 		// TODO : 1.12
 		this.builtInModels.forEach( factory::addBuiltInModel );
+//		factory.addBootstrapComponent( (IModelRegistrationComponent) () -> this.itemModels.forEach(ModelLoader::addSpecialModel));
+		factory.addBootstrapComponent((IModelBakeComponent) (modelManager, modelLoader, modelRegistry) -> {
+//			this.builtInModels.forEach((s, iModel) -> {
+//				modelRegistry.put(new ModelResourceLocation("appliedenergistics2:"), iModel.bake(modelLoader.getBakedModel()));
+//			});
+//			modelRegistry.keySet()
+//					.stream()
+//					.filter(resourceLocation -> resourceLocation.getNamespace().startsWith("appliedenergistics2"))
+//					.forEach(resourceLocation -> {
+//						AELog.info("%s", resourceLocation);
+//					});
+			IBakedModel model = new GlassBakedModel(DefaultVertexFormats.BLOCK, resourceLocation -> {
+				return Minecraft.getInstance().getTextureMap().getSprite(resourceLocation);
+			});
+			modelRegistry.put(new ModelResourceLocation("appliedenergistics2:quartz_glass", ""), model);
+			modelRegistry.put(new ModelResourceLocation("appliedenergistics2:quartz_vibrant_glass", ""), model);
+		});
 
 		if( this.blockColor != null )
 		{
 			factory.addBootstrapComponent( new BlockColorComponent( block, this.blockColor ) );
 		}
 
-		if( this.stateMapper != null )
-		{
-			factory.addBootstrapComponent( new StateMapperComponent( block, this.stateMapper ) );
-		}
+//		if( this.stateMapper != null )
+//		{
+//			factory.addBootstrapComponent( new StateMapperComponent( block, this.stateMapper ) );
+//		}
 	}
 }

@@ -23,108 +23,104 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.qnb.TileQuantumBridge;
 
 
-public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICustomCollision
+public abstract class BlockQuantumBase //extends AEBaseTileBlock implements ICustomCollision
 {
-
-	public static final BooleanProperty FORMED = BooleanProperty.create( "formed" );
-
-	public static final QnbFormedStateProperty FORMED_STATE = new QnbFormedStateProperty();
-
-	public BlockQuantumBase( final Material mat )
-	{
-		super( mat );
-		final float shave = 2.0f / 16.0f;
-		this.boundingBox = new AxisAlignedBB( shave, shave, shave, 1.0f - shave, 1.0f - shave, 1.0f - shave );
-		this.setLightOpacity( 0 );
-		this.setFullSize( this.setOpaque( false ) );
-		this.setDefaultState( this.getDefaultState().withProperty( FORMED, false ) );
-	}
-
-	@Override
-	protected IProperty[] getAEStates()
-	{
-		return new IProperty[] { FORMED };
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState()
-	{
-		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] { FORMED_STATE } );
-	}
-
-	@Override
-	public BlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
-	{
-		IExtendedBlockState extState = (IExtendedBlockState) state;
-
-		TileQuantumBridge bridge = this.getTileEntity( world, pos );
-		if( bridge != null )
-		{
-			QnbFormedState formedState = new QnbFormedState( bridge.getAdjacentQuantumBridges(), bridge.isCorner(), bridge.isPowered() );
-			extState = extState.withProperty( FORMED_STATE, formedState );
-		}
-
-		return extState;
-	}
-
-	@Override
-	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
-	{
-		TileQuantumBridge bridge = this.getTileEntity( worldIn, pos );
-		if( bridge != null )
-		{
-			state = state.withProperty( FORMED, bridge.isFormed() );
-		}
-		return state;
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
-	{
-		final TileQuantumBridge bridge = this.getTileEntity( world, pos );
-		if( bridge != null )
-		{
-			bridge.neighborUpdate();
-		}
-	}
-
-	@Override
-	public void breakBlock( final World w, final BlockPos pos, final BlockState state )
-	{
-		final TileQuantumBridge bridge = this.getTileEntity( w, pos );
-		if( bridge != null )
-		{
-			bridge.breakCluster();
-		}
-
-		super.breakBlock( w, pos, state );
-	}
-
-	@Override
-	public boolean isFullCube( BlockState state )
-	{
-		return false;
-	}
+//
+//	public static final BooleanProperty FORMED = BooleanProperty.create( "formed" );
+//
+//	public static final QnbFormedStateProperty FORMED_STATE = new QnbFormedStateProperty();
+//
+//	public BlockQuantumBase( final Material mat )
+//	{
+//		super( mat );
+//		final float shave = 2.0f / 16.0f;
+//		this.boundingBox = new AxisAlignedBB( shave, shave, shave, 1.0f - shave, 1.0f - shave, 1.0f - shave );
+//		this.setLightOpacity( 0 );
+//		this.setFullSize( this.setOpaque( false ) );
+//		this.setDefaultState( this.getDefaultState().withProperty( FORMED, false ) );
+//	}
+//
+//	@Override
+//	protected IProperty[] getAEStates()
+//	{
+//		return new IProperty[] { FORMED };
+//	}
+//
+//	@Override
+//	protected BlockStateContainer createBlockState()
+//	{
+//		return new ExtendedBlockState( this, this.getAEStates(), new IUnlistedProperty[] { FORMED_STATE } );
+//	}
+//
+//	@Override
+//	public BlockState getExtendedState( BlockState state, IEnviromentBlockReader world, BlockPos pos )
+//	{
+//		IExtendedBlockState extState = (IExtendedBlockState) state;
+//
+//		TileQuantumBridge bridge = this.getTileEntity( world, pos );
+//		if( bridge != null )
+//		{
+//			QnbFormedState formedState = new QnbFormedState( bridge.getAdjacentQuantumBridges(), bridge.isCorner(), bridge.isPowered() );
+//			extState = extState.withProperty( FORMED_STATE, formedState );
+//		}
+//
+//		return extState;
+//	}
+//
+//	@Override
+//	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
+//	{
+//		TileQuantumBridge bridge = this.getTileEntity( worldIn, pos );
+//		if( bridge != null )
+//		{
+//			state = state.withProperty( FORMED, bridge.isFormed() );
+//		}
+//		return state;
+//	}
+//
+//	@Override
+//	public BlockRenderLayer getBlockLayer()
+//	{
+//		return BlockRenderLayer.CUTOUT;
+//	}
+//
+//	@Override
+//	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
+//	{
+//		final TileQuantumBridge bridge = this.getTileEntity( world, pos );
+//		if( bridge != null )
+//		{
+//			bridge.neighborUpdate();
+//		}
+//	}
+//
+//	@Override
+//	public void breakBlock( final World w, final BlockPos pos, final BlockState state )
+//	{
+//		final TileQuantumBridge bridge = this.getTileEntity( w, pos );
+//		if( bridge != null )
+//		{
+//			bridge.breakCluster();
+//		}
+//
+//		super.breakBlock( w, pos, state );
+//	}
+//
+//	@Override
+//	public boolean isFullCube( BlockState state )
+//	{
+//		return false;
+//	}
 }

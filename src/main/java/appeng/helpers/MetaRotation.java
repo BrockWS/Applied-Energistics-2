@@ -18,97 +18,97 @@
 
 package appeng.helpers;
 
+//
+//import net.minecraft.state.IProperty;
+//import net.minecraft.block.BlockState;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.Direction.Axis;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.IEnviromentBlockReader;
+//import net.minecraft.world.World;
+//
+//import appeng.api.util.IOrientable;
+//import appeng.decorative.solid.BlockQuartzPillar;
 
-import net.minecraft.state.IProperty;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
-import net.minecraft.world.World;
 
-import appeng.api.util.IOrientable;
-import appeng.decorative.solid.BlockQuartzPillar;
-
-
-public class MetaRotation implements IOrientable
+public class MetaRotation //implements IOrientable
 {
-
-	private final IProperty<Direction> facingProp;
-	private final IEnviromentBlockReader w;
-	private final BlockPos pos;
-
-	public MetaRotation( final IEnviromentBlockReader world, final BlockPos pos, final IProperty<Direction> facingProp )
-	{
-		this.w = world;
-		this.pos = pos;
-		this.facingProp = facingProp;
-	}
-
-	@Override
-	public boolean canBeRotated()
-	{
-		return true;
-	}
-
-	@Override
-	public Direction getForward()
-	{
-		if( this.getUp().getFrontOffsetY() == 0 )
-		{
-			return Direction.UP;
-		}
-		return Direction.SOUTH;
-	}
-
-	@Override
-	public Direction getUp()
-	{
-		final BlockState state = this.w.getBlockState( this.pos );
-
-		if( this.facingProp != null )
-		{
-			return state.getValue( this.facingProp );
-		}
-
-		// TODO 1.10.2-R - Temp
-		Axis a = state.getValue( BlockQuartzPillar.AXIS_ORIENTATION );
-
-		if( a == null )
-		{
-			a = Axis.Y;
-		}
-
-		switch( a )
-		{
-			case X:
-				return Direction.EAST;
-			case Z:
-				return Direction.SOUTH;
-			default:
-			case Y:
-				return Direction.UP;
-		}
-	}
-
-	@Override
-	public void setOrientation( final Direction forward, final Direction up )
-	{
-		if( this.w instanceof World )
-		{
-			if( this.facingProp != null )
-			{
-				( (World) this.w ).setBlockState( this.pos, this.w.getBlockState( this.pos ).withProperty( this.facingProp, up ) );
-			}
-			else
-			{
-				// TODO 1.10.2-R - Temp
-				( (World) this.w ).setBlockState( this.pos, this.w.getBlockState( this.pos ).withProperty( BlockQuartzPillar.AXIS_ORIENTATION, up.getAxis() ) );
-			}
-		}
-		else
-		{
-			throw new IllegalStateException( this.w.getClass().getName() + " received, expected World" );
-		}
-	}
+//
+//	private final IProperty<Direction> facingProp;
+//	private final IEnviromentBlockReader w;
+//	private final BlockPos pos;
+//
+//	public MetaRotation( final IEnviromentBlockReader world, final BlockPos pos, final IProperty<Direction> facingProp )
+//	{
+//		this.w = world;
+//		this.pos = pos;
+//		this.facingProp = facingProp;
+//	}
+//
+//	@Override
+//	public boolean canBeRotated()
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public Direction getForward()
+//	{
+//		if( this.getUp().getFrontOffsetY() == 0 )
+//		{
+//			return Direction.UP;
+//		}
+//		return Direction.SOUTH;
+//	}
+//
+//	@Override
+//	public Direction getUp()
+//	{
+//		final BlockState state = this.w.getBlockState( this.pos );
+//
+//		if( this.facingProp != null )
+//		{
+//			return state.getValue( this.facingProp );
+//		}
+//
+//		// TODO 1.10.2-R - Temp
+//		Axis a = state.getValue( BlockQuartzPillar.AXIS_ORIENTATION );
+//
+//		if( a == null )
+//		{
+//			a = Axis.Y;
+//		}
+//
+//		switch( a )
+//		{
+//			case X:
+//				return Direction.EAST;
+//			case Z:
+//				return Direction.SOUTH;
+//			default:
+//			case Y:
+//				return Direction.UP;
+//		}
+//	}
+//
+//	@Override
+//	public void setOrientation( final Direction forward, final Direction up )
+//	{
+//		if( this.w instanceof World )
+//		{
+//			if( this.facingProp != null )
+//			{
+//				( (World) this.w ).setBlockState( this.pos, this.w.getBlockState( this.pos ).withProperty( this.facingProp, up ) );
+//			}
+//			else
+//			{
+//				// TODO 1.10.2-R - Temp
+//				( (World) this.w ).setBlockState( this.pos, this.w.getBlockState( this.pos ).withProperty( BlockQuartzPillar.AXIS_ORIENTATION, up.getAxis() ) );
+//			}
+//		}
+//		else
+//		{
+//			throw new IllegalStateException( this.w.getClass().getName() + " received, expected World" );
+//		}
+//	}
 }

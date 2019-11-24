@@ -19,54 +19,54 @@
 package appeng.parts.reporting;
 
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.Hand;
+//import net.minecraft.util.ResourceLocation;
+//import net.minecraft.util.math.Vec3d;
+//
+//import appeng.api.parts.IPartModel;
+//import appeng.core.AppEng;
+//import appeng.core.sync.GuiBridge;
+//import appeng.items.parts.PartModels;
+//import appeng.parts.PartModel;
+//import appeng.util.Platform;
 
-import appeng.api.parts.IPartModel;
-import appeng.core.AppEng;
-import appeng.core.sync.GuiBridge;
-import appeng.items.parts.PartModels;
-import appeng.parts.PartModel;
-import appeng.util.Platform;
 
-
-public class PartInterfaceTerminal extends AbstractPartDisplay
+public class PartInterfaceTerminal //extends AbstractPartDisplay
 {
-
-	@PartModels
-	public static final ResourceLocation MODEL_OFF = new ResourceLocation( AppEng.MOD_ID, "part/interface_terminal_off" );
-	@PartModels
-	public static final ResourceLocation MODEL_ON = new ResourceLocation( AppEng.MOD_ID, "part/interface_terminal_on" );
-
-	public static final IPartModel MODELS_OFF = new PartModel( MODEL_BASE, MODEL_OFF, MODEL_STATUS_OFF );
-	public static final IPartModel MODELS_ON = new PartModel( MODEL_BASE, MODEL_ON, MODEL_STATUS_ON );
-	public static final IPartModel MODELS_HAS_CHANNEL = new PartModel( MODEL_BASE, MODEL_ON, MODEL_STATUS_HAS_CHANNEL );
-
-	public PartInterfaceTerminal( final ItemStack is )
-	{
-		super( is );
-	}
-
-	@Override
-	public boolean onPartActivate( final PlayerEntity player, final Hand hand, final Vec3d pos )
-	{
-		if( !super.onPartActivate( player, hand, pos ) )
-		{
-			if( Platform.isServer() )
-			{
-				Platform.openGUI( player, this.getHost().getTile(), this.getSide(), GuiBridge.GUI_INTERFACE_TERMINAL );
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public IPartModel getStaticModels()
-	{
-		return this.selectModel( MODELS_OFF, MODELS_ON, MODELS_HAS_CHANNEL );
-	}
+//
+//	@PartModels
+//	public static final ResourceLocation MODEL_OFF = new ResourceLocation( AppEng.MOD_ID, "part/interface_terminal_off" );
+//	@PartModels
+//	public static final ResourceLocation MODEL_ON = new ResourceLocation( AppEng.MOD_ID, "part/interface_terminal_on" );
+//
+//	public static final IPartModel MODELS_OFF = new PartModel( MODEL_BASE, MODEL_OFF, MODEL_STATUS_OFF );
+//	public static final IPartModel MODELS_ON = new PartModel( MODEL_BASE, MODEL_ON, MODEL_STATUS_ON );
+//	public static final IPartModel MODELS_HAS_CHANNEL = new PartModel( MODEL_BASE, MODEL_ON, MODEL_STATUS_HAS_CHANNEL );
+//
+//	public PartInterfaceTerminal( final ItemStack is )
+//	{
+//		super( is );
+//	}
+//
+//	@Override
+//	public boolean onPartActivate( final PlayerEntity player, final Hand hand, final Vec3d pos )
+//	{
+//		if( !super.onPartActivate( player, hand, pos ) )
+//		{
+//			if( Platform.isServer() )
+//			{
+//				Platform.openGUI( player, this.getHost().getTile(), this.getSide(), GuiBridge.GUI_INTERFACE_TERMINAL );
+//			}
+//		}
+//		return true;
+//	}
+//
+//	@Override
+//	public IPartModel getStaticModels()
+//	{
+//		return this.selectModel( MODELS_OFF, MODELS_ON, MODELS_HAS_CHANNEL );
+//	}
 
 }

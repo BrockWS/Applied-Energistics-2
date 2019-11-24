@@ -123,38 +123,38 @@ public class PacketInventoryAction extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
-		if( sender.openContainer instanceof AEBaseContainer )
-		{
-			final AEBaseContainer baseContainer = (AEBaseContainer) sender.openContainer;
-			if( this.action == InventoryAction.AUTO_CRAFT )
-			{
-				final ContainerOpenContext context = baseContainer.getOpenContext();
-				if( context != null )
-				{
-					final TileEntity te = context.getTile();
-					Platform.openGUI( sender, te, baseContainer.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_AMOUNT );
-
-					if( sender.openContainer instanceof ContainerCraftAmount )
-					{
-						final ContainerCraftAmount cca = (ContainerCraftAmount) sender.openContainer;
-
-						if( baseContainer.getTargetStack() != null )
-						{
-							cca.getCraftingItem().putStack( baseContainer.getTargetStack().asItemStackRepresentation() );
-							// This is the *actual* item that matters, not the display item above
-							cca.setItemToCraft( baseContainer.getTargetStack() );
-						}
-
-						cca.detectAndSendChanges();
-					}
-				}
-			}
-			else
-			{
-				baseContainer.doAction( sender, this.action, this.slot, this.id );
-			}
-		}
+//		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
+//		if( sender.openContainer instanceof AEBaseContainer )
+//		{
+//			final AEBaseContainer baseContainer = (AEBaseContainer) sender.openContainer;
+//			if( this.action == InventoryAction.AUTO_CRAFT )
+//			{
+//				final ContainerOpenContext context = baseContainer.getOpenContext();
+//				if( context != null )
+//				{
+//					final TileEntity te = context.getTile();
+//					Platform.openGUI( sender, te, baseContainer.getOpenContext().getSide(), GuiBridge.GUI_CRAFTING_AMOUNT );
+//
+//					if( sender.openContainer instanceof ContainerCraftAmount )
+//					{
+//						final ContainerCraftAmount cca = (ContainerCraftAmount) sender.openContainer;
+//
+//						if( baseContainer.getTargetStack() != null )
+//						{
+//							cca.getCraftingItem().putStack( baseContainer.getTargetStack().asItemStackRepresentation() );
+//							// This is the *actual* item that matters, not the display item above
+//							cca.setItemToCraft( baseContainer.getTargetStack() );
+//						}
+//
+//						cca.detectAndSendChanges();
+//					}
+//				}
+//			}
+//			else
+//			{
+//				baseContainer.doAction( sender, this.action, this.slot, this.id );
+//			}
+//		}
 	}
 
 	@Override

@@ -33,60 +33,50 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.AEBaseBlock;
 import appeng.helpers.ICustomCollision;
 
 
-public class BlockMatrixFrame extends AEBaseBlock implements ICustomCollision
+public class BlockMatrixFrame extends AEBaseBlock //implements ICustomCollision
 {
 
 	public BlockMatrixFrame()
 	{
-		super( Material.ANVIL );
-		this.setResistance( 6000000.0F );
-		this.setBlockUnbreakable();
-		this.setLightOpacity( 0 );
-		this.setOpaque( false );
+		super( Properties.create(Material.ANVIL)
+				.hardnessAndResistance(-1, 6000000.0F)
+				.lightValue(0)
+		);
 	}
 
-	@Override
-	@SideOnly( Side.CLIENT )
-	public void getSubBlocks( final ItemGroup tabs, final NonNullList<ItemStack> itemStacks )
-	{
-		// do nothing
-	}
-
-	@Override
-	public Iterable<AxisAlignedBB> getSelectedBoundingBoxesFromPool( final World w, final BlockPos pos, final Entity thePlayer, final boolean b )
-	{
-		return Arrays.asList( new AxisAlignedBB[] {} );// AxisAlignedBB.getBoundingBox( 0.25, 0, 0.25, 0.75, 0.5, 0.75 )
-		// } );
-	}
-
-	@Override
-	public void addCollidingBlockToList( final World w, final BlockPos pos, final AxisAlignedBB bb, final List<AxisAlignedBB> out, final Entity e )
-	{
-		out.add( new AxisAlignedBB( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0 ) );
-	}
-
-	@Override
-	public boolean canPlaceBlockAt( final World worldIn, final BlockPos pos )
-	{
-		return false;
-	}
-
-	@Override
-	public void onBlockExploded( final World world, final BlockPos pos, final Explosion explosion )
-	{
-		// Don't explode.
-	}
-
-	@Override
-	public boolean canEntityDestroy( final BlockState state, final IEnviromentBlockReader world, final BlockPos pos, final Entity entity )
-	{
-		return false;
-	}
+//	@Override
+//	public Iterable<AxisAlignedBB> getSelectedBoundingBoxesFromPool( final World w, final BlockPos pos, final Entity thePlayer, final boolean b )
+//	{
+//		return Arrays.asList( new AxisAlignedBB[] {} );// AxisAlignedBB.getBoundingBox( 0.25, 0, 0.25, 0.75, 0.5, 0.75 )
+//		// } );
+//	}
+//
+//	@Override
+//	public void addCollidingBlockToList( final World w, final BlockPos pos, final AxisAlignedBB bb, final List<AxisAlignedBB> out, final Entity e )
+//	{
+//		out.add( new AxisAlignedBB( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0 ) );
+//	}
+//
+//	@Override
+//	public boolean canPlaceBlockAt( final World worldIn, final BlockPos pos )
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public void onBlockExploded( final World world, final BlockPos pos, final Explosion explosion )
+//	{
+//		// Don't explode.
+//	}
+//
+//	@Override
+//	public boolean canEntityDestroy( final BlockState state, final IEnviromentBlockReader world, final BlockPos pos, final Entity entity )
+//	{
+//		return false;
+//	}
 }

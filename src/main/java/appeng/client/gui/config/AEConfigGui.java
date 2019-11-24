@@ -19,54 +19,54 @@
 package appeng.client.gui.config;
 
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import net.minecraft.client.gui.screen.Screen;
+//import net.minecraftforge.common.config.ConfigCategory;
+//import net.minecraftforge.common.config.ConfigElement;
+//import net.minecraftforge.fml.client.config.GuiConfig;
+//import net.minecraftforge.fml.client.config.IConfigElement;
+//
+//import appeng.core.config.AEConfig;
+//import appeng.core.AppEng;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.fml.client.config.GuiConfig;
-import net.minecraftforge.fml.client.config.IConfigElement;
 
-import appeng.core.AEConfig;
-import appeng.core.AppEng;
-
-
-public class AEConfigGui extends GuiConfig
+public class AEConfigGui //extends GuiConfig
 {
-
-	public AEConfigGui( final Screen parent )
-	{
-		super( parent, getConfigElements(), AppEng.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath( AEConfig.instance().getFilePath() ) );
-	}
-
-	private static List<IConfigElement> getConfigElements()
-	{
-		final List<IConfigElement> list = new ArrayList<>();
-
-		for( final String cat : AEConfig.instance().getCategoryNames() )
-		{
-			if( cat.equals( "versionchecker" ) )
-			{
-				continue;
-			}
-
-			if( cat.equals( "settings" ) )
-			{
-				continue;
-			}
-
-			final ConfigCategory cc = AEConfig.instance().getCategory( cat );
-
-			if( cc.isChild() )
-			{
-				continue;
-			}
-
-			final ConfigElement ce = new ConfigElement( cc );
-			list.add( ce );
-		}
-
-		return list;
-	}
+//
+//	public AEConfigGui( final Screen parent )
+//	{
+//		super( parent, getConfigElements(), AppEng.MOD_ID, false, false, GuiConfig.getAbridgedConfigPath( AEConfig.instance().getFilePath() ) );
+//	}
+//
+//	private static List<IConfigElement> getConfigElements()
+//	{
+//		final List<IConfigElement> list = new ArrayList<>();
+//
+//		for( final String cat : AEConfig.instance().getCategoryNames() )
+//		{
+//			if( cat.equals( "versionchecker" ) )
+//			{
+//				continue;
+//			}
+//
+//			if( cat.equals( "settings" ) )
+//			{
+//				continue;
+//			}
+//
+//			final ConfigCategory cc = AEConfig.instance().getCategory( cat );
+//
+//			if( cc.isChild() )
+//			{
+//				continue;
+//			}
+//
+//			final ConfigElement ce = new ConfigElement( cc );
+//			list.add( ce );
+//		}
+//
+//		return list;
+//	}
 }

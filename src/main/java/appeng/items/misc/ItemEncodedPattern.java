@@ -27,15 +27,19 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
@@ -56,7 +60,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 
 	public ItemEncodedPattern()
 	{
-		this.setMaxStackSize( 1 );
+		super( new Properties().maxStackSize(1) );
 	}
 
 	@Override
@@ -68,9 +72,9 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 	}
 
 	@Override
-	public ActionResultType onItemUseFirst( final PlayerEntity player, final World world, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ, final Hand hand )
+	public ActionResultType onItemUseFirst( final ItemStack stack, final ItemUseContext context )
 	{
-		return this.clearPattern( player.getHeldItem( hand ), player ) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+		return this.clearPattern( stack, context.getPlayer() ) ? ActionResultType.SUCCESS : ActionResultType.PASS;
 	}
 
 	private boolean clearPattern( final ItemStack stack, final PlayerEntity player )
@@ -102,19 +106,19 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
-	public void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag advancedTooltips )
+	@OnlyIn( Dist.CLIENT )
+	public void addCheckedInformation( final ItemStack stack, final World world, final List<ITextComponent> lines, final ITooltipFlag advancedTooltips )
 	{
 		final ICraftingPatternDetails details = this.getPatternForItem( stack, world );
 
 		if( details == null )
 		{
-			if( !stack.hasTagCompound() )
+			if( !stack.hasTag() )
 			{
 				return;
 			}
 
-			stack.setStackDisplayName( TextFormatting.RED + GuiText.InvalidPattern.getLocal() );
+			stack.setDisplayName( new TranslationTextComponent( GuiText.InvalidPattern.getLocal() ).applyTextStyle( TextFormatting.RED ) );
 
 			InvalidPatternHelper invalid = new InvalidPatternHelper( stack );
 
@@ -125,14 +129,14 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 			boolean first = true;
 			for( final InvalidPatternHelper.PatternIngredient output : invalid.getOutputs() )
 			{
-				lines.add( ( first ? label : and ) + output.getFormattedToolTip() );
+				lines.add( new StringTextComponent( ( first ? label : and ) + output.getFormattedToolTip() ));
 				first = false;
 			}
 
 			first = true;
 			for( final InvalidPatternHelper.PatternIngredient input : invalid.getInputs() )
 			{
-				lines.add( ( first ? with : and ) + input.getFormattedToolTip() );
+				lines.add( new StringTextComponent( ( first ? with : and ) + input.getFormattedToolTip() ) );
 				first = false;
 			}
 
@@ -141,7 +145,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 				final String substitutionLabel = GuiText.Substitute.getLocal() + " ";
 				final String canSubstitute = invalid.canSubstitute() ? GuiText.Yes.getLocal() : GuiText.No.getLocal();
 
-				lines.add( substitutionLabel + canSubstitute );
+				lines.add( new StringTextComponent( substitutionLabel + canSubstitute ) );
 			}
 
 			return;
@@ -149,7 +153,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 
 		if( stack.hasDisplayName() )
 		{
-			stack.removeSubCompound( "display" );
+			stack.removeChildTag( "display" );
 		}
 
 		final boolean isCrafting = details.isCraftable();
@@ -170,7 +174,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 				continue;
 			}
 
-			lines.add( ( first ? label : and ) + anOut.getStackSize() + ' ' + Platform.getItemDisplayName( anOut ) );
+			lines.add( new StringTextComponent( ( first ? label : and ) + anOut.getStackSize() + ' ' + Platform.getItemDisplayName( anOut ) ) );
 			first = false;
 		}
 
@@ -182,7 +186,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 				continue;
 			}
 
-			lines.add( ( first ? with : and ) + anIn.getStackSize() + ' ' + Platform.getItemDisplayName( anIn ) );
+			lines.add( new StringTextComponent( ( first ? with : and ) + anIn.getStackSize() + ' ' + Platform.getItemDisplayName( anIn ) ) );
 			first = false;
 		}
 
@@ -191,7 +195,7 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 			final String substitutionLabel = GuiText.Substitute.getLocal() + " ";
 			final String canSubstitute = substitute ? GuiText.Yes.getLocal() : GuiText.No.getLocal();
 
-			lines.add( substitutionLabel + canSubstitute );
+			lines.add( new StringTextComponent( substitutionLabel + canSubstitute ) );
 		}
 	}
 

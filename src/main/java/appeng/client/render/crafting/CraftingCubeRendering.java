@@ -19,85 +19,85 @@
 package appeng.client.render.crafting;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import appeng.block.crafting.BlockCraftingUnit;
-import appeng.bootstrap.BlockRenderingCustomizer;
-import appeng.bootstrap.IBlockRendering;
-import appeng.bootstrap.IItemRendering;
-import appeng.core.AppEng;
+//import java.util.HashMap;
+//import java.util.Map;
+//
+//import net.minecraft.block.Block;
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.model.ModelResourceLocation;
+//import net.minecraft.util.ResourceLocation;
+//import net.minecraftforge.api.distmarker.Dist;
+//import net.minecraftforge.api.distmarker.OnlyIn;
+//
+//import appeng.block.crafting.BlockCraftingUnit;
+//import appeng.bootstrap.BlockRenderingCustomizer;
+//import appeng.bootstrap.IBlockRendering;
+//import appeng.bootstrap.IItemRendering;
+//import appeng.core.AppEng;
 
 
 /**
  * Rendering customization for the crafting cube.
  */
-public class CraftingCubeRendering extends BlockRenderingCustomizer
+public class CraftingCubeRendering //extends BlockRenderingCustomizer
 {
-
-	private final String registryName;
-
-	private final BlockCraftingUnit.CraftingUnitType type;
-
-	public CraftingCubeRendering( String registryName, BlockCraftingUnit.CraftingUnitType type )
-	{
-		this.registryName = registryName;
-		this.type = type;
-	}
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public void customize( IBlockRendering rendering, IItemRendering itemRendering )
-	{
-		ResourceLocation baseName = new ResourceLocation( AppEng.MOD_ID, this.registryName );
-
-		// Disable auto-rotation
-		if( this.type != BlockCraftingUnit.CraftingUnitType.MONITOR )
-		{
-			rendering.modelCustomizer( ( loc, model ) -> model );
-		}
-
-		// This is the standard blockstate model
-		ModelResourceLocation defaultModel = new ModelResourceLocation( baseName, "normal" );
-
-		// This is the built-in model
-		String builtInName = "models/block/crafting/" + this.registryName + "/builtin";
-		ModelResourceLocation builtInModelName = new ModelResourceLocation( new ResourceLocation( AppEng.MOD_ID, builtInName ), "normal" );
-
-		rendering.builtInModel( builtInName, new CraftingCubeModel( this.type ) );
-
-		rendering.stateMapper( block -> this.mapState( block, defaultModel, builtInModelName ) );
-
-		if( this.type == BlockCraftingUnit.CraftingUnitType.MONITOR )
-		{
-			rendering.tesr( new CraftingMonitorTESR() );
-		}
-
-	}
-
-	private Map<BlockState, ModelResourceLocation> mapState( Block block, ModelResourceLocation defaultModel, ModelResourceLocation formedModel )
-	{
-		Map<BlockState, ModelResourceLocation> result = new HashMap<>();
-		for( BlockState state : block.getBlockState().getValidStates() )
-		{
-			if( state.getValue( BlockCraftingUnit.FORMED ) )
-			{
-				// Always use the builtin model if the multiblock is formed
-				result.put( state, formedModel );
-			}
-			else
-			{
-				// Use the default model
-				result.put( state, defaultModel );
-			}
-		}
-		return result;
-	}
+//
+//	private final String registryName;
+//
+//	private final BlockCraftingUnit.CraftingUnitType type;
+//
+//	public CraftingCubeRendering( String registryName, BlockCraftingUnit.CraftingUnitType type )
+//	{
+//		this.registryName = registryName;
+//		this.type = type;
+//	}
+//
+//	@Override
+//	@OnlyIn( Dist.CLIENT )
+//	public void customize( IBlockRendering rendering, IItemRendering itemRendering )
+//	{
+//		ResourceLocation baseName = new ResourceLocation( AppEng.MOD_ID, this.registryName );
+//
+//		// Disable auto-rotation
+//		if( this.type != BlockCraftingUnit.CraftingUnitType.MONITOR )
+//		{
+//			rendering.modelCustomizer( ( loc, model ) -> model );
+//		}
+//
+//		// This is the standard blockstate model
+//		ModelResourceLocation defaultModel = new ModelResourceLocation( baseName, "normal" );
+//
+//		// This is the built-in model
+//		String builtInName = "models/block/crafting/" + this.registryName + "/builtin";
+//		ModelResourceLocation builtInModelName = new ModelResourceLocation( new ResourceLocation( AppEng.MOD_ID, builtInName ), "normal" );
+//
+//		rendering.builtInModel( builtInName, new CraftingCubeModel( this.type ) );
+//
+//		rendering.stateMapper( block -> this.mapState( block, defaultModel, builtInModelName ) );
+//
+//		if( this.type == BlockCraftingUnit.CraftingUnitType.MONITOR )
+//		{
+//			rendering.tesr( new CraftingMonitorTESR() );
+//		}
+//
+//	}
+//
+//	private Map<BlockState, ModelResourceLocation> mapState( Block block, ModelResourceLocation defaultModel, ModelResourceLocation formedModel )
+//	{
+//		Map<BlockState, ModelResourceLocation> result = new HashMap<>();
+//		for( BlockState state : block.getBlockState().getValidStates() )
+//		{
+//			if( state.getValue( BlockCraftingUnit.FORMED ) )
+//			{
+//				// Always use the builtin model if the multiblock is formed
+//				result.put( state, formedModel );
+//			}
+//			else
+//			{
+//				// Use the default model
+//				result.put( state, defaultModel );
+//			}
+//		}
+//		return result;
+//	}
 }

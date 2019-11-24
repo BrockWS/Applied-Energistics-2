@@ -24,7 +24,7 @@
 package appeng.api.definitions;
 
 
-import appeng.api.util.AEColoredItemDefinition;
+import appeng.api.util.IColoredItemDefinition;
 
 
 /**
@@ -32,23 +32,23 @@ import appeng.api.util.AEColoredItemDefinition;
  */
 public interface IParts
 {
-	AEColoredItemDefinition cableSmart();
+	IColoredItemDefinition cableSmart();
 
-	AEColoredItemDefinition cableCovered();
+	IColoredItemDefinition cableCovered();
 
-	AEColoredItemDefinition cableGlass();
+	IColoredItemDefinition cableGlass();
 
-	AEColoredItemDefinition cableDenseCovered();
+	IColoredItemDefinition cableDenseCovered();
 
-	AEColoredItemDefinition cableDenseSmart();
+	IColoredItemDefinition cableDenseSmart();
 
-	AEColoredItemDefinition lumenCableSmart();
+	IColoredItemDefinition lumenCableSmart();
 
-	AEColoredItemDefinition lumenCableCovered();
+	IColoredItemDefinition lumenCableCovered();
 
-	AEColoredItemDefinition lumenCableGlass();
+	IColoredItemDefinition lumenCableGlass();
 
-	AEColoredItemDefinition lumenDenseCableSmart();
+	IColoredItemDefinition lumenDenseCableSmart();
 
 	IItemDefinition quartzFiber();
 

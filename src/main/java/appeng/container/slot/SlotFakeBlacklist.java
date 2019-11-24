@@ -19,36 +19,36 @@
 package appeng.container.slot;
 
 
-import net.minecraftforge.items.IItemHandler;
+//import net.minecraftforge.items.IItemHandler;
 
 
-public class SlotFakeBlacklist extends SlotFakeTypeOnly
+public class SlotFakeBlacklist //extends SlotFakeTypeOnly
 {
-
-	public SlotFakeBlacklist( final IItemHandler inv, final int idx, final int x, final int y )
-	{
-		super( inv, idx, x, y );
-	}
-
-	@Override
-	public float getOpacityOfIcon()
-	{
-		return 0.8f;
-	}
-
-	@Override
-	public boolean renderIconWithItem()
-	{
-		return true;
-	}
-
-	@Override
-	public int getIcon()
-	{
-		if( this.getHasStack() )
-		{
-			return this.getStack().getCount() > 0 ? 16 + 14 : 14;
-		}
-		return -1;
-	}
+//
+//	public SlotFakeBlacklist( final IItemHandler inv, final int idx, final int x, final int y )
+//	{
+//		super( inv, idx, x, y );
+//	}
+//
+//	@Override
+//	public float getOpacityOfIcon()
+//	{
+//		return 0.8f;
+//	}
+//
+//	@Override
+//	public boolean renderIconWithItem()
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public int getIcon()
+//	{
+//		if( this.getHasStack() )
+//		{
+//			return this.getStack().getCount() > 0 ? 16 + 14 : 14;
+//		}
+//		return -1;
+//	}
 }

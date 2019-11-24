@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.state.IProperty;
-import net.minecraft.state.PropertyEnum;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -42,79 +41,79 @@ import appeng.tile.storage.TileChest;
 import appeng.util.Platform;
 
 
-public class BlockChest extends AEBaseTileBlock
+public class BlockChest //extends AEBaseTileBlock
 {
-
-	private final static PropertyEnum<DriveSlotState> SLOT_STATE = PropertyEnum.create( "slot_state", DriveSlotState.class );
-
-	public BlockChest()
-	{
-		super( Material.IRON );
-		this.setDefaultState( this.getDefaultState().withProperty( SLOT_STATE, DriveSlotState.EMPTY ) );
-	}
-
-	@Override
-	protected IProperty[] getAEStates()
-	{
-		return new IProperty[] { SLOT_STATE };
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.CUTOUT;
-	}
-
-	@Override
-	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
-	{
-		DriveSlotState slotState = DriveSlotState.EMPTY;
-
-		TileChest te = this.getTileEntity( worldIn, pos );
-
-		if( te != null )
-		{
-			if( te.getCellCount() >= 1 )
-			{
-				slotState = DriveSlotState.fromCellStatus( te.getCellStatus( 0 ) );
-			}
-			// Power-state has to be checked separately
-			if( !te.isPowered() && slotState != DriveSlotState.EMPTY )
-			{
-				slotState = DriveSlotState.OFFLINE;
-			}
-		}
-
-		return super.getActualState( state, worldIn, pos )
-				.withProperty( SLOT_STATE, slotState );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		final TileChest tg = this.getTileEntity( w, pos );
-		if( tg != null && !p.isSneaking() )
-		{
-			if( Platform.isClient() )
-			{
-				return true;
-			}
-
-			if( side != tg.getUp() )
-			{
-				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_CHEST );
-			}
-			else
-			{
-				if( !tg.openGui( p ) )
-				{
-					p.sendMessage( PlayerMessages.ChestCannotReadStorageCell.get() );
-				}
-			}
-
-			return true;
-		}
-
-		return false;
-	}
+//
+//	private final static PropertyEnum<DriveSlotState> SLOT_STATE = PropertyEnum.create( "slot_state", DriveSlotState.class );
+//
+//	public BlockChest()
+//	{
+//		super( Material.IRON );
+//		this.setDefaultState( this.getDefaultState().withProperty( SLOT_STATE, DriveSlotState.EMPTY ) );
+//	}
+//
+//	@Override
+//	protected IProperty[] getAEStates()
+//	{
+//		return new IProperty[] { SLOT_STATE };
+//	}
+//
+//	@Override
+//	public BlockRenderLayer getBlockLayer()
+//	{
+//		return BlockRenderLayer.CUTOUT;
+//	}
+//
+//	@Override
+//	public BlockState getActualState( BlockState state, IEnviromentBlockReader worldIn, BlockPos pos )
+//	{
+//		DriveSlotState slotState = DriveSlotState.EMPTY;
+//
+//		TileChest te = this.getTileEntity( worldIn, pos );
+//
+//		if( te != null )
+//		{
+//			if( te.getCellCount() >= 1 )
+//			{
+//				slotState = DriveSlotState.fromCellStatus( te.getCellStatus( 0 ) );
+//			}
+//			// Power-state has to be checked separately
+//			if( !te.isPowered() && slotState != DriveSlotState.EMPTY )
+//			{
+//				slotState = DriveSlotState.OFFLINE;
+//			}
+//		}
+//
+//		return super.getActualState( state, worldIn, pos )
+//				.withProperty( SLOT_STATE, slotState );
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		final TileChest tg = this.getTileEntity( w, pos );
+//		if( tg != null && !p.isSneaking() )
+//		{
+//			if( Platform.isClient() )
+//			{
+//				return true;
+//			}
+//
+//			if( side != tg.getUp() )
+//			{
+//				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_CHEST );
+//			}
+//			else
+//			{
+//				if( !tg.openGui( p ) )
+//				{
+//					p.sendMessage( PlayerMessages.ChestCannotReadStorageCell.get() );
+//				}
+//			}
+//
+//			return true;
+//		}
+//
+//		return false;
+//	}
 }

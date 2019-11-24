@@ -23,8 +23,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.nbt.INBT;
 
 import appeng.api.config.FuzzyMode;
 import appeng.util.item.OreHelper;
@@ -52,11 +51,11 @@ public class ItemComparisonHelper
 	{
 		if( !that.isEmpty() && !other.isEmpty() && that.getItem() == other.getItem() )
 		{
-			if( that.isItemStackDamageable() )
+			if( that.isDamageable() )
 			{
 				return true;
 			}
-			return that.getItemDamage() == other.getItemDamage();
+			return that.getDamage() == other.getDamage(); // TODO Remove
 		}
 		return false;
 	}
@@ -71,16 +70,16 @@ public class ItemComparisonHelper
 	 */
 	public boolean isSameItem( @Nonnull final ItemStack is, @Nonnull final ItemStack filter )
 	{
-		return ItemStack.areItemsEqual( is, filter ) && this.isNbtTagEqual( is.getTagCompound(), filter.getTagCompound() );
+		return ItemStack.areItemsEqual( is, filter ) && this.isNbtTagEqual( is.getTag(), filter.getTag() );
 	}
 
 	/**
-	 * Similar to {@link ItemComparisonHelper#isEqualItem(ItemStack, ItemStack)},
+	 * Similar to {@link ItemComparisonHelper#isEqualItemType(ItemStack, ItemStack)},
 	 * but it can further check, if both match the same {@link FuzzyMode}
-	 * or are considered equal by the {@link OreDictionary}
+	 * or are considered equal by the
 	 *
 	 * @param mode how to compare the two {@link ItemStack}s
-	 * @return true, if both are matching the mode or considered equal by the {@link OreDictionary}
+	 * @return true, if both are matching the mode or considered equal by the
 	 */
 	public boolean isFuzzyEqualItem( final ItemStack a, final ItemStack b, final FuzzyMode mode )
 	{
@@ -103,24 +102,24 @@ public class ItemComparisonHelper
 			}
 			else if( mode == FuzzyMode.PERCENT_99 )
 			{
-				return ( a.getItemDamage() > 1 ) == ( b.getItemDamage() > 1 );
+				return ( a.getDamage() > 1 ) == ( b.getDamage() > 1 );
 			}
 			else
 			{
-				final float percentDamagedOfA = (float) a.getItemDamage() / (float) a.getMaxDamage();
-				final float percentDamagedOfB = (float) b.getItemDamage() / (float) b.getMaxDamage();
+				final float percentDamagedOfA = (float) a.getDamage() / (float) a.getMaxDamage();
+				final float percentDamagedOfB = (float) b.getDamage() / (float) b.getMaxDamage();
 
 				return ( percentDamagedOfA > mode.breakPoint ) == ( percentDamagedOfB > mode.breakPoint );
 			}
 		}
 
-		final OreReference aOR = OreHelper.INSTANCE.getOre( a ).orElse( null );
-		final OreReference bOR = OreHelper.INSTANCE.getOre( b ).orElse( null );
-
-		if( OreHelper.INSTANCE.sameOre( aOR, bOR ) )
-		{
-			return true;
-		}
+//		final OreReference aOR = OreHelper.INSTANCE.getOre( a ).orElse( null ); TODO Tags
+//		final OreReference bOR = OreHelper.INSTANCE.getOre( b ).orElse( null );
+//
+//		if( OreHelper.INSTANCE.sameOre( aOR, bOR ) )
+//		{
+//			return true;
+//		}
 
 		return a.isItemEqual( b );
 	}
@@ -130,15 +129,15 @@ public class ItemComparisonHelper
 	 * then the vanilla version which likes to fail when NBT Compound data changes order, it is pretty expensive
 	 * performance wise, so try an use shared tag compounds as long as the system remains in AE.
 	 */
-	public boolean isNbtTagEqual( final NBTBase left, final NBTBase right )
+	public boolean isNbtTagEqual(final INBT left, final INBT right )
 	{
 		if( left == right )
 		{
 			return true;
 		}
 
-		final boolean isLeftEmpty = left == null || left.hasNoTags();
-		final boolean isRightEmpty = right == null || right.hasNoTags();
+		final boolean isLeftEmpty = left == null;// || left.hasNoTags();
+		final boolean isRightEmpty = right == null;// || right.hasNoTags();
 
 		if( isLeftEmpty && isRightEmpty )
 		{

@@ -19,48 +19,48 @@
 package appeng.core.features;
 
 
-import com.google.common.base.Preconditions;
+//import com.google.common.base.Preconditions;
+//
+//import net.minecraft.item.Item;
+//import net.minecraft.item.ItemStack;
+//
+//import appeng.items.materials.MaterialType;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
-import appeng.items.materials.MaterialType;
-
-
-public class MaterialStackSrc implements IStackSrc
+public class MaterialStackSrc //implements IStackSrc
 {
-	private final MaterialType src;
-	private final boolean enabled;
-
-	public MaterialStackSrc( final MaterialType src, boolean enabled )
-	{
-		Preconditions.checkNotNull( src );
-
-		this.src = src;
-		this.enabled = enabled;
-	}
-
-	@Override
-	public ItemStack stack( final int stackSize )
-	{
-		return this.src.stack( stackSize );
-	}
-
-	@Override
-	public Item getItem()
-	{
-		return this.src.getItemInstance();
-	}
-
-	@Override
-	public int getDamage()
-	{
-		return this.src.getDamageValue();
-	}
-
-	@Override
-	public boolean isEnabled()
-	{
-		return this.enabled;
-	}
+//	private final MaterialType src;
+//	private final boolean enabled;
+//
+//	public MaterialStackSrc( final MaterialType src, boolean enabled )
+//	{
+//		Preconditions.checkNotNull( src );
+//
+//		this.src = src;
+//		this.enabled = enabled;
+//	}
+//
+//	@Override
+//	public ItemStack stack( final int stackSize )
+//	{
+//		return this.src.stack( stackSize );
+//	}
+//
+//	@Override
+//	public Item getItem()
+//	{
+//		return this.src.getItemInstance();
+//	}
+//
+//	@Override
+//	public int getDamage()
+//	{
+//		return this.src.getDamageValue();
+//	}
+//
+//	@Override
+//	public boolean isEnabled()
+//	{
+//		return this.enabled;
+//	}
 }

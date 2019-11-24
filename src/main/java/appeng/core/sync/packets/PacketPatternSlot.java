@@ -111,11 +111,11 @@ public class PacketPatternSlot extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
-		if( sender.openContainer instanceof ContainerPatternTerm )
-		{
-			final ContainerPatternTerm patternTerminal = (ContainerPatternTerm) sender.openContainer;
-			patternTerminal.craftOrGetItem( this );
-		}
+//		final ServerPlayerEntity sender = (ServerPlayerEntity) player;
+//		if( sender.openContainer instanceof ContainerPatternTerm )
+//		{
+//			final ContainerPatternTerm patternTerminal = (ContainerPatternTerm) sender.openContainer;
+//			patternTerminal.craftOrGetItem( this );
+//		}
 	}
 }

@@ -61,20 +61,20 @@ public class PacketProgressBar extends AppEngPacket
 	@Override
 	public void serverPacketData( final INetworkInfo manager, final AppEngPacket packet, final PlayerEntity player )
 	{
-		final Container c = player.openContainer;
-		if( c instanceof AEBaseContainer )
-		{
-			( (AEBaseContainer) c ).updateFullProgressBar( this.id, this.value );
-		}
+//		final Container c = player.openContainer;
+//		if( c instanceof AEBaseContainer )
+//		{
+//			( (AEBaseContainer) c ).updateFullProgressBar( this.id, this.value );
+//		}
 	}
 
 	@Override
 	public void clientPacketData( final INetworkInfo network, final AppEngPacket packet, final PlayerEntity player )
 	{
-		final Container c = player.openContainer;
-		if( c instanceof AEBaseContainer )
-		{
-			( (AEBaseContainer) c ).updateFullProgressBar( this.id, this.value );
-		}
+//		final Container c = player.openContainer;
+//		if( c instanceof AEBaseContainer )
+//		{
+//			( (AEBaseContainer) c ).updateFullProgressBar( this.id, this.value );
+//		}
 	}
 }

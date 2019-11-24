@@ -26,10 +26,8 @@ import java.util.WeakHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.google.common.base.Preconditions;
-
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 
 import appeng.core.AELog;
 import appeng.me.GridStorage;
@@ -50,11 +48,11 @@ final class StorageData implements IWorldGridStorageData, IOnWorldStartable, IOn
 	private static final String GRID_STORAGE_CATEGORY = "gridstorage";
 
 	private final Map<GridStorageSearch, WeakReference<GridStorageSearch>> loadedStorage = new WeakHashMap<>( 10 );
-	private final Configuration config;
+	private final CommentedFileConfig config;
 
 	private long lastGridStorage;
 
-	public StorageData( @Nonnull final Configuration settingsFile )
+	public StorageData( @Nonnull final CommentedFileConfig settingsFile )
 	{
 		Preconditions.checkNotNull( settingsFile );
 
@@ -78,7 +76,7 @@ final class StorageData implements IWorldGridStorageData, IOnWorldStartable, IOn
 		if( result == null || result.get() == null )
 		{
 			final String id = String.valueOf( storageID );
-			final String data = this.config.get( "gridstorage", id, "" ).getString();
+			final String data = this.config.get( "gridstorage" + "." + id );
 			final GridStorage thisStorage = new GridStorage( data, storageID, gss );
 			gss.setGridStorage( new WeakReference<>( thisStorage ) );
 			this.loadedStorage.put( gss, new WeakReference<>( gss ) );
@@ -109,7 +107,7 @@ final class StorageData implements IWorldGridStorageData, IOnWorldStartable, IOn
 	{
 		final long r = this.lastGridStorage;
 		this.lastGridStorage++;
-		this.config.get( "Counters", "lastGridStorage", this.lastGridStorage ).set( Long.toString( this.lastGridStorage ) );
+		this.config.set( "Counters" + "." + "lastGridStorage", this.lastGridStorage );
 		return r;
 	}
 
@@ -117,22 +115,21 @@ final class StorageData implements IWorldGridStorageData, IOnWorldStartable, IOn
 	public void destroyGridStorage( final long id )
 	{
 		final String stringID = String.valueOf( id );
-		this.config.getCategory( "gridstorage" ).remove( stringID );
+		this.config.remove( "gridstorage" + "." + stringID );
 	}
 
 	@Override
 	public int getNextOrderedValue( final String name )
 	{
-		final Property p = this.config.get( "orderedValues", name, 0 );
-		final int myValue = p.getInt();
-		p.set( myValue + 1 );
+		final int myValue = this.config.get( "orderedValues" +"."+ name );
+		this.config.set("orderedValues" +"."+ name, myValue + 1);
 		return myValue;
 	}
 
 	@Override
 	public void onWorldStart()
 	{
-		final String lastString = this.config.get( LAST_GRID_STORAGE_CATEGORY, LAST_GRID_STORAGE_KEY, LAST_GRID_STORAGE_DEFAULT ).getString();
+		final String lastString = this.config.get( LAST_GRID_STORAGE_CATEGORY +"."+ LAST_GRID_STORAGE_KEY );
 
 		try
 		{
@@ -156,7 +153,7 @@ final class StorageData implements IWorldGridStorageData, IOnWorldStartable, IOn
 			if( thisStorage != null && thisStorage.getGrid() != null && !thisStorage.getGrid().isEmpty() )
 			{
 				final String value = thisStorage.getValue();
-				this.config.get( GRID_STORAGE_CATEGORY, String.valueOf( thisStorage.getID() ), value ).set( value );
+				this.config.set( GRID_STORAGE_CATEGORY +"."+  String.valueOf( thisStorage.getID() ), value );
 			}
 		}
 

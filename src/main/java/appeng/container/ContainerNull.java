@@ -19,8 +19,11 @@
 package appeng.container;
 
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 
 
 /*
@@ -28,6 +31,10 @@ import net.minecraft.inventory.container.Container;
  */
 public class ContainerNull extends Container
 {
+
+	public ContainerNull() {
+		super(null, 0);
+	}
 
 	@Override
 	public boolean canInteractWith( final PlayerEntity entityplayer )

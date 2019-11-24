@@ -19,49 +19,49 @@
 package appeng.recipes.factories.conditions;
 
 
-import java.util.Locale;
-import java.util.function.BooleanSupplier;
-import java.util.stream.Stream;
+//import java.util.Locale;
+//import java.util.function.BooleanSupplier;
+//import java.util.stream.Stream;
+//
+//import com.google.gson.JsonArray;
+//import com.google.gson.JsonObject;
+//
+//import net.minecraft.util.JSONUtils;
+//import net.minecraftforge.common.crafting.IConditionSerializer;
+//import net.minecraftforge.common.crafting.JsonContext;
+//
+//import appeng.core.config.AEConfig;
+//import appeng.core.features.AEFeature;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
-import net.minecraft.util.JSONUtils;
-import net.minecraftforge.common.crafting.IConditionSerializer;
-import net.minecraftforge.common.crafting.JsonContext;
-
-import appeng.core.AEConfig;
-import appeng.core.features.AEFeature;
-
-
-public class Features implements IConditionSerializer
+public class Features //implements IConditionSerializer
 {
-	private static final String JSON_FEATURES_KEY = "features";
-
-	@Override
-	public BooleanSupplier parse( JsonContext jsonContext, JsonObject jsonObject )
-	{
-		final boolean result;
-
-		if( JSONUtils.isJsonArray( jsonObject, JSON_FEATURES_KEY ) )
-		{
-			final JsonArray features = JSONUtils.getJsonArray( jsonObject, JSON_FEATURES_KEY );
-
-			result = Stream.of( features )
-					.allMatch( p -> AEConfig.instance().isFeatureEnabled( AEFeature.valueOf( p.getAsString().toUpperCase( Locale.ENGLISH ) ) ) );
-		}
-		else if( JSONUtils.isString( jsonObject, JSON_FEATURES_KEY ) )
-		{
-			final String featureName = JSONUtils.getString( jsonObject, JSON_FEATURES_KEY ).toUpperCase( Locale.ENGLISH );
-			final AEFeature feature = AEFeature.valueOf( featureName );
-
-			result = AEConfig.instance().isFeatureEnabled( feature );
-		}
-		else
-		{
-			result = false;
-		}
-
-		return () -> result;
-	}
+//	private static final String JSON_FEATURES_KEY = "features";
+//
+//	@Override
+//	public BooleanSupplier parse( JsonContext jsonContext, JsonObject jsonObject )
+//	{
+//		final boolean result;
+//
+//		if( JSONUtils.isJsonArray( jsonObject, JSON_FEATURES_KEY ) )
+//		{
+//			final JsonArray features = JSONUtils.getJsonArray( jsonObject, JSON_FEATURES_KEY );
+//
+//			result = Stream.of( features )
+//					.allMatch( p -> AEConfig.instance().isFeatureEnabled( AEFeature.valueOf( p.getAsString().toUpperCase( Locale.ENGLISH ) ) ) );
+//		}
+//		else if( JSONUtils.isString( jsonObject, JSON_FEATURES_KEY ) )
+//		{
+//			final String featureName = JSONUtils.getString( jsonObject, JSON_FEATURES_KEY ).toUpperCase( Locale.ENGLISH );
+//			final AEFeature feature = AEFeature.valueOf( featureName );
+//
+//			result = AEConfig.instance().isFeatureEnabled( feature );
+//		}
+//		else
+//		{
+//			result = false;
+//		}
+//
+//		return () -> result;
+//	}
 }

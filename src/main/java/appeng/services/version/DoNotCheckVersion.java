@@ -22,22 +22,22 @@ package appeng.services.version;
 /**
  * Exceptional template for {@link Version}, when the mod does not want a check
  */
-public final class DoNotCheckVersion extends BaseVersion
+public final class DoNotCheckVersion //extends BaseVersion
 {
-	public DoNotCheckVersion()
-	{
-		super( Integer.MAX_VALUE, Channel.Stable, Integer.MAX_VALUE );
-	}
-
-	@Override
-	public boolean isNewerAs( final Version maybeOlder )
-	{
-		return true;
-	}
-
-	@Override
-	public String formatted()
-	{
-		return "dev build";
-	}
+//	public DoNotCheckVersion()
+//	{
+//		super( Integer.MAX_VALUE, Channel.Stable, Integer.MAX_VALUE );
+//	}
+//
+//	@Override
+//	public boolean isNewerAs( final Version maybeOlder )
+//	{
+//		return true;
+//	}
+//
+//	@Override
+//	public String formatted()
+//	{
+//		return "dev build";
+//	}
 }

@@ -26,144 +26,110 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.bootstrap.components.IItemRegistrationComponent;
-import appeng.bootstrap.components.IPostInitComponent;
-import appeng.core.AEConfig;
+import appeng.bootstrap.components.ILoadCompleteComponent;
 import appeng.core.AppEng;
-import appeng.core.CreativeTab;
 import appeng.core.features.AEFeature;
 import appeng.core.features.ItemDefinition;
 import appeng.util.Platform;
 
 
-class ItemDefinitionBuilder implements IItemBuilder
-{
+class ItemDefinitionBuilder implements IItemBuilder {
 
-	private final FeatureFactory factory;
+    private final FeatureFactory factory;
+    private final String registryName;
+    private final Supplier<Item> itemSupplier;
+    private final EnumSet<AEFeature> features = EnumSet.noneOf(AEFeature.class);
+    private final List<Function<Item, IBootstrapComponent>> boostrapComponents = new ArrayList<>();
+    private Supplier<IDispenseItemBehavior> dispenserBehaviorSupplier;
+    @OnlyIn(Dist.CLIENT)
+    private ItemRendering itemRendering;
 
-	private final String registryName;
+    ItemDefinitionBuilder(FeatureFactory factory, String registryName, Supplier<Item> itemSupplier) {
+        this.factory = factory;
+        this.registryName = registryName;
+        this.itemSupplier = itemSupplier;
+        if (Platform.isClient()) {
+            this.itemRendering = new ItemRendering();
+        }
+    }
 
-	private final Supplier<Item> itemSupplier;
+    @Override
+    public IItemBuilder bootstrap(Function<Item, IBootstrapComponent> component) {
+        this.boostrapComponents.add(component);
+        return this;
+    }
 
-	private final EnumSet<AEFeature> features = EnumSet.noneOf( AEFeature.class );
+    @Override
+    public IItemBuilder features(AEFeature... features) {
+        this.features.clear();
+        this.addFeatures(features);
+        return this;
+    }
 
-	private final List<Function<Item, IBootstrapComponent>> boostrapComponents = new ArrayList<>();
+    @Override
+    public IItemBuilder addFeatures(AEFeature... features) {
+        Collections.addAll(this.features, features);
+        return this;
+    }
 
-	private Supplier<IBehaviorDispenseItem> dispenserBehaviorSupplier;
+    @Override
+    public IItemBuilder rendering(ItemRenderingCustomizer callback) {
+        if (Platform.isClient()) {
+            this.customizeForClient(callback);
+        }
 
-	@SideOnly( Side.CLIENT )
-	private ItemRendering itemRendering;
+        return this;
+    }
 
-	private ItemGroup creativeTab = CreativeTab.instance;
+    @Override
+    public IItemBuilder dispenserBehavior(Supplier<IDispenseItemBehavior> behavior) {
+        this.dispenserBehaviorSupplier = behavior;
+        return this;
+    }
 
-	ItemDefinitionBuilder( FeatureFactory factory, String registryName, Supplier<Item> itemSupplier )
-	{
-		this.factory = factory;
-		this.registryName = registryName;
-		this.itemSupplier = itemSupplier;
-		if( Platform.isClient() )
-		{
-			this.itemRendering = new ItemRendering();
-		}
-	}
+    @OnlyIn(Dist.CLIENT)
+    private void customizeForClient(ItemRenderingCustomizer callback) {
+        callback.customize(this.itemRendering);
+    }
 
-	@Override
-	public IItemBuilder bootstrap( Function<Item, IBootstrapComponent> component )
-	{
-		this.boostrapComponents.add( component );
-		return this;
-	}
+    @Override
+    public ItemDefinition build() {
+//		if( !AEConfig.instance().areFeaturesEnabled( this.features ) )
+//		{
+//			return new ItemDefinition( this.registryName, null );
+//		}
 
-	@Override
-	public IItemBuilder features( AEFeature... features )
-	{
-		this.features.clear();
-		this.addFeatures( features );
-		return this;
-	}
+        Item item = this.itemSupplier.get();
+        item.setRegistryName(AppEng.MOD_ID, this.registryName);
 
-	@Override
-	public IItemBuilder addFeatures( AEFeature... features )
-	{
-		Collections.addAll( this.features, features );
-		return this;
-	}
+        ItemDefinition definition = new ItemDefinition(this.registryName, item);
 
-	@Override
-	public IItemBuilder creativeTab( ItemGroup tab )
-	{
-		this.creativeTab = tab;
-		return this;
-	}
+        // Register all extra handlers
+        this.boostrapComponents.forEach(component -> this.factory.addBootstrapComponent(component.apply(item)));
 
-	@Override
-	public IItemBuilder rendering( ItemRenderingCustomizer callback )
-	{
-		if( Platform.isClient() )
-		{
-			this.customizeForClient( callback );
-		}
+        // Register custom dispenser behavior if requested
+        if (this.dispenserBehaviorSupplier != null) {
+            this.factory.addBootstrapComponent((ILoadCompleteComponent) () -> {
+                IDispenseItemBehavior behavior = this.dispenserBehaviorSupplier.get();
+                DispenserBlock.registerDispenseBehavior(item, behavior);
+            });
+        }
 
-		return this;
-	}
+        this.factory.addBootstrapComponent((IItemRegistrationComponent) (reg) -> reg.register(item));
 
-	@Override
-	public IItemBuilder dispenserBehavior( Supplier<IBehaviorDispenseItem> behavior )
-	{
-		this.dispenserBehaviorSupplier = behavior;
-		return this;
-	}
+        if (Platform.isClient()) {
+            this.itemRendering.apply(this.factory, item);
+        }
 
-	@SideOnly( Side.CLIENT )
-	private void customizeForClient( ItemRenderingCustomizer callback )
-	{
-		callback.customize( this.itemRendering );
-	}
-
-	@Override
-	public ItemDefinition build()
-	{
-		if( !AEConfig.instance().areFeaturesEnabled( this.features ) )
-		{
-			return new ItemDefinition( this.registryName, null );
-		}
-
-		Item item = this.itemSupplier.get();
-		item.setRegistryName( AppEng.MOD_ID, this.registryName );
-
-		ItemDefinition definition = new ItemDefinition( this.registryName, item );
-
-		item.setUnlocalizedName( "appliedenergistics2." + this.registryName );
-		item.setCreativeTab( this.creativeTab );
-
-		// Register all extra handlers
-		this.boostrapComponents.forEach( component -> this.factory.addBootstrapComponent( component.apply( item ) ) );
-
-		// Register custom dispenser behavior if requested
-		if( this.dispenserBehaviorSupplier != null )
-		{
-			this.factory.addBootstrapComponent( (IPostInitComponent) side ->
-			{
-				IBehaviorDispenseItem behavior = this.dispenserBehaviorSupplier.get();
-				BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject( item, behavior );
-			} );
-		}
-
-		this.factory.addBootstrapComponent( (IItemRegistrationComponent) ( side, reg ) -> reg.register( item ) );
-
-		if( Platform.isClient() )
-		{
-			this.itemRendering.apply( this.factory, item );
-		}
-
-		return definition;
-	}
+        return definition;
+    }
 
 }

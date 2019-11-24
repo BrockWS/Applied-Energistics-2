@@ -15,17 +15,17 @@ import appeng.helpers.Splotch;
  */
 class PaintSplotches
 {
-
-	private final List<Splotch> splotches;
-
-	PaintSplotches( Collection<Splotch> splotches )
-	{
-		this.splotches = ImmutableList.copyOf( splotches );
-	}
-
-	List<Splotch> getSplotches()
-	{
-		return this.splotches;
-	}
+//
+//	private final List<Splotch> splotches;
+//
+//	PaintSplotches( Collection<Splotch> splotches )
+//	{
+//		this.splotches = ImmutableList.copyOf( splotches );
+//	}
+//
+//	List<Splotch> getSplotches()
+//	{
+//		return this.splotches;
+//	}
 
 }

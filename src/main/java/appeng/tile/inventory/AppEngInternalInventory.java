@@ -173,12 +173,12 @@ public class AppEngInternalInventory extends ItemStackHandler implements Iterabl
 
 	public void writeToNBT( final CompoundNBT data, final String name )
 	{
-		data.setTag( name, this.serializeNBT() );
+		data.put( name, this.serializeNBT() );
 	}
 
 	public void readFromNBT( final CompoundNBT data, final String name )
 	{
-		final CompoundNBT c = data.getCompoundTag( name );
+		final CompoundNBT c = data.getCompound( name );
 		if( c != null )
 		{
 			this.readFromNBT( c );

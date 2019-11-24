@@ -18,18 +18,18 @@
 
 package appeng.integration.modules.theoneprobe.tile;
 
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
-
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoProvider;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.tile.AEBaseTile;
-
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.IProbeInfoProvider;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.tile.AEBaseTile;
+//
 
 /**
  * Similar to {@link IProbeInfoProvider}, but already providing the {@link AEBaseTile} being looked at.
@@ -41,5 +41,5 @@ public interface ITileProbInfoProvider
 	/**
 	 * @see IProbeInfoProvider#addProbeInfo(ProbeMode, IProbeInfo, PlayerEntity, World, BlockState, IProbeHitData)
 	 */
-	void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data );
+	//void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data );
 }

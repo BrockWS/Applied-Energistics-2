@@ -19,57 +19,57 @@
 package appeng.core.features.registries.charger;
 
 
-import java.util.IdentityHashMap;
-import java.util.Map;
+//import java.util.IdentityHashMap;
+//import java.util.Map;
+//
+//import javax.annotation.Nonnegative;
+//import javax.annotation.Nonnull;
+//
+//import com.google.common.base.Preconditions;
+//
+//import net.minecraft.item.Item;
+//
+//import appeng.api.features.IChargerRegistry;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 
-import com.google.common.base.Preconditions;
-
-import net.minecraft.item.Item;
-
-import appeng.api.features.IChargerRegistry;
-
-
-public class ChargerRegistry implements IChargerRegistry
+public class ChargerRegistry// implements IChargerRegistry
 {
-	private static final double DEFAULT_CHARGE_RATE = 160d;
-	private static final double CAPPED_CHARGE_RATE = 16000d;
-
-	private final Map<Item, Double> chargeRates;
-
-	public ChargerRegistry()
-	{
-		this.chargeRates = new IdentityHashMap<>();
-	}
-
-	@Override
-	@Nonnegative
-	public double getChargeRate( @Nonnull Item item )
-	{
-		Preconditions.checkNotNull( item );
-
-		return this.chargeRates.getOrDefault( item, DEFAULT_CHARGE_RATE );
-	}
-
-	@Override
-	public void addChargeRate( @Nonnull Item item, @Nonnegative double value )
-	{
-		Preconditions.checkNotNull( item );
-		Preconditions.checkArgument( value > 0d );
-
-		final double cappedValue = Math.min( value, CAPPED_CHARGE_RATE );
-
-		this.chargeRates.put( item, cappedValue );
-	}
-
-	@Override
-	public void removeChargeRate( @Nonnull Item item )
-	{
-		Preconditions.checkNotNull( item );
-
-		this.chargeRates.remove( item );
-	}
+//	private static final double DEFAULT_CHARGE_RATE = 160d;
+//	private static final double CAPPED_CHARGE_RATE = 16000d;
+//
+//	private final Map<Item, Double> chargeRates;
+//
+//	public ChargerRegistry()
+//	{
+//		this.chargeRates = new IdentityHashMap<>();
+//	}
+//
+//	@Override
+//	@Nonnegative
+//	public double getChargeRate( @Nonnull Item item )
+//	{
+//		Preconditions.checkNotNull( item );
+//
+//		return this.chargeRates.getOrDefault( item, DEFAULT_CHARGE_RATE );
+//	}
+//
+//	@Override
+//	public void addChargeRate( @Nonnull Item item, @Nonnegative double value )
+//	{
+//		Preconditions.checkNotNull( item );
+//		Preconditions.checkArgument( value > 0d );
+//
+//		final double cappedValue = Math.min( value, CAPPED_CHARGE_RATE );
+//
+//		this.chargeRates.put( item, cappedValue );
+//	}
+//
+//	@Override
+//	public void removeChargeRate( @Nonnull Item item )
+//	{
+//		Preconditions.checkNotNull( item );
+//
+//		this.chargeRates.remove( item );
+//	}
 
 }

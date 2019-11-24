@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -44,16 +45,16 @@ public class BlockSkyStone extends AEBaseBlock
 	public BlockSkyStone( final SkystoneType type )
 	{
 		super( Material.ROCK );
-		this.setHardness( 50 );
-		this.blockResistance = BLOCK_RESISTANCE;
-		if( type == SkystoneType.STONE )
-		{
-			this.setHarvestLevel( "pickaxe", 3 );
-		}
+//		this.setHardness( 50 );
+//		this.blockResistance = BLOCK_RESISTANCE;
+//		if( type == SkystoneType.STONE )
+//		{
+//			this.setHarvestLevel( "pickaxe", 3 );
+//		}
 
 		this.type = type;
 
-		MinecraftForge.EVENT_BUS.register( this );
+//		MinecraftForge.EVENT_BUS.register( this );
 	}
 
 	@SubscribeEvent
@@ -66,7 +67,7 @@ public class BlockSkyStone extends AEBaseBlock
 
 			if( !is.isEmpty() )
 			{
-				level = is.getItem().getHarvestLevel( is, "pickaxe", event.getEntityPlayer(), event.getState() );
+				level = is.getItem().getHarvestLevel( is, ToolType.PICKAXE, event.getEntityPlayer(), event.getState() );
 			}
 
 			if( this.type != SkystoneType.STONE || level >= 3 || event.getOriginalSpeed() > BREAK_SPEAK_THRESHOLD )
@@ -76,26 +77,26 @@ public class BlockSkyStone extends AEBaseBlock
 		}
 	}
 
-	@Override
-	public void onBlockAdded( final World w, final BlockPos pos, final BlockState state )
-	{
-		super.onBlockAdded( w, pos, state );
-		if( Platform.isServer() )
-		{
-			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
-		}
-	}
+//	@Override
+//	public void onBlockAdded( final World w, final BlockPos pos, final BlockState state )
+//	{
+//		super.onBlockAdded( w, pos, state );
+//		if( Platform.isServer() )
+//		{
+//			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
+//		}
+//	}
 
-	@Override
-	public void breakBlock( final World w, final BlockPos pos, final BlockState state )
-	{
-		super.breakBlock( w, pos, state );
-
-		if( Platform.isServer() )
-		{
-			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
-		}
-	}
+//	@Override
+//	public void breakBlock( final World w, final BlockPos pos, final BlockState state )
+//	{
+//		super.breakBlock( w, pos, state );
+//
+//		if( Platform.isServer() )
+//		{
+//			WorldData.instance().compassData().service().updateArea( w, pos.getX(), pos.getY(), pos.getZ() );
+//		}
+//	}
 
 	public enum SkystoneType
 	{

@@ -19,51 +19,40 @@
 package appeng.core;
 
 
-import java.io.File;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
 
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.biome.Biome;
-
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.CrashReportExtender;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import appeng.api.AEApi;
+import appeng.bootstrap.components.IClientSetupComponent;
+import appeng.bootstrap.components.IModConstructionComponent;
+import appeng.client.ClientHelper;
+import appeng.core.config.AEConfig;
 import appeng.core.crash.CrashInfo;
 import appeng.core.crash.IntegrationCrashEnhancement;
 import appeng.core.crash.ModCrashEnhancement;
-import appeng.core.features.AEFeature;
-import appeng.core.stats.AdvancementTriggers;
-import appeng.core.sync.GuiBridge;
-import appeng.core.sync.network.NetworkHandler;
-import appeng.core.worlddata.WorldData;
-import appeng.hooks.TickHandler;
 import appeng.integration.IntegrationRegistry;
-import appeng.integration.IntegrationType;
-import appeng.server.AECommand;
-import appeng.services.VersionChecker;
+import appeng.server.ServerHelper;
 import appeng.services.export.ExportConfig;
-import appeng.services.export.ExportProcess;
-import appeng.services.export.ForgeExportConfig;
-import appeng.services.version.VersionCheckerConfig;
-import appeng.util.Platform;
 
 
 @Mod( AppEng.MOD_ID )
 public final class AppEng
 {
 	//FIXME: @SidedProxy( clientSide = "appeng.client.ClientHelper", serverSide = "appeng.server.ServerHelper", modId = AppEng.MOD_ID )
-	public static CommonHelper proxy;
+	public static CommonHelper proxy = DistExecutor.runForDist(() -> ClientHelper::new, () -> ServerHelper::new);
 
 	public static final String MOD_ID = "appliedenergistics2";
 	public static final String MOD_NAME = "Applied Energistics 2";
@@ -75,7 +64,7 @@ public final class AppEng
 
 	private final Registration registration;
 
-	private File configDirectory;
+//	private File configDirectory;
 
 	/**
 	 * determined in pre-init but used in init
@@ -83,13 +72,26 @@ public final class AppEng
 	private ExportConfig exportConfig;
 
 	public AppEng()
-	{
+	{ // for %a in (material_*.json) do @(set "fname=%a" & call ren "%fname%" "%fname:*material_=%")
 		INSTANCE = this;
+		CreativeTab.init();
+		AEConfig.init();
+		AEApi.instance(); // Init api
 
 		CrashReportExtender.registerCrashCallable( new ModCrashEnhancement( CrashInfo.MOD_VERSION ) );
+		CrashReportExtender.registerCrashCallable( new IntegrationCrashEnhancement() );
 
 		this.registration = new Registration();
-		MinecraftForge.EVENT_BUS.register( this.registration );
+		FMLJavaModLoadingContext.get().getModEventBus().register(this.registration);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
+
+		ApiDefinitions definitions = (ApiDefinitions) AEApi.instance().definitions();
+
+		definitions.getRegistry().getBootstrapComponents( IModConstructionComponent.class ).forEachRemaining(b -> b.modConstruction() );
+
+		this.preInit();
 	}
 
 	@Nonnull
@@ -98,25 +100,25 @@ public final class AppEng
 		return INSTANCE;
 	}
 
-	public Biome getStorageBiome()
-	{
-		return this.registration.storageBiome;
-	}
-
-	public DimensionType getStorageDimensionType()
-	{
-		return this.registration.storageDimensionType;
-	}
+//	public Biome getStorageBiome()
+//	{
+//		return this.registration.storageBiome;
+//	}
+//
+//	public DimensionType getStorageDimensionType()
+//	{
+//		return this.registration.storageDimensionType;
+//	}
 
 	public int getStorageDimensionID()
 	{
 		return this.registration.storageDimensionID;
 	}
 
-	public AdvancementTriggers getAdvancementTriggers()
-	{
-		return this.registration.advancementTriggers;
-	}
+//	public AdvancementTriggers getAdvancementTriggers()
+//	{
+//		return this.registration.advancementTriggers;
+//	}
 
 	private void preInit()
 	{
@@ -138,24 +140,23 @@ public final class AppEng
 
 		AELog.info( "Pre Initialization ( started )" );
 
-		CreativeTab.init();
-		if( AEConfig.instance().isFeatureEnabled( AEFeature.FACADES ) )
-		{
-			CreativeTabFacade.init();
-		}
-
-		for( final IntegrationType type : IntegrationType.values() )
-		{
-			IntegrationRegistry.INSTANCE.add( type );
-		}
+//		if( AEConfig.instance().isFeatureEnabled( AEFeature.FACADES ) )
+//		{
+//			CreativeTabFacade.init();
+//		}
+//
+//		for( final IntegrationType type : IntegrationType.values() )
+//		{
+//			IntegrationRegistry.INSTANCE.add( type );
+//		}
 
 		// TODO preInit Registration
 		//this.registration.preInitialize( event );
 
-		if( Platform.isClient() )
-		{
-			AppEng.proxy.preinit();
-		}
+//		if( Platform.isClient() )
+//		{
+//			AppEng.proxy.preinit();
+//		}
 
 		IntegrationRegistry.INSTANCE.preInit();
 
@@ -171,10 +172,10 @@ public final class AppEng
 		AELog.info( "Pre Initialization ( ended after " + watch.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
 
 		// Instantiate all Plugins
-		List<Object> injectables = Lists.newArrayList(
-				AEApi.instance() );
+//		List<Object> injectables = Lists.newArrayList(
+//				AEApi.instance() );
 		// TODO: PluginLoader
-		//new PluginLoader().loadPlugins( injectables, event.getAsmData() );
+//		new PluginLoader().loadPlugins( injectables, event.getAsmData() );
 	}
 
 	private void startService( final String serviceName, final Thread thread )
@@ -186,12 +187,20 @@ public final class AppEng
 		thread.start();
 	}
 
-	private void init( final FMLCommonSetupEvent event )
+	private void clientSetup(final FMLClientSetupEvent event) {
+		ApiDefinitions definitions = (ApiDefinitions) AEApi.instance().definitions();
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+			AELog.info("Running IClientSetupComponent");
+			definitions.getRegistry().getBootstrapComponents(IClientSetupComponent.class).forEachRemaining(IClientSetupComponent::clientSetup);
+		});
+	}
+
+	private void setup(final FMLCommonSetupEvent event )
 	{
 		final Stopwatch start = Stopwatch.createStarted();
 		AELog.info( "Initialization ( started )" );
 
-		AppEng.proxy.init();
+//		AppEng.proxy.init();
 
 		/* TODO: Item.csv Exporting
 		if( this.exportConfig.isExportingItemNamesEnabled() )
@@ -216,21 +225,19 @@ public final class AppEng
 		AELog.info( "Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
 	}
 
-	private void postInit( final FMLLoadCompleteEvent event )
+	private void loadComplete(final FMLLoadCompleteEvent event )
 	{
 		final Stopwatch start = Stopwatch.createStarted();
 		AELog.info( "Post Initialization ( started )" );
 
 		// TODO postInit Registration
-		//this.registration.postInit( event );
+//		this.registration.postInit( event );
 		IntegrationRegistry.INSTANCE.postInit();
-		CrashReportExtender.registerCrashCallable( new IntegrationCrashEnhancement() );
 
-		AppEng.proxy.postInit();
-		AEConfig.instance().save();
+//		AppEng.proxy.postInit();
 
 		//NetworkRegistry.INSTANCE.registerGuiHandler( this, GuiBridge.GUI_Handler );
-		NetworkHandler.init( "AE2" );
+//		NetworkHandler.init( "AE2" );
 
 		AELog.info( "Post Initialization ( ended after " + start.elapsed( TimeUnit.MILLISECONDS ) + "ms )" );
 	}

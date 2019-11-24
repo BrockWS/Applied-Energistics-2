@@ -30,42 +30,42 @@
 package appeng.core.api.imc;
 
 
-import java.util.Arrays;
-import java.util.Locale;
+//import java.util.Arrays;
+//import java.util.Locale;
+//
+//import net.minecraft.item.ItemStack;
+//import net.minecraftforge.fml.InterModComms.IMCMessage;
+//
+//import appeng.api.AEApi;
+//import appeng.api.config.TunnelType;
+//import appeng.core.api.IIMCProcessor;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.InterModComms.IMCMessage;
 
-import appeng.api.AEApi;
-import appeng.api.config.TunnelType;
-import appeng.core.api.IIMCProcessor;
-
-
-public class IMCP2PAttunement implements IIMCProcessor
+public class IMCP2PAttunement //implements IIMCProcessor
 {
-
-	@Override
-	public void process( final IMCMessage m )
-	{
-		final String key = m.key.substring( "add-p2p-attunement-".length() ).replace( '-', '_' ).toUpperCase( Locale.ENGLISH );
-
-		final TunnelType type = TunnelType.valueOf( key );
-
-		if( type != null )
-		{
-			final ItemStack is = m.getItemStackValue();
-			if( !is.isEmpty() )
-			{
-				AEApi.instance().registries().p2pTunnel().addNewAttunement( is, type );
-			}
-			else
-			{
-				throw new IllegalStateException( "invalid item in message " + m );
-			}
-		}
-		else
-		{
-			throw new IllegalStateException( "invalid type in message " + m + " is not contained in " + Arrays.toString( TunnelType.values() ) );
-		}
-	}
+//
+//	@Override
+//	public void process( final IMCMessage m )
+//	{
+//		final String key = m.key.substring( "add-p2p-attunement-".length() ).replace( '-', '_' ).toUpperCase( Locale.ENGLISH );
+//
+//		final TunnelType type = TunnelType.valueOf( key );
+//
+//		if( type != null )
+//		{
+//			final ItemStack is = m.getItemStackValue();
+//			if( !is.isEmpty() )
+//			{
+//				AEApi.instance().registries().p2pTunnel().addNewAttunement( is, type );
+//			}
+//			else
+//			{
+//				throw new IllegalStateException( "invalid item in message " + m );
+//			}
+//		}
+//		else
+//		{
+//			throw new IllegalStateException( "invalid type in message " + m + " is not contained in " + Arrays.toString( TunnelType.values() ) );
+//		}
+//	}
 }

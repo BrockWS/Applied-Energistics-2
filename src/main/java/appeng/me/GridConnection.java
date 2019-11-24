@@ -34,7 +34,7 @@ import appeng.api.networking.pathing.IPathingGrid;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
 import appeng.api.util.IReadOnlyCollection;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AELog;
 import appeng.core.features.AEFeature;
 import appeng.me.pathfinding.IPathItem;

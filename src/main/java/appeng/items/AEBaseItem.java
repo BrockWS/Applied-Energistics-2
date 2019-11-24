@@ -26,40 +26,43 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public abstract class AEBaseItem extends Item
 {
 
-	public AEBaseItem()
+	public AEBaseItem(Properties properties)
 	{
-		this.setNoRepair();
+		super(properties);
+//		this.setNoRepair();
 	}
 
 	@Override
 	public String toString()
 	{
-		String regName = this.getRegistryName() != null ? this.getRegistryName().getResourcePath() : "unregistered";
+		String regName = this.getRegistryName() != null ? this.getRegistryName().getPath() : "unregistered";
 		return this.getClass().getSimpleName() + "[" + regName + "]";
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	@Override
 	@SuppressWarnings( "unchecked" )
-	public final void addInformation( final ItemStack stack, final World world, final List lines, final ITooltipFlag advancedTooltips )
+	public final void addInformation( final ItemStack stack, final World world, final List<ITextComponent> lines, final ITooltipFlag advancedTooltips )
 	{
 		this.addCheckedInformation( stack, world, lines, advancedTooltips );
 	}
 
 	@Override
-	public final void getSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
+	public final void fillItemGroup( final ItemGroup itemGroup, final NonNullList<ItemStack> itemStacks )
 	{
-		if( this.isInCreativeTab( creativeTab ) )
+		if( this.isInGroup( itemGroup ) )
 		{
-			this.getCheckedSubItems( creativeTab, itemStacks );
+			this.getCheckedSubItems( itemGroup, itemStacks );
 		}
 	}
 
@@ -69,15 +72,15 @@ public abstract class AEBaseItem extends Item
 		return false;
 	}
 
-	@SideOnly( Side.CLIENT )
-	protected void addCheckedInformation( final ItemStack stack, final World world, final List<String> lines, final ITooltipFlag advancedTooltips )
+	@OnlyIn( Dist.CLIENT )
+	protected void addCheckedInformation( final ItemStack stack, final World world, final List<ITextComponent> lines, final ITooltipFlag advancedTooltips )
 	{
 		super.addInformation( stack, world, lines, advancedTooltips );
 	}
 
 	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
-		super.getSubItems( creativeTab, itemStacks );
+		super.fillItemGroup( creativeTab, itemStacks );
 	}
 
 }

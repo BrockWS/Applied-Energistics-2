@@ -19,104 +19,104 @@
 package appeng.tile.misc;
 
 
-import java.io.IOException;
-import java.util.EnumSet;
+//import java.io.IOException;
+//import java.util.EnumSet;
+//
+//import io.netty.buffer.ByteBuf;
+//
+//import net.minecraft.util.Direction;
+//
+//import appeng.api.implementations.IPowerChannelState;
+//import appeng.api.implementations.tiles.ICrystalGrowthAccelerator;
+//import appeng.api.networking.events.MENetworkEventSubscribe;
+//import appeng.api.networking.events.MENetworkPowerStatusChange;
+//import appeng.api.util.AECableType;
+//import appeng.api.util.AEPartLocation;
+//import appeng.me.GridAccessException;
+//import appeng.tile.grid.AENetworkTile;
+//import appeng.util.Platform;
 
-import io.netty.buffer.ByteBuf;
 
-import net.minecraft.util.Direction;
-
-import appeng.api.implementations.IPowerChannelState;
-import appeng.api.implementations.tiles.ICrystalGrowthAccelerator;
-import appeng.api.networking.events.MENetworkEventSubscribe;
-import appeng.api.networking.events.MENetworkPowerStatusChange;
-import appeng.api.util.AECableType;
-import appeng.api.util.AEPartLocation;
-import appeng.me.GridAccessException;
-import appeng.tile.grid.AENetworkTile;
-import appeng.util.Platform;
-
-
-public class TileQuartzGrowthAccelerator extends AENetworkTile implements IPowerChannelState, ICrystalGrowthAccelerator
+public class TileQuartzGrowthAccelerator //extends AENetworkTile implements IPowerChannelState, ICrystalGrowthAccelerator
 {
-
-	private boolean hasPower = false;
-
-	public TileQuartzGrowthAccelerator()
-	{
-		this.getProxy().setValidSides( EnumSet.noneOf( Direction.class ) );
-		this.getProxy().setFlags();
-		this.getProxy().setIdlePowerUsage( 8 );
-	}
-
-	@MENetworkEventSubscribe
-	public void onPower( final MENetworkPowerStatusChange ch )
-	{
-		this.markForUpdate();
-	}
-
-	@Override
-	public AECableType getCableConnectionType( final AEPartLocation dir )
-	{
-		return AECableType.COVERED;
-	}
-
-	@Override
-	public boolean readFromStream( final ByteBuf data ) throws IOException
-	{
-		final boolean c = super.readFromStream( data );
-		final boolean hadPower = this.isPowered();
-		this.setPowered( data.readBoolean() );
-		return this.isPowered() != hadPower || c;
-	}
-
-	@Override
-	public void writeToStream( final ByteBuf data ) throws IOException
-	{
-		super.writeToStream( data );
-		try
-		{
-			data.writeBoolean( this.getProxy().getEnergy().isNetworkPowered() );
-		}
-		catch( final GridAccessException e )
-		{
-			data.writeBoolean( false );
-		}
-	}
-
-	@Override
-	public void setOrientation( final Direction inForward, final Direction inUp )
-	{
-		super.setOrientation( inForward, inUp );
-		this.getProxy().setValidSides( EnumSet.of( this.getUp(), this.getUp().getOpposite() ) );
-	}
-
-	@Override
-	public boolean isPowered()
-	{
-		if( Platform.isServer() )
-		{
-			try
-			{
-				return this.getProxy().getEnergy().isNetworkPowered();
-			}
-			catch( final GridAccessException e )
-			{
-				return false;
-			}
-		}
-
-		return this.hasPower;
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return this.isPowered();
-	}
-
-	private void setPowered( final boolean hasPower )
-	{
-		this.hasPower = hasPower;
-	}
+//
+//	private boolean hasPower = false;
+//
+//	public TileQuartzGrowthAccelerator()
+//	{
+//		this.getProxy().setValidSides( EnumSet.noneOf( Direction.class ) );
+//		this.getProxy().setFlags();
+//		this.getProxy().setIdlePowerUsage( 8 );
+//	}
+//
+//	@MENetworkEventSubscribe
+//	public void onPower( final MENetworkPowerStatusChange ch )
+//	{
+//		this.markForUpdate();
+//	}
+//
+//	@Override
+//	public AECableType getCableConnectionType( final AEPartLocation dir )
+//	{
+//		return AECableType.COVERED;
+//	}
+//
+//	@Override
+//	public boolean readFromStream( final ByteBuf data ) throws IOException
+//	{
+//		final boolean c = super.readFromStream( data );
+//		final boolean hadPower = this.isPowered();
+//		this.setPowered( data.readBoolean() );
+//		return this.isPowered() != hadPower || c;
+//	}
+//
+//	@Override
+//	public void writeToStream( final ByteBuf data ) throws IOException
+//	{
+//		super.writeToStream( data );
+//		try
+//		{
+//			data.writeBoolean( this.getProxy().getEnergy().isNetworkPowered() );
+//		}
+//		catch( final GridAccessException e )
+//		{
+//			data.writeBoolean( false );
+//		}
+//	}
+//
+//	@Override
+//	public void setOrientation( final Direction inForward, final Direction inUp )
+//	{
+//		super.setOrientation( inForward, inUp );
+//		this.getProxy().setValidSides( EnumSet.of( this.getUp(), this.getUp().getOpposite() ) );
+//	}
+//
+//	@Override
+//	public boolean isPowered()
+//	{
+//		if( Platform.isServer() )
+//		{
+//			try
+//			{
+//				return this.getProxy().getEnergy().isNetworkPowered();
+//			}
+//			catch( final GridAccessException e )
+//			{
+//				return false;
+//			}
+//		}
+//
+//		return this.hasPower;
+//	}
+//
+//	@Override
+//	public boolean isActive()
+//	{
+//		return this.isPowered();
+//	}
+//
+//	private void setPowered( final boolean hasPower )
+//	{
+//		this.hasPower = hasPower;
+//	}
 }

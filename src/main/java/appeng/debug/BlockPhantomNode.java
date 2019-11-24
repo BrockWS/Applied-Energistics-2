@@ -18,34 +18,34 @@
 
 package appeng.debug;
 
+//
+//import javax.annotation.Nullable;
+//
+//import net.minecraft.block.material.Material;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.Hand;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.world.World;
+//
+//import appeng.block.AEBaseTileBlock;
 
-import javax.annotation.Nullable;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import appeng.block.AEBaseTileBlock;
-
-
-public class BlockPhantomNode extends AEBaseTileBlock
+public class BlockPhantomNode //extends AEBaseTileBlock
 {
-
-	public BlockPhantomNode()
-	{
-		super( Material.IRON );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity player, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		final TilePhantomNode tpn = this.getTileEntity( w, pos );
-		tpn.triggerCrashMode();
-		return true;
-	}
+//
+//	public BlockPhantomNode()
+//	{
+//		super( Material.IRON );
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity player, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		final TilePhantomNode tpn = this.getTileEntity( w, pos );
+//		tpn.triggerCrashMode();
+//		return true;
+//	}
 
 }

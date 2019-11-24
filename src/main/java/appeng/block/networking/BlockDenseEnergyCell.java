@@ -19,17 +19,17 @@
 package appeng.block.networking;
 
 
-public class BlockDenseEnergyCell extends BlockEnergyCell
+public class BlockDenseEnergyCell //extends BlockEnergyCell
 {
-
-	public BlockDenseEnergyCell()
-	{
-
-	}
-
-	@Override
-	public double getMaxPower()
-	{
-		return 200000.0 * 8.0;
-	}
+//
+//	public BlockDenseEnergyCell()
+//	{
+//
+//	}
+//
+//	@Override
+//	public double getMaxPower()
+//	{
+//		return 200000.0 * 8.0;
+//	}
 }

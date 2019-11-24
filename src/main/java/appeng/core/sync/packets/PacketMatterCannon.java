@@ -26,9 +26,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.client.render.effects.MatterCannonFX;
 import appeng.core.sync.AppEngPacket;
@@ -87,19 +86,18 @@ public class PacketMatterCannon extends AppEngPacket
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public void clientPacketData( final INetworkInfo network, final AppEngPacket packet, final PlayerEntity player )
 	{
 		try
 		{
-
-			final World world = FMLClientHandler.instance().getClient().world;
-			for( int a = 1; a < this.len; a++ )
-			{
-				final MatterCannonFX fx = new MatterCannonFX( world, this.x + this.dx * a, this.y + this.dy * a, this.z + this.dz * a, Items.DIAMOND );
-
-				Minecraft.getMinecraft().effectRenderer.addEffect( fx );
-			}
+//			final World world = FMLClientHandler.instance().getClient().world;
+//			for( int a = 1; a < this.len; a++ )
+//			{
+//				final MatterCannonFX fx = new MatterCannonFX( world, this.x + this.dx * a, this.y + this.dy * a, this.z + this.dz * a, Items.DIAMOND );
+//
+//				Minecraft.getMinecraft().effectRenderer.addEffect( fx );
+//			}
 		}
 		catch( final Exception ignored )
 		{

@@ -19,64 +19,64 @@
 package appeng.container.slot;
 
 
-import java.io.IOException;
+//import java.io.IOException;
+//
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraftforge.items.IItemHandler;
+//
+//import appeng.api.AEApi;
+//import appeng.api.networking.energy.IEnergySource;
+//import appeng.api.networking.security.IActionSource;
+//import appeng.api.storage.IStorageMonitorable;
+//import appeng.api.storage.channels.IItemStorageChannel;
+//import appeng.core.sync.AppEngPacket;
+//import appeng.core.sync.packets.PacketPatternSlot;
+//import appeng.helpers.IContainerCraftingPacket;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 
-import appeng.api.AEApi;
-import appeng.api.networking.energy.IEnergySource;
-import appeng.api.networking.security.IActionSource;
-import appeng.api.storage.IStorageMonitorable;
-import appeng.api.storage.channels.IItemStorageChannel;
-import appeng.core.sync.AppEngPacket;
-import appeng.core.sync.packets.PacketPatternSlot;
-import appeng.helpers.IContainerCraftingPacket;
-
-
-public class SlotPatternTerm extends SlotCraftingTerm
+public class SlotPatternTerm //extends SlotCraftingTerm
 {
-
-	private final int groupNum;
-	private final IOptionalSlotHost host;
-
-	public SlotPatternTerm( final PlayerEntity player, final IActionSource mySrc, final IEnergySource energySrc, final IStorageMonitorable storage, final IItemHandler cMatrix, final IItemHandler secondMatrix, final IItemHandler output, final int x, final int y, final IOptionalSlotHost h, final int groupNumber, final IContainerCraftingPacket c )
-	{
-		super( player, mySrc, energySrc, storage, cMatrix, secondMatrix, output, x, y, c );
-
-		this.host = h;
-		this.groupNum = groupNumber;
-	}
-
-	public AppEngPacket getRequest( final boolean shift ) throws IOException
-	{
-		return new PacketPatternSlot( this
-				.getPattern(), AEApi.instance().storage().getStorageChannel( IItemStorageChannel.class ).createStack( this.getStack() ), shift );
-	}
-
-	@Override
-	public ItemStack getStack()
-	{
-		if( !this.isSlotEnabled() )
-		{
-			if( !this.getDisplayStack().isEmpty() )
-			{
-				this.clearStack();
-			}
-		}
-
-		return super.getStack();
-	}
-
-	@Override
-	public boolean isSlotEnabled()
-	{
-		if( this.host == null )
-		{
-			return false;
-		}
-
-		return this.host.isSlotEnabled( this.groupNum );
-	}
+//
+//	private final int groupNum;
+//	private final IOptionalSlotHost host;
+//
+//	public SlotPatternTerm( final PlayerEntity player, final IActionSource mySrc, final IEnergySource energySrc, final IStorageMonitorable storage, final IItemHandler cMatrix, final IItemHandler secondMatrix, final IItemHandler output, final int x, final int y, final IOptionalSlotHost h, final int groupNumber, final IContainerCraftingPacket c )
+//	{
+//		super( player, mySrc, energySrc, storage, cMatrix, secondMatrix, output, x, y, c );
+//
+//		this.host = h;
+//		this.groupNum = groupNumber;
+//	}
+//
+//	public AppEngPacket getRequest( final boolean shift ) throws IOException
+//	{
+//		return new PacketPatternSlot( this
+//				.getPattern(), AEApi.instance().storage().getStorageChannel( IItemStorageChannel.class ).createStack( this.getStack() ), shift );
+//	}
+//
+//	@Override
+//	public ItemStack getStack()
+//	{
+//		if( !this.isSlotEnabled() )
+//		{
+//			if( !this.getDisplayStack().isEmpty() )
+//			{
+//				this.clearStack();
+//			}
+//		}
+//
+//		return super.getStack();
+//	}
+//
+//	@Override
+//	public boolean isSlotEnabled()
+//	{
+//		if( this.host == null )
+//		{
+//			return false;
+//		}
+//
+//		return this.host.isSlotEnabled( this.groupNum );
+//	}
 }

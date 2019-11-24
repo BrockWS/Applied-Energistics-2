@@ -32,12 +32,12 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.parts.IPart;
 import appeng.api.util.AEColor;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AppEng;
 import appeng.core.features.AEFeature;
 import appeng.core.localization.GuiText;
@@ -100,7 +100,7 @@ public enum PartType
 		}
 
 		@Override
-		@SideOnly( Side.CLIENT )
+		@OnlyIn( Dist.CLIENT )
 		protected List<ModelResourceLocation> createItemModels( String baseName )
 		{
 			return Arrays.stream( AEColor.values() )
@@ -118,7 +118,7 @@ public enum PartType
 		}
 
 		@Override
-		@SideOnly( Side.CLIENT )
+		@OnlyIn( Dist.CLIENT )
 		protected List<ModelResourceLocation> createItemModels( String baseName )
 		{
 			return Arrays.stream( AEColor.values() )
@@ -136,7 +136,7 @@ public enum PartType
 		}
 
 		@Override
-		@SideOnly( Side.CLIENT )
+		@OnlyIn( Dist.CLIENT )
 		protected List<ModelResourceLocation> createItemModels( String baseName )
 		{
 			return Arrays.stream( AEColor.values() )
@@ -155,7 +155,7 @@ public enum PartType
 		}
 
 		@Override
-		@SideOnly( Side.CLIENT )
+		@OnlyIn( Dist.CLIENT )
 		protected List<ModelResourceLocation> createItemModels( String baseName )
 		{
 			return Arrays.stream( AEColor.values() )
@@ -174,7 +174,7 @@ public enum PartType
 		}
 
 		@Override
-		@SideOnly( Side.CLIENT )
+		@OnlyIn( Dist.CLIENT )
 		protected List<ModelResourceLocation> createItemModels( String baseName )
 		{
 			return Arrays.stream( AEColor.values() )
@@ -321,17 +321,17 @@ public enum PartType
 
 	FLUID_TERMINAL( 520, "fluid_terminal", EnumSet.of( AEFeature.FLUID_TERMINAL ), EnumSet.noneOf( IntegrationType.class ), PartFluidTerminal.class );
 
-	private final int baseDamage;
+//	private final int baseDamage;
 	private final Set<AEFeature> features;
 	private final Set<IntegrationType> integrations;
 	private final Class<? extends IPart> myPart;
 	private final GuiText extraName;
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private List<ModelResourceLocation> itemModels;
 	private final Set<ResourceLocation> models;
 	private final boolean enabled;
 	private Constructor<? extends IPart> constructor;
-	private final String oreName;
+//	private final String oreName;
 
 	PartType( final int baseMetaValue, final String itemModel, final Set<AEFeature> features, final Set<IntegrationType> integrations, final Class<? extends IPart> c )
 	{
@@ -350,12 +350,12 @@ public enum PartType
 
 	PartType( final int baseMetaValue, final String itemModel, final Set<AEFeature> features, final Set<IntegrationType> integrations, final Class<? extends IPart> c, final GuiText en, final String oreDict )
 	{
-		this.baseDamage = baseMetaValue;
+//		this.baseDamage = baseMetaValue;
 		this.features = Collections.unmodifiableSet( features );
 		this.integrations = Collections.unmodifiableSet( integrations );
 		this.myPart = c;
 		this.extraName = en;
-		this.oreName = oreDict;
+//		this.oreName = oreDict;
 
 		// The part is enabled if all features + integrations it needs are enabled
 		this.enabled = features.stream().allMatch( AEConfig.instance()::isFeatureEnabled ) && integrations.stream()
@@ -388,13 +388,13 @@ public enum PartType
 		}
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	protected List<ModelResourceLocation> createItemModels( String baseName )
 	{
 		return ImmutableList.of( modelFromBaseName( baseName ) );
 	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	private static ModelResourceLocation modelFromBaseName( String baseName )
 	{
 		return new ModelResourceLocation( new ResourceLocation( AppEng.MOD_ID, "part/" + baseName ), "inventory" );
@@ -405,10 +405,10 @@ public enum PartType
 		return this.enabled;
 	}
 
-	int getBaseDamage()
-	{
-		return this.baseDamage;
-	}
+//	int getBaseDamage()
+//	{
+//		return this.baseDamage;
+//	}
 
 	public boolean isCable()
 	{
@@ -428,6 +428,11 @@ public enum PartType
 	Class<? extends IPart> getPart()
 	{
 		return this.myPart;
+	}
+
+	public String getRegistrationName()
+	{
+		return this.name().toLowerCase();
 	}
 
 	String getUnlocalizedName()
@@ -450,12 +455,12 @@ public enum PartType
 		this.constructor = constructor;
 	}
 
-	public String getOreName()
-	{
-		return this.oreName;
-	}
+//	public String getOreName()
+//	{
+//		return this.oreName;
+//	}
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public List<ModelResourceLocation> getItemModels()
 	{
 		return this.itemModels;

@@ -18,47 +18,47 @@
 
 package appeng.integration.modules.theoneprobe.tile;
 
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.api.implementations.IPowerChannelState;
+//import appeng.integration.modules.theoneprobe.TheOneProbeText;
+//import appeng.tile.AEBaseTile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
 
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.api.implementations.IPowerChannelState;
-import appeng.integration.modules.theoneprobe.TheOneProbeText;
-import appeng.tile.AEBaseTile;
-
-
-public class PowerStateInfoProvider implements ITileProbInfoProvider
+public class PowerStateInfoProvider //implements ITileProbInfoProvider
 {
-
-	@Override
-	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
-	{
-		if( tile instanceof IPowerChannelState )
-		{
-			final IPowerChannelState state = (IPowerChannelState) tile;
-
-			final boolean isActive = state.isActive();
-			final boolean isPowered = state.isPowered();
-
-			if( isActive && isPowered )
-			{
-				probeInfo.text( TheOneProbeText.DEVICE_ONLINE.getLocal() );
-			}
-			else if( isPowered )
-			{
-				probeInfo.text( TheOneProbeText.DEVICE_MISSING_CHANNEL.getLocal() );
-			}
-			else
-			{
-				probeInfo.text( TheOneProbeText.DEVICE_OFFLINE.getLocal() );
-			}
-		}
-
-	}
+//
+//	@Override
+//	public void addProbeInfo( AEBaseTile tile, ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
+//	{
+//		if( tile instanceof IPowerChannelState )
+//		{
+//			final IPowerChannelState state = (IPowerChannelState) tile;
+//
+//			final boolean isActive = state.isActive();
+//			final boolean isPowered = state.isPowered();
+//
+//			if( isActive && isPowered )
+//			{
+//				probeInfo.text( TheOneProbeText.DEVICE_ONLINE.getLocal() );
+//			}
+//			else if( isPowered )
+//			{
+//				probeInfo.text( TheOneProbeText.DEVICE_MISSING_CHANNEL.getLocal() );
+//			}
+//			else
+//			{
+//				probeInfo.text( TheOneProbeText.DEVICE_OFFLINE.getLocal() );
+//			}
+//		}
+//
+//	}
 
 }

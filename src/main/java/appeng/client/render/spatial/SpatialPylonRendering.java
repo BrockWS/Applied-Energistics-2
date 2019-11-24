@@ -19,39 +19,39 @@
 package appeng.client.render.spatial;
 
 
-import java.util.Map;
+//import java.util.Map;
+//
+//import com.google.common.collect.ImmutableMap;
+//
+//import net.minecraft.block.Block;
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.model.ModelResourceLocation;
+//import net.minecraft.util.ResourceLocation;
+//import net.minecraftforge.api.distmarker.Dist;
+//import net.minecraftforge.api.distmarker.OnlyIn;
+//
+//import appeng.bootstrap.BlockRenderingCustomizer;
+//import appeng.bootstrap.IBlockRendering;
+//import appeng.bootstrap.IItemRendering;
+//import appeng.core.AppEng;
 
-import com.google.common.collect.ImmutableMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import appeng.bootstrap.BlockRenderingCustomizer;
-import appeng.bootstrap.IBlockRendering;
-import appeng.bootstrap.IItemRendering;
-import appeng.core.AppEng;
-
-
-public class SpatialPylonRendering extends BlockRenderingCustomizer
+public class SpatialPylonRendering// extends BlockRenderingCustomizer
 {
-
-	private static final ResourceLocation MODEL_ID = new ResourceLocation( AppEng.MOD_ID, "models/blocks/spatial_pylon/builtin" );
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public void customize( IBlockRendering rendering, IItemRendering itemRendering )
-	{
-		rendering.builtInModel( MODEL_ID.getResourcePath(), new SpatialPylonModel() );
-		rendering.stateMapper( this::mapState );
-	}
-
-	private Map<BlockState, ModelResourceLocation> mapState( Block block )
-	{
-		return ImmutableMap.of( block.getDefaultState(), new ModelResourceLocation( MODEL_ID, "normal" ) );
-	}
+//
+//	private static final ResourceLocation MODEL_ID = new ResourceLocation( AppEng.MOD_ID, "models/blocks/spatial_pylon/builtin" );
+//
+//	@Override
+//	@OnlyIn( Dist.CLIENT )
+//	public void customize( IBlockRendering rendering, IItemRendering itemRendering )
+//	{
+//		rendering.builtInModel( MODEL_ID.getResourcePath(), new SpatialPylonModel() );
+//		rendering.stateMapper( this::mapState );
+//	}
+//
+//	private Map<BlockState, ModelResourceLocation> mapState( Block block )
+//	{
+//		return ImmutableMap.of( block.getDefaultState(), new ModelResourceLocation( MODEL_ID, "normal" ) );
+//	}
 
 }

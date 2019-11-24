@@ -19,34 +19,34 @@
 package appeng.core.api.imc;
 
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.InterModComms.IMCMessage;
+//import net.minecraft.block.Block;
+//import net.minecraft.block.Blocks;
+//import net.minecraft.item.ItemStack;
+//import net.minecraftforge.fml.InterModComms.IMCMessage;
+//
+//import appeng.api.AEApi;
+//import appeng.core.AELog;
+//import appeng.core.api.IIMCProcessor;
 
-import appeng.api.AEApi;
-import appeng.core.AELog;
-import appeng.core.api.IIMCProcessor;
 
-
-public class IMCBlackListSpatial implements IIMCProcessor
+public class IMCBlackListSpatial// implements IIMCProcessor
 {
-
-	@Override
-	public void process( final IMCMessage m )
-	{
-
-		final ItemStack is = m.getItemStackValue();
-		if( !is.isEmpty() )
-		{
-			final Block blk = Block.getBlockFromItem( is.getItem() );
-			if( blk != Blocks.AIR )
-			{
-				AEApi.instance().registries().movable().blacklistBlock( blk );
-				return;
-			}
-		}
-
-		AELog.info( "Bad Block blacklisted by " + m.getSender() );
-	}
+//
+//	@Override
+//	public void process( final IMCMessage m )
+//	{
+//
+//		final ItemStack is = m.getItemStackValue();
+//		if( !is.isEmpty() )
+//		{
+//			final Block blk = Block.getBlockFromItem( is.getItem() );
+//			if( blk != Blocks.AIR )
+//			{
+//				AEApi.instance().registries().movable().blacklistBlock( blk );
+//				return;
+//			}
+//		}
+//
+//		AELog.info( "Bad Block blacklisted by " + m.getSender() );
+//	}
 }

@@ -36,32 +36,32 @@ import appeng.tile.misc.TileCondenser;
 import appeng.util.Platform;
 
 
-public class BlockCondenser extends AEBaseTileBlock
+public class BlockCondenser //extends AEBaseTileBlock
 {
-
-	public BlockCondenser()
-	{
-		super( Material.IRON );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity player, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		if( player.isSneaking() )
-		{
-			return false;
-		}
-
-		if( Platform.isServer() )
-		{
-			final TileCondenser tc = this.getTileEntity( w, pos );
-			if( tc != null && !player.isSneaking() )
-			{
-				Platform.openGUI( player, tc, AEPartLocation.fromFacing( side ), GuiBridge.GUI_CONDENSER );
-				return true;
-			}
-		}
-
-		return true;
-	}
+//
+//	public BlockCondenser()
+//	{
+//		super( Material.IRON );
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity player, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		if( player.isSneaking() )
+//		{
+//			return false;
+//		}
+//
+//		if( Platform.isServer() )
+//		{
+//			final TileCondenser tc = this.getTileEntity( w, pos );
+//			if( tc != null && !player.isSneaking() )
+//			{
+//				Platform.openGUI( player, tc, AEPartLocation.fromFacing( side ), GuiBridge.GUI_CONDENSER );
+//				return true;
+//			}
+//		}
+//
+//		return true;
+//	}
 }

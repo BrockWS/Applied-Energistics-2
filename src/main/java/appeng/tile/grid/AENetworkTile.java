@@ -37,16 +37,16 @@ public class AENetworkTile extends AEBaseTile implements IActionHost, IGridProxy
 	private final AENetworkProxy gridProxy = this.createProxy();
 
 	@Override
-	public void readFromNBT( final CompoundNBT data )
+	public void read( final CompoundNBT data )
 	{
-		super.readFromNBT( data );
+		super.read( data );
 		this.getProxy().readFromNBT( data );
 	}
 
 	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
+	public CompoundNBT write( final CompoundNBT data )
 	{
-		super.writeToNBT( data );
+		super.write( data );
 		this.getProxy().writeToNBT( data );
 		return data;
 	}
@@ -69,9 +69,9 @@ public class AENetworkTile extends AEBaseTile implements IActionHost, IGridProxy
 	}
 
 	@Override
-	public void onChunkUnload()
+	public void onChunkUnloaded()
 	{
-		super.onChunkUnload();
+		super.onChunkUnloaded();
 		this.getProxy().onChunkUnload();
 	}
 
@@ -83,9 +83,9 @@ public class AENetworkTile extends AEBaseTile implements IActionHost, IGridProxy
 	}
 
 	@Override
-	public void invalidate()
+	public void remove()
 	{
-		super.invalidate();
+		super.remove();
 		this.getProxy().invalidate();
 	}
 

@@ -38,41 +38,41 @@ import appeng.tile.spatial.TileSpatialIOPort;
 import appeng.util.Platform;
 
 
-public class BlockSpatialIOPort extends AEBaseTileBlock
+public class BlockSpatialIOPort //extends AEBaseTileBlock
 {
-
-	public BlockSpatialIOPort()
-	{
-		super( Material.IRON );
-	}
-
-	@Override
-	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
-	{
-		final TileSpatialIOPort te = this.getTileEntity( world, pos );
-		if( te != null )
-		{
-			te.updateRedstoneState();
-		}
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		if( p.isSneaking() )
-		{
-			return false;
-		}
-
-		final TileSpatialIOPort tg = this.getTileEntity( w, pos );
-		if( tg != null )
-		{
-			if( Platform.isServer() )
-			{
-				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_SPATIAL_IO_PORT );
-			}
-			return true;
-		}
-		return false;
-	}
+//
+//	public BlockSpatialIOPort()
+//	{
+//		super( Material.IRON );
+//	}
+//
+//	@Override
+//	public void neighborChanged( BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos )
+//	{
+//		final TileSpatialIOPort te = this.getTileEntity( world, pos );
+//		if( te != null )
+//		{
+//			te.updateRedstoneState();
+//		}
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		if( p.isSneaking() )
+//		{
+//			return false;
+//		}
+//
+//		final TileSpatialIOPort tg = this.getTileEntity( w, pos );
+//		if( tg != null )
+//		{
+//			if( Platform.isServer() )
+//			{
+//				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_SPATIAL_IO_PORT );
+//			}
+//			return true;
+//		}
+//		return false;
+//	}
 }

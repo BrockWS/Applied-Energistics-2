@@ -18,12 +18,12 @@
 
 package appeng.fluids.util;
 
-
-import java.util.Comparator;
-
-import appeng.api.config.SortDir;
-import appeng.api.storage.data.IAEFluidStack;
-import appeng.util.Platform;
+//
+//import java.util.Comparator;
+//
+//import appeng.api.config.SortDir;
+//import appeng.api.storage.data.IAEFluidStack;
+//import appeng.util.Platform;
 
 
 /**
@@ -33,60 +33,60 @@ import appeng.util.Platform;
  */
 public class FluidSorters
 {
-	private static SortDir Direction = SortDir.ASCENDING;
-
-	public static final Comparator<IAEFluidStack> CONFIG_BASED_SORT_BY_NAME = ( o1, o2 ) ->
-	{
-		if( getDirection() == SortDir.ASCENDING )
-		{
-			return Platform.getFluidDisplayName( o1 ).compareToIgnoreCase( Platform.getFluidDisplayName( o2 ) );
-		}
-		return Platform.getFluidDisplayName( o2 ).compareToIgnoreCase( Platform.getFluidDisplayName( o1 ) );
-	};
-
-	public static final Comparator<IAEFluidStack> CONFIG_BASED_SORT_BY_MOD = new Comparator<IAEFluidStack>()
-	{
-
-		@Override
-		public int compare( final IAEFluidStack o1, final IAEFluidStack o2 )
-		{
-			final AEFluidStack op1 = (AEFluidStack) o1;
-			final AEFluidStack op2 = (AEFluidStack) o2;
-
-			if( getDirection() == SortDir.ASCENDING )
-			{
-				return this.secondarySort( Platform.getModId( op1 ).compareToIgnoreCase( Platform.getModId( op2 ) ), o2, o1 );
-			}
-			return this.secondarySort( Platform.getModId( op2 ).compareToIgnoreCase( Platform.getModId( op1 ) ), o1, o2 );
-		}
-
-		private int secondarySort( final int compareToIgnoreCase, final IAEFluidStack o1, final IAEFluidStack o2 )
-		{
-			if( compareToIgnoreCase == 0 )
-			{
-				return Platform.getFluidDisplayName( o2 ).compareToIgnoreCase( Platform.getFluidDisplayName( o1 ) );
-			}
-
-			return compareToIgnoreCase;
-		}
-	};
-
-	public static final Comparator<IAEFluidStack> CONFIG_BASED_SORT_BY_SIZE = ( o1, o2 ) ->
-	{
-		if( getDirection() == SortDir.ASCENDING )
-		{
-			return Long.compare( o2.getStackSize(), o1.getStackSize() );
-		}
-		return Long.compare( o1.getStackSize(), o2.getStackSize() );
-	};
-
-	private static SortDir getDirection()
-	{
-		return Direction;
-	}
-
-	public static void setDirection( final SortDir direction )
-	{
-		Direction = direction;
-	}
+//	private static SortDir Direction = SortDir.ASCENDING;
+//
+//	public static final Comparator<IAEFluidStack> CONFIG_BASED_SORT_BY_NAME = ( o1, o2 ) ->
+//	{
+//		if( getDirection() == SortDir.ASCENDING )
+//		{
+//			return Platform.getFluidDisplayName( o1 ).compareToIgnoreCase( Platform.getFluidDisplayName( o2 ) );
+//		}
+//		return Platform.getFluidDisplayName( o2 ).compareToIgnoreCase( Platform.getFluidDisplayName( o1 ) );
+//	};
+//
+//	public static final Comparator<IAEFluidStack> CONFIG_BASED_SORT_BY_MOD = new Comparator<IAEFluidStack>()
+//	{
+//
+//		@Override
+//		public int compare( final IAEFluidStack o1, final IAEFluidStack o2 )
+//		{
+//			final AEFluidStack op1 = (AEFluidStack) o1;
+//			final AEFluidStack op2 = (AEFluidStack) o2;
+//
+//			if( getDirection() == SortDir.ASCENDING )
+//			{
+//				return this.secondarySort( Platform.getModId( op1 ).compareToIgnoreCase( Platform.getModId( op2 ) ), o2, o1 );
+//			}
+//			return this.secondarySort( Platform.getModId( op2 ).compareToIgnoreCase( Platform.getModId( op1 ) ), o1, o2 );
+//		}
+//
+//		private int secondarySort( final int compareToIgnoreCase, final IAEFluidStack o1, final IAEFluidStack o2 )
+//		{
+//			if( compareToIgnoreCase == 0 )
+//			{
+//				return Platform.getFluidDisplayName( o2 ).compareToIgnoreCase( Platform.getFluidDisplayName( o1 ) );
+//			}
+//
+//			return compareToIgnoreCase;
+//		}
+//	};
+//
+//	public static final Comparator<IAEFluidStack> CONFIG_BASED_SORT_BY_SIZE = ( o1, o2 ) ->
+//	{
+//		if( getDirection() == SortDir.ASCENDING )
+//		{
+//			return Long.compare( o2.getStackSize(), o1.getStackSize() );
+//		}
+//		return Long.compare( o1.getStackSize(), o2.getStackSize() );
+//	};
+//
+//	private static SortDir getDirection()
+//	{
+//		return Direction;
+//	}
+//
+//	public static void setDirection( final SortDir direction )
+//	{
+//		Direction = direction;
+//	}
 }

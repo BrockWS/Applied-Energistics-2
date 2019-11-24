@@ -19,18 +19,18 @@
 package appeng.client.render;
 
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+//import java.util.List;
+//
+//import javax.annotation.Nullable;
+//
+//import com.google.common.collect.ImmutableList;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.model.BakedQuad;
+//import net.minecraft.client.renderer.model.IBakedModel;
+//import net.minecraft.client.renderer.model.ItemOverrideList;
+//import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+//import net.minecraft.util.Direction;
 
 
 /**
@@ -38,48 +38,48 @@ import net.minecraft.util.Direction;
  * @version rv6 - 2018-01-22
  * @since rv6 2018-01-22
  */
-public class DummyFluidBakedModel implements IBakedModel
+public class DummyFluidBakedModel// implements IBakedModel
 {
-	private final ImmutableList<BakedQuad> quads;
-
-	public DummyFluidBakedModel( ImmutableList<BakedQuad> quads )
-	{
-		this.quads = quads;
-	}
-
-	@Override
-	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
-	{
-		return this.quads;
-	}
-
-	@Override
-	public boolean isAmbientOcclusion()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isGui3d()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isBuiltInRenderer()
-	{
-		return false;
-	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture()
-	{
-		return null;
-	}
-
-	@Override
-	public ItemOverrideList getOverrides()
-	{
-		return null;
-	}
+//	private final ImmutableList<BakedQuad> quads;
+//
+//	public DummyFluidBakedModel( ImmutableList<BakedQuad> quads )
+//	{
+//		this.quads = quads;
+//	}
+//
+//	@Override
+//	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
+//	{
+//		return this.quads;
+//	}
+//
+//	@Override
+//	public boolean isAmbientOcclusion()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isGui3d()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isBuiltInRenderer()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public TextureAtlasSprite getParticleTexture()
+//	{
+//		return null;
+//	}
+//
+//	@Override
+//	public ItemOverrideList getOverrides()
+//	{
+//		return null;
+//	}
 }

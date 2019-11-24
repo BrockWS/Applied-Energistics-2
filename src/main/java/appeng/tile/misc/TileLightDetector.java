@@ -19,48 +19,48 @@
 package appeng.tile.misc;
 
 
-import net.minecraft.util.ITickable;
+//import net.minecraft.util.ITickable;
+//
+//import appeng.tile.AEBaseTile;
+//import appeng.util.Platform;
 
-import appeng.tile.AEBaseTile;
-import appeng.util.Platform;
 
-
-public class TileLightDetector extends AEBaseTile implements ITickable
+public class TileLightDetector //extends AEBaseTile implements ITickable
 {
-
-	private int lastCheck = 30;
-	private int lastLight = 0;
-
-	public boolean isReady()
-	{
-		return this.lastLight > 0;
-	}
-
-	@Override
-	public void update()
-	{
-		this.lastCheck++;
-		if( this.lastCheck > 30 )
-		{
-			this.lastCheck = 0;
-			this.updateLight();
-		}
-	}
-
-	public void updateLight()
-	{
-		final int val = this.world.getLight( this.pos );
-
-		if( this.lastLight != val )
-		{
-			this.lastLight = val;
-			Platform.notifyBlocksOfNeighbors( this.world, this.pos );
-		}
-	}
-
-	@Override
-	public boolean canBeRotated()
-	{
-		return false;
-	}
+//
+//	private int lastCheck = 30;
+//	private int lastLight = 0;
+//
+//	public boolean isReady()
+//	{
+//		return this.lastLight > 0;
+//	}
+//
+//	@Override
+//	public void update()
+//	{
+//		this.lastCheck++;
+//		if( this.lastCheck > 30 )
+//		{
+//			this.lastCheck = 0;
+//			this.updateLight();
+//		}
+//	}
+//
+//	public void updateLight()
+//	{
+//		final int val = this.world.getLight( this.pos );
+//
+//		if( this.lastLight != val )
+//		{
+//			this.lastLight = val;
+//			Platform.notifyBlocksOfNeighbors( this.world, this.pos );
+//		}
+//	}
+//
+//	@Override
+//	public boolean canBeRotated()
+//	{
+//		return false;
+//	}
 }

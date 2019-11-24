@@ -18,33 +18,33 @@
 
 package appeng.integration.modules.waila;
 
-
-import java.util.List;
-import java.util.Optional;
-
-import com.google.common.collect.Lists;
-
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
-
-import appeng.api.parts.IPart;
-import appeng.integration.modules.waila.part.ChannelWailaDataProvider;
-import appeng.integration.modules.waila.part.IPartWailaDataProvider;
-import appeng.integration.modules.waila.part.P2PStateWailaDataProvider;
-import appeng.integration.modules.waila.part.PartAccessor;
-import appeng.integration.modules.waila.part.PartStackWailaDataProvider;
-import appeng.integration.modules.waila.part.PowerStateWailaDataProvider;
-import appeng.integration.modules.waila.part.StorageMonitorWailaDataProvider;
-import appeng.integration.modules.waila.part.Tracer;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//import com.google.common.collect.Lists;
+//
+//import net.minecraft.entity.player.ServerPlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.tileentity.TileEntity;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.util.math.RayTraceResult;
+//import net.minecraft.world.World;
+//
+//import mcp.mobius.waila.api.IWailaConfigHandler;
+//import mcp.mobius.waila.api.IWailaDataAccessor;
+//import mcp.mobius.waila.api.IWailaDataProvider;
+//
+//import appeng.api.parts.IPart;
+//import appeng.integration.modules.waila.part.ChannelWailaDataProvider;
+//import appeng.integration.modules.waila.part.IPartWailaDataProvider;
+//import appeng.integration.modules.waila.part.P2PStateWailaDataProvider;
+//import appeng.integration.modules.waila.part.PartAccessor;
+//import appeng.integration.modules.waila.part.PartStackWailaDataProvider;
+//import appeng.integration.modules.waila.part.PowerStateWailaDataProvider;
+//import appeng.integration.modules.waila.part.StorageMonitorWailaDataProvider;
+//import appeng.integration.modules.waila.part.Tracer;
 
 
 /**
@@ -54,144 +54,144 @@ import appeng.integration.modules.waila.part.Tracer;
  * @version rv2
  * @since rv2
  */
-public final class PartWailaDataProvider implements IWailaDataProvider
+public final class PartWailaDataProvider// implements IWailaDataProvider
 {
-	/**
-	 * Contains all providers
-	 */
-	private final List<IPartWailaDataProvider> providers;
-
-	/**
-	 * Can access parts through view-hits
-	 */
-	private final PartAccessor accessor = new PartAccessor();
-
-	/**
-	 * Traces views hit on blocks
-	 */
-	private final Tracer tracer = new Tracer();
-
-	/**
-	 * Initializes the provider list with all wanted providers
-	 */
-	public PartWailaDataProvider()
-	{
-		final IPartWailaDataProvider channel = new ChannelWailaDataProvider();
-		final IPartWailaDataProvider storageMonitor = new StorageMonitorWailaDataProvider();
-		final IPartWailaDataProvider powerState = new PowerStateWailaDataProvider();
-		final IPartWailaDataProvider p2pState = new P2PStateWailaDataProvider();
-		final IPartWailaDataProvider partStack = new PartStackWailaDataProvider();
-
-		this.providers = Lists.newArrayList( channel, storageMonitor, powerState, partStack, p2pState );
-	}
-
-	@Override
-	public ItemStack getWailaStack( final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		final TileEntity te = accessor.getTileEntity();
-		final RayTraceResult mop = accessor.getMOP();
-
-		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
-
-		if( maybePart.isPresent() )
-		{
-			final IPart part = maybePart.get();
-
-			ItemStack wailaStack = ItemStack.EMPTY;
-
-			for( final IPartWailaDataProvider provider : this.providers )
-			{
-				wailaStack = provider.getWailaStack( part, config, wailaStack );
-			}
-			return wailaStack;
-		}
-
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public List<String> getWailaHead( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		final TileEntity te = accessor.getTileEntity();
-		final RayTraceResult mop = accessor.getMOP();
-
-		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
-
-		if( maybePart.isPresent() )
-		{
-			final IPart part = maybePart.get();
-
-			for( final IPartWailaDataProvider provider : this.providers )
-			{
-				provider.getWailaHead( part, currentToolTip, accessor, config );
-			}
-		}
-
-		return currentToolTip;
-	}
-
-	@Override
-	public List<String> getWailaBody( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		final TileEntity te = accessor.getTileEntity();
-		final RayTraceResult mop = accessor.getMOP();
-
-		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
-
-		if( maybePart.isPresent() )
-		{
-			final IPart part = maybePart.get();
-
-			for( final IPartWailaDataProvider provider : this.providers )
-			{
-				provider.getWailaBody( part, currentToolTip, accessor, config );
-			}
-		}
-
-		return currentToolTip;
-	}
-
-	@Override
-	public List<String> getWailaTail( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
-	{
-		final TileEntity te = accessor.getTileEntity();
-		final RayTraceResult mop = accessor.getMOP();
-
-		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
-
-		if( maybePart.isPresent() )
-		{
-			final IPart part = maybePart.get();
-
-			for( final IPartWailaDataProvider provider : this.providers )
-			{
-				provider.getWailaTail( part, currentToolTip, accessor, config );
-			}
-		}
-
-		return currentToolTip;
-	}
-
-	@Override
-	public CompoundNBT getNBTData( final ServerPlayerEntity player, final TileEntity te, final CompoundNBT tag, final World world, BlockPos pos )
-	{
-		final RayTraceResult mop = this.tracer.retraceBlock( world, player, pos );
-
-		if( mop != null )
-		{
-			final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
-
-			if( maybePart.isPresent() )
-			{
-				final IPart part = maybePart.get();
-
-				for( final IPartWailaDataProvider provider : this.providers )
-				{
-					provider.getNBTData( player, part, te, tag, world, pos );
-				}
-			}
-		}
-
-		return tag;
-	}
+//	/**
+//	 * Contains all providers
+//	 */
+//	private final List<IPartWailaDataProvider> providers;
+//
+//	/**
+//	 * Can access parts through view-hits
+//	 */
+//	private final PartAccessor accessor = new PartAccessor();
+//
+//	/**
+//	 * Traces views hit on blocks
+//	 */
+//	private final Tracer tracer = new Tracer();
+//
+//	/**
+//	 * Initializes the provider list with all wanted providers
+//	 */
+//	public PartWailaDataProvider()
+//	{
+//		final IPartWailaDataProvider channel = new ChannelWailaDataProvider();
+//		final IPartWailaDataProvider storageMonitor = new StorageMonitorWailaDataProvider();
+//		final IPartWailaDataProvider powerState = new PowerStateWailaDataProvider();
+//		final IPartWailaDataProvider p2pState = new P2PStateWailaDataProvider();
+//		final IPartWailaDataProvider partStack = new PartStackWailaDataProvider();
+//
+//		this.providers = Lists.newArrayList( channel, storageMonitor, powerState, partStack, p2pState );
+//	}
+//
+//	@Override
+//	public ItemStack getWailaStack( final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		final TileEntity te = accessor.getTileEntity();
+//		final RayTraceResult mop = accessor.getMOP();
+//
+//		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
+//
+//		if( maybePart.isPresent() )
+//		{
+//			final IPart part = maybePart.get();
+//
+//			ItemStack wailaStack = ItemStack.EMPTY;
+//
+//			for( final IPartWailaDataProvider provider : this.providers )
+//			{
+//				wailaStack = provider.getWailaStack( part, config, wailaStack );
+//			}
+//			return wailaStack;
+//		}
+//
+//		return ItemStack.EMPTY;
+//	}
+//
+//	@Override
+//	public List<String> getWailaHead( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		final TileEntity te = accessor.getTileEntity();
+//		final RayTraceResult mop = accessor.getMOP();
+//
+//		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
+//
+//		if( maybePart.isPresent() )
+//		{
+//			final IPart part = maybePart.get();
+//
+//			for( final IPartWailaDataProvider provider : this.providers )
+//			{
+//				provider.getWailaHead( part, currentToolTip, accessor, config );
+//			}
+//		}
+//
+//		return currentToolTip;
+//	}
+//
+//	@Override
+//	public List<String> getWailaBody( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		final TileEntity te = accessor.getTileEntity();
+//		final RayTraceResult mop = accessor.getMOP();
+//
+//		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
+//
+//		if( maybePart.isPresent() )
+//		{
+//			final IPart part = maybePart.get();
+//
+//			for( final IPartWailaDataProvider provider : this.providers )
+//			{
+//				provider.getWailaBody( part, currentToolTip, accessor, config );
+//			}
+//		}
+//
+//		return currentToolTip;
+//	}
+//
+//	@Override
+//	public List<String> getWailaTail( final ItemStack itemStack, final List<String> currentToolTip, final IWailaDataAccessor accessor, final IWailaConfigHandler config )
+//	{
+//		final TileEntity te = accessor.getTileEntity();
+//		final RayTraceResult mop = accessor.getMOP();
+//
+//		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
+//
+//		if( maybePart.isPresent() )
+//		{
+//			final IPart part = maybePart.get();
+//
+//			for( final IPartWailaDataProvider provider : this.providers )
+//			{
+//				provider.getWailaTail( part, currentToolTip, accessor, config );
+//			}
+//		}
+//
+//		return currentToolTip;
+//	}
+//
+//	@Override
+//	public CompoundNBT getNBTData( final ServerPlayerEntity player, final TileEntity te, final CompoundNBT tag, final World world, BlockPos pos )
+//	{
+//		final RayTraceResult mop = this.tracer.retraceBlock( world, player, pos );
+//
+//		if( mop != null )
+//		{
+//			final Optional<IPart> maybePart = this.accessor.getMaybePart( te, mop );
+//
+//			if( maybePart.isPresent() )
+//			{
+//				final IPart part = maybePart.get();
+//
+//				for( final IPartWailaDataProvider provider : this.providers )
+//				{
+//					provider.getNBTData( player, part, te, tag, world, pos );
+//				}
+//			}
+//		}
+//
+//		return tag;
+//	}
 }

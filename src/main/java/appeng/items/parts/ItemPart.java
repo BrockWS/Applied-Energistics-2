@@ -38,13 +38,13 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.AEApi;
 import appeng.api.implementations.items.IItemGroup;
@@ -59,175 +59,76 @@ import appeng.items.AEBaseItem;
 
 public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 {
-	private static final int INITIAL_REGISTERED_CAPACITY = PartType.values().length;
-	private static final Comparator<Entry<Integer, PartTypeWithVariant>> REGISTERED_COMPARATOR = new RegisteredComparator();
+	public final PartType type;
+	public final AEColor color;
 
-	public static ItemPart instance;
-	private final Map<Integer, PartTypeWithVariant> registered;
-
-	public ItemPart()
+	public ItemPart(PartType type, AEColor color)
 	{
-		this.registered = new HashMap<>( INITIAL_REGISTERED_CAPACITY );
-
-		this.setHasSubtypes( true );
-
-		instance = this;
-	}
-
-	@Nonnull
-	public final ItemStackSrc createPart( final PartType mat )
-	{
-		Preconditions.checkNotNull( mat );
-
-		return this.createPart( mat, 0 );
-	}
-
-	@Nonnull
-	public ItemStackSrc createPart( final PartType mat, final AEColor color )
-	{
-		Preconditions.checkNotNull( mat );
-		Preconditions.checkNotNull( color );
-
-		final int varID = color.ordinal();
-
-		return this.createPart( mat, varID );
-	}
-
-	@Nonnull
-	private ItemStackSrc createPart( final PartType mat, final int varID )
-	{
-		assert mat != null;
-		assert varID >= 0;
-
-		// verify
-		for( final PartTypeWithVariant p : this.registered.values() )
-		{
-			if( p.part == mat && p.variant == varID )
-			{
-				throw new IllegalStateException( "Cannot create the same material twice..." );
-			}
-		}
-
-		boolean enabled = mat.isEnabled();
-
-		final int partDamage = mat.getBaseDamage() + varID;
-		final ActivityState state = ActivityState.from( enabled );
-		final ItemStackSrc output = new ItemStackSrc( this, partDamage, state );
-
-		final PartTypeWithVariant pti = new PartTypeWithVariant( mat, varID );
-
-		this.processMetaOverlap( enabled, partDamage, mat, pti );
-
-		return output;
-	}
-
-	private void processMetaOverlap( final boolean enabled, final int partDamage, final PartType mat, final PartTypeWithVariant pti )
-	{
-		assert partDamage >= 0;
-		assert mat != null;
-		assert pti != null;
-
-		final PartTypeWithVariant registeredPartType = this.registered.get( partDamage );
-		if( registeredPartType != null )
-		{
-			throw new IllegalStateException( "Meta Overlap detected with type " + mat + " and damage " + partDamage + ". Found " + registeredPartType + " there already." );
-		}
-
-		if( enabled )
-		{
-			this.registered.put( partDamage, pti );
-		}
-	}
-
-	public int getDamageByType( final PartType t )
-	{
-		Preconditions.checkNotNull( t );
-
-		for( final Entry<Integer, PartTypeWithVariant> pt : this.registered.entrySet() )
-		{
-			if( pt.getValue().part == t )
-			{
-				return pt.getKey();
-			}
-		}
-		return -1;
+		super(new Properties());
+		this.type = type != null ? type : PartType.INVALID_TYPE;
+		this.color = color;
 	}
 
 	@Override
-	public ActionResultType onItemUse( final PlayerEntity player, final World w, final BlockPos pos, final Hand hand, final Direction side, final float hitX, final float hitY, final float hitZ )
+	public ActionResultType onItemUse( final ItemUseContext context )
 	{
-		if( this.getTypeByStack( player.getHeldItem( hand ) ) == PartType.INVALID_TYPE )
+		if( this.type == PartType.INVALID_TYPE )
 		{
 			return ActionResultType.FAIL;
 		}
 
-		return AEApi.instance().partHelper().placeBus( player.getHeldItem( hand ), pos, side, player, hand, w );
+		return AEApi.instance().partHelper().placeBus( context.getItem(), context.getPos(), context.getFace(), context.getPlayer(), context.getHand(), context.getWorld() );
 	}
 
-	@Override
-	public String getUnlocalizedName( final ItemStack is )
-	{
-		Preconditions.checkNotNull( is );
-		return "item.appliedenergistics2.multi_part." + this.getTypeByStack( is ).getUnlocalizedName().toLowerCase();
-	}
+//	@Override
+//	public String getUnlocalizedName( final ItemStack is )
+//	{
+//		Preconditions.checkNotNull( is );
+//		return "item.appliedenergistics2.multi_part." + this.getTypeByStack( is ).getUnlocalizedName().toLowerCase();
+//	}
 
-	@Override
-	public String getItemStackDisplayName( final ItemStack is )
-	{
-		final PartType pt = this.getTypeByStack( is );
-
-		if( pt.isCable() )
-		{
-			final AEColor[] variants = AEColor.values();
-
-			final int itemDamage = is.getItemDamage();
-			final PartTypeWithVariant registeredPartType = this.registered.get( itemDamage );
-			if( registeredPartType != null )
-			{
-				return super.getItemStackDisplayName( is ) + " - " + variants[registeredPartType.variant].toString();
-			}
-		}
-
-		if( pt.getExtraName() != null )
-		{
-			return super.getItemStackDisplayName( is ) + " - " + pt.getExtraName().getLocal();
-		}
-
-		return super.getItemStackDisplayName( is );
-	}
+//	@Override
+//	public String getItemStackDisplayName( final ItemStack is )
+//	{
+//		final PartType pt = this.getTypeByStack( is );
+//
+//		if( pt.isCable() )
+//		{
+//			final AEColor[] variants = AEColor.values();
+//
+//			final int itemDamage = is.getItemDamage();
+//			final PartTypeWithVariant registeredPartType = this.registered.get( itemDamage );
+//			if( registeredPartType != null )
+//			{
+//				return super.getItemStackDisplayName( is ) + " - " + variants[registeredPartType.variant].toString();
+//			}
+//		}
+//
+//		if( pt.getExtraName() != null )
+//		{
+//			return super.getItemStackDisplayName( is ) + " - " + pt.getExtraName().getLocal();
+//		}
+//
+//		return super.getItemStackDisplayName( is );
+//	}
 
 	@Override
 	protected void getCheckedSubItems( final ItemGroup creativeTab, final NonNullList<ItemStack> itemStacks )
 	{
-		final List<Entry<Integer, PartTypeWithVariant>> types = new ArrayList<>( this.registered.entrySet() );
-		Collections.sort( types, REGISTERED_COMPARATOR );
-
-		for( final Entry<Integer, PartTypeWithVariant> part : types )
-		{
-			itemStacks.add( new ItemStack( this, 1, part.getKey() ) );
-		}
-	}
-
-	@Nonnull
-	public PartType getTypeByStack( final ItemStack is )
-	{
-		Preconditions.checkNotNull( is );
-
-		final PartTypeWithVariant pt = this.registered.get( is.getItemDamage() );
-		if( pt != null )
-		{
-			return pt.part;
-		}
-
-		return PartType.INVALID_TYPE;
+//		final List<Entry<Integer, PartTypeWithVariant>> types = new ArrayList<>( this.registered.entrySet() );
+//
+//		for( final Entry<Integer, PartTypeWithVariant> part : types )
+//		{
+//			itemStacks.add( new ItemStack( this, 1, part.getKey() ) );
+//		}
+		itemStacks.add(new ItemStack(this));
 	}
 
 	@Nullable
 	@Override
 	public IPart createPartFromItemStack( final ItemStack is )
 	{
-		final PartType type = this.getTypeByStack( is );
-		final Class<? extends IPart> part = type.getPart();
+		final Class<? extends IPart> part = this.type.getPart();
 		if( part == null )
 		{
 			return null;
@@ -235,12 +136,12 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 
 		try
 		{
-			if( type.getConstructor() == null )
+			if( this.type.getConstructor() == null )
 			{
-				type.setConstructor( part.getConstructor( ItemStack.class ) );
+				this.type.setConstructor( part.getConstructor( ItemStack.class ) );
 			}
 
-			return type.getConstructor().newInstance( is );
+			return this.type.getConstructor().newInstance( is );
 		}
 		catch( final InstantiationException e )
 		{
@@ -264,17 +165,6 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 		}
 	}
 
-	public int variantOf( final int itemDamage )
-	{
-		final PartTypeWithVariant registeredPartType = this.registered.get( itemDamage );
-		if( registeredPartType != null )
-		{
-			return registeredPartType.variant;
-		}
-
-		return 0;
-	}
-
 	@Nullable
 	@Override
 	public String getUnlocalizedGroupName( final Set<ItemStack> others, final ItemStack is )
@@ -285,39 +175,37 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 		boolean exportBusFluids = false;
 		boolean group = false;
 
-		final PartType u = this.getTypeByStack( is );
-
 		for( final ItemStack stack : others )
 		{
-			if( stack.getItem() == this )
+			if( stack.getItem() instanceof ItemPart )
 			{
-				final PartType pt = this.getTypeByStack( stack );
+				final PartType pt = ((ItemPart) stack.getItem()).type;
 				switch( pt )
 				{
 					case IMPORT_BUS:
 						importBus = true;
-						if( u == pt )
+						if( this.type == pt )
 						{
 							group = true;
 						}
 						break;
 					case FLUID_IMPORT_BUS:
 						importBusFluids = true;
-						if( u == pt )
+						if( this.type == pt )
 						{
 							group = true;
 						}
 						break;
 					case EXPORT_BUS:
 						exportBus = true;
-						if( u == pt )
+						if( this.type == pt )
 						{
 							group = true;
 						}
 						break;
 					case FLUID_EXPORT_BUS:
 						exportBusFluids = true;
-						if( u == pt )
+						if( this.type == pt )
 						{
 							group = true;
 						}
@@ -327,71 +215,16 @@ public final class ItemPart extends AEBaseItem implements IPartItem, IItemGroup
 			}
 		}
 
-		if( group && importBus && exportBus && ( u == PartType.IMPORT_BUS || u == PartType.EXPORT_BUS ) )
+		if( group && importBus && exportBus && ( this.type == PartType.IMPORT_BUS || this.type == PartType.EXPORT_BUS ) )
 		{
 			return GuiText.IOBuses.getUnlocalized();
 		}
-		if( group && importBusFluids && exportBusFluids && ( u == PartType.FLUID_IMPORT_BUS || u == PartType.FLUID_EXPORT_BUS ) )
+		if( group && importBusFluids && exportBusFluids && ( this.type == PartType.FLUID_IMPORT_BUS || this.type == PartType.FLUID_EXPORT_BUS ) )
 		{
 			return GuiText.IOBusesFluids.getUnlocalized();
 		}
 
 		return null;
-	}
-
-	private static final class PartTypeWithVariant
-	{
-		private final PartType part;
-		private final int variant;
-
-		private PartTypeWithVariant( final PartType part, final int variant )
-		{
-			assert part != null;
-			assert variant >= 0;
-
-			this.part = part;
-			this.variant = variant;
-		}
-
-		@Override
-		public String toString()
-		{
-			return "PartTypeWithVariant{" + "part=" + this.part + ", variant=" + this.variant + '}';
-		}
-	}
-
-	private static final class RegisteredComparator implements Comparator<Entry<Integer, PartTypeWithVariant>>
-	{
-		@Override
-		public int compare( final Entry<Integer, PartTypeWithVariant> o1, final Entry<Integer, PartTypeWithVariant> o2 )
-		{
-			final String string1 = o1.getValue().part.name();
-			final String string2 = o2.getValue().part.name();
-			final int comparedString = string1.compareTo( string2 );
-
-			if( comparedString == 0 )
-			{
-				return Integer.compare( o1.getKey(), o2.getKey() );
-			}
-
-			return comparedString;
-		}
-	}
-
-	public void registerOreDicts()
-	{
-		for( final PartTypeWithVariant mt : ImmutableSet.copyOf( this.registered.values() ) )
-		{
-			if( mt.part.getOreName() != null )
-			{
-				final String[] names = mt.part.getOreName().split( "," );
-
-				for( final String name : names )
-				{
-					OreDictionary.registerOre( name, new ItemStack( this, 1, mt.part.getBaseDamage() + mt.variant ) );
-				}
-			}
-		}
 	}
 
 }

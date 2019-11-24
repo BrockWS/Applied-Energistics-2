@@ -69,7 +69,7 @@ public class PartCable extends AEBasePart implements IPartCable
 		super( is );
 		this.getProxy().setFlags( GridFlags.PREFERRED );
 		this.getProxy().setIdlePowerUsage( 0.0 );
-		this.getProxy().setColor( AEColor.values()[( (ItemPart) is.getItem() ).variantOf( is.getItemDamage() )] );
+		this.getProxy().setColor( ((ItemPart) is.getItem()).color );
 	}
 
 	@Override
@@ -283,7 +283,7 @@ public class PartCable extends AEBasePart implements IPartCable
 					howMany = Math.max( gc.getUsedChannels(), howMany );
 				}
 
-				data.setByte( "usedChannels", (byte) howMany );
+				data.putByte( "usedChannels", (byte) howMany );
 			}
 		}
 	}

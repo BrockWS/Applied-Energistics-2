@@ -19,16 +19,16 @@
 package appeng.parts.networking;
 
 
-import net.minecraft.item.ItemStack;
+//import net.minecraft.item.ItemStack;
+//
+//import appeng.helpers.Reflected;
 
-import appeng.helpers.Reflected;
 
-
-public class PartCableGlass extends PartCable
+public class PartCableGlass// extends PartCable
 {
-	@Reflected
-	public PartCableGlass( final ItemStack is )
-	{
-		super( is );
-	}
+//	@Reflected
+//	public PartCableGlass( final ItemStack is )
+//	{
+//		super( is );
+//	}
 }

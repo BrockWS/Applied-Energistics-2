@@ -32,12 +32,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import appeng.api.parts.CableRenderMode;
 import appeng.block.AEBaseBlock;
 import appeng.client.ActionKey;
 import appeng.client.EffectType;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+
 import appeng.core.CommonHelper;
 import appeng.core.sync.AppEngPacket;
 import appeng.core.sync.network.NetworkHandler;
@@ -79,7 +80,7 @@ public class ServerHelper extends CommonHelper
 	{
 		if( !Platform.isClient() )
 		{
-			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			final MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 
 			if( server != null )
 			{
@@ -173,7 +174,7 @@ public class ServerHelper extends CommonHelper
 
 				if( !is.isEmpty() && is.getItem() instanceof ToolNetworkTool )
 				{
-					final CompoundNBT c = is.getTagCompound();
+					final CompoundNBT c = is.getTag();
 					if( c != null && c.getBoolean( "hideFacades" ) )
 					{
 						return CableRenderMode.CABLE_VIEW;

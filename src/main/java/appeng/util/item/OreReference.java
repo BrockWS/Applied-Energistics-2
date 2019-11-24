@@ -18,55 +18,55 @@
 
 package appeng.util.item;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
-
-import appeng.api.storage.data.IAEItemStack;
+//
+//import java.util.ArrayList;
+//import java.util.Collection;
+//import java.util.HashSet;
+//import java.util.List;
+//import java.util.Set;
+//
+//import net.minecraft.item.Items;
+//import net.minecraft.item.ItemStack;
+//
+//import appeng.api.storage.data.IAEItemStack;
 
 
 public class OreReference
 {
-
-	private final List<String> otherOptions = new ArrayList<>();
-	private final Set<Integer> ores = new HashSet<>();
-	private List<IAEItemStack> aeOtherOptions = null;
-
-	Collection<String> getEquivalents()
-	{
-		return this.otherOptions;
-	}
-
-	List<IAEItemStack> getAEEquivalents()
-	{
-		if( this.aeOtherOptions == null )
-		{
-			this.aeOtherOptions = new ArrayList<>( this.otherOptions.size() );
-
-			// SUMMON AE STACKS!
-			for( final String oreName : this.otherOptions )
-			{
-				for( final ItemStack is : OreHelper.INSTANCE.getCachedOres( oreName ) )
-				{
-					if( is.getItem() != Items.AIR )
-					{
-						this.aeOtherOptions.add( AEItemStack.fromItemStack( is ) );
-					}
-				}
-			}
-		}
-
-		return this.aeOtherOptions;
-	}
-
-	Collection<Integer> getOres()
-	{
-		return this.ores;
-	}
+//
+//	private final List<String> otherOptions = new ArrayList<>();
+//	private final Set<Integer> ores = new HashSet<>();
+//	private List<IAEItemStack> aeOtherOptions = null;
+//
+//	Collection<String> getEquivalents()
+//	{
+//		return this.otherOptions;
+//	}
+//
+//	List<IAEItemStack> getAEEquivalents()
+//	{
+//		if( this.aeOtherOptions == null )
+//		{
+//			this.aeOtherOptions = new ArrayList<>( this.otherOptions.size() );
+//
+//			// SUMMON AE STACKS!
+//			for( final String oreName : this.otherOptions )
+//			{
+//				for( final ItemStack is : OreHelper.INSTANCE.getCachedOres( oreName ) )
+//				{
+//					if( is.getItem() != Items.AIR )
+//					{
+//						this.aeOtherOptions.add( AEItemStack.fromItemStack( is ) );
+//					}
+//				}
+//			}
+//		}
+//
+//		return this.aeOtherOptions;
+//	}
+//
+//	Collection<Integer> getOres()
+//	{
+//		return this.ores;
+//	}
 }

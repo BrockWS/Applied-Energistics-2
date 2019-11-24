@@ -40,153 +40,153 @@ import appeng.util.inv.IAEAppEngInventory;
 import appeng.util.inv.InvOperation;
 
 
-public class ContainerSecurityStation extends ContainerMEMonitorable implements IAEAppEngInventory
+public class ContainerSecurityStation extends ContainerMEMonitorable// implements IAEAppEngInventory
 {
-
-	private final SlotRestrictedInput configSlot;
-
-	private final AppEngInternalInventory wirelessEncoder = new AppEngInternalInventory( this, 2 );
-
-	private final SlotRestrictedInput wirelessIn;
-	private final SlotOutput wirelessOut;
-
-	private final TileSecurityStation securityBox;
-	@GuiSync( 0 )
-	public int permissionMode = 0;
-
+//
+//	private final SlotRestrictedInput configSlot;
+//
+//	private final AppEngInternalInventory wirelessEncoder = new AppEngInternalInventory( this, 2 );
+//
+//	private final SlotRestrictedInput wirelessIn;
+//	private final SlotOutput wirelessOut;
+//
+//	private final TileSecurityStation securityBox;
+//	@GuiSync( 0 )
+//	public int permissionMode = 0;
+//
 	public ContainerSecurityStation( final PlayerInventory ip, final ITerminalHost monitorable )
 	{
 		super( ip, monitorable, false );
-
-		this.securityBox = (TileSecurityStation) monitorable;
-
-		this.addSlotToContainer( this.configSlot = new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.BIOMETRIC_CARD, this.securityBox
-				.getConfigSlot(), 0, 37, -33, ip ) );
-
-		this.addSlotToContainer(
-				this.wirelessIn = new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.ENCODABLE_ITEM, this.wirelessEncoder, 0, 212, 10, ip ) );
-		this.addSlotToContainer( this.wirelessOut = new SlotOutput( this.wirelessEncoder, 1, 212, 68, -1 ) );
-
-		this.bindPlayerInventory( ip, 0, 0 );
+//
+//		this.securityBox = (TileSecurityStation) monitorable;
+//
+//		this.addSlotToContainer( this.configSlot = new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.BIOMETRIC_CARD, this.securityBox
+//				.getConfigSlot(), 0, 37, -33, ip ) );
+//
+//		this.addSlotToContainer(
+//				this.wirelessIn = new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.ENCODABLE_ITEM, this.wirelessEncoder, 0, 212, 10, ip ) );
+//		this.addSlotToContainer( this.wirelessOut = new SlotOutput( this.wirelessEncoder, 1, 212, 68, -1 ) );
+//
+//		this.bindPlayerInventory( ip, 0, 0 );
 	}
-
-	public void toggleSetting( final String value, final PlayerEntity player )
-	{
-		try
-		{
-			final SecurityPermissions permission = SecurityPermissions.valueOf( value );
-
-			final ItemStack a = this.configSlot.getStack();
-			if( !a.isEmpty() && a.getItem() instanceof IBiometricCard )
-			{
-				final IBiometricCard bc = (IBiometricCard) a.getItem();
-				if( bc.hasPermission( a, permission ) )
-				{
-					bc.removePermission( a, permission );
-				}
-				else
-				{
-					bc.addPermission( a, permission );
-				}
-			}
-		}
-		catch( final EnumConstantNotPresentException ex )
-		{
-			// :(
-		}
-	}
-
-	@Override
-	public void detectAndSendChanges()
-	{
-		this.verifyPermissions( SecurityPermissions.SECURITY, false );
-
-		this.setPermissionMode( 0 );
-
-		final ItemStack a = this.configSlot.getStack();
-		if( !a.isEmpty() && a.getItem() instanceof IBiometricCard )
-		{
-			final IBiometricCard bc = (IBiometricCard) a.getItem();
-
-			for( final SecurityPermissions sp : bc.getPermissions( a ) )
-			{
-				this.setPermissionMode( this.getPermissionMode() | ( 1 << sp.ordinal() ) );
-			}
-		}
-
-		this.updatePowerStatus();
-
-		super.detectAndSendChanges();
-	}
-
-	@Override
-	public void onContainerClosed( final PlayerEntity player )
-	{
-		super.onContainerClosed( player );
-
-		if( this.wirelessIn.getHasStack() )
-		{
-			player.dropItem( this.wirelessIn.getStack(), false );
-		}
-
-		if( this.wirelessOut.getHasStack() )
-		{
-			player.dropItem( this.wirelessOut.getStack(), false );
-		}
-	}
-
-	@Override
-	public void saveChanges()
-	{
-		// :P
-	}
-
-	@Override
-	public void onChangeInventory( final IItemHandler inv, final int slot, final InvOperation mc, final ItemStack removedStack, final ItemStack newStack )
-	{
-		if( !this.wirelessOut.getHasStack() )
-		{
-			if( this.wirelessIn.getHasStack() )
-			{
-				final ItemStack term = this.wirelessIn.getStack().copy();
-				INetworkEncodable networkEncodable = null;
-
-				if( term.getItem() instanceof INetworkEncodable )
-				{
-					networkEncodable = (INetworkEncodable) term.getItem();
-				}
-
-				final IWirelessTermHandler wTermHandler = AEApi.instance().registries().wireless().getWirelessTerminalHandler( term );
-				if( wTermHandler != null )
-				{
-					networkEncodable = wTermHandler;
-				}
-
-				if( networkEncodable != null )
-				{
-					networkEncodable.setEncryptionKey( term, String.valueOf( this.securityBox.getSecurityKey() ), "" );
-
-					this.wirelessIn.putStack( ItemStack.EMPTY );
-					this.wirelessOut.putStack( term );
-
-					// update the two slots in question...
-					for( final IContainerListener listener : this.listeners )
-					{
-						listener.sendSlotContents( this, this.wirelessIn.slotNumber, this.wirelessIn.getStack() );
-						listener.sendSlotContents( this, this.wirelessOut.slotNumber, this.wirelessOut.getStack() );
-					}
-				}
-			}
-		}
-	}
-
-	public int getPermissionMode()
-	{
-		return this.permissionMode;
-	}
-
-	private void setPermissionMode( final int permissionMode )
-	{
-		this.permissionMode = permissionMode;
-	}
+//
+//	public void toggleSetting( final String value, final PlayerEntity player )
+//	{
+//		try
+//		{
+//			final SecurityPermissions permission = SecurityPermissions.valueOf( value );
+//
+//			final ItemStack a = this.configSlot.getStack();
+//			if( !a.isEmpty() && a.getItem() instanceof IBiometricCard )
+//			{
+//				final IBiometricCard bc = (IBiometricCard) a.getItem();
+//				if( bc.hasPermission( a, permission ) )
+//				{
+//					bc.removePermission( a, permission );
+//				}
+//				else
+//				{
+//					bc.addPermission( a, permission );
+//				}
+//			}
+//		}
+//		catch( final EnumConstantNotPresentException ex )
+//		{
+//			// :(
+//		}
+//	}
+//
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		this.verifyPermissions( SecurityPermissions.SECURITY, false );
+//
+//		this.setPermissionMode( 0 );
+//
+//		final ItemStack a = this.configSlot.getStack();
+//		if( !a.isEmpty() && a.getItem() instanceof IBiometricCard )
+//		{
+//			final IBiometricCard bc = (IBiometricCard) a.getItem();
+//
+//			for( final SecurityPermissions sp : bc.getPermissions( a ) )
+//			{
+//				this.setPermissionMode( this.getPermissionMode() | ( 1 << sp.ordinal() ) );
+//			}
+//		}
+//
+//		this.updatePowerStatus();
+//
+//		super.detectAndSendChanges();
+//	}
+//
+//	@Override
+//	public void onContainerClosed( final PlayerEntity player )
+//	{
+//		super.onContainerClosed( player );
+//
+//		if( this.wirelessIn.getHasStack() )
+//		{
+//			player.dropItem( this.wirelessIn.getStack(), false );
+//		}
+//
+//		if( this.wirelessOut.getHasStack() )
+//		{
+//			player.dropItem( this.wirelessOut.getStack(), false );
+//		}
+//	}
+//
+//	@Override
+//	public void saveChanges()
+//	{
+//		// :P
+//	}
+//
+//	@Override
+//	public void onChangeInventory( final IItemHandler inv, final int slot, final InvOperation mc, final ItemStack removedStack, final ItemStack newStack )
+//	{
+//		if( !this.wirelessOut.getHasStack() )
+//		{
+//			if( this.wirelessIn.getHasStack() )
+//			{
+//				final ItemStack term = this.wirelessIn.getStack().copy();
+//				INetworkEncodable networkEncodable = null;
+//
+//				if( term.getItem() instanceof INetworkEncodable )
+//				{
+//					networkEncodable = (INetworkEncodable) term.getItem();
+//				}
+//
+//				final IWirelessTermHandler wTermHandler = AEApi.instance().registries().wireless().getWirelessTerminalHandler( term );
+//				if( wTermHandler != null )
+//				{
+//					networkEncodable = wTermHandler;
+//				}
+//
+//				if( networkEncodable != null )
+//				{
+//					networkEncodable.setEncryptionKey( term, String.valueOf( this.securityBox.getSecurityKey() ), "" );
+//
+//					this.wirelessIn.putStack( ItemStack.EMPTY );
+//					this.wirelessOut.putStack( term );
+//
+//					// update the two slots in question...
+//					for( final IContainerListener listener : this.listeners )
+//					{
+//						listener.sendSlotContents( this, this.wirelessIn.slotNumber, this.wirelessIn.getStack() );
+//						listener.sendSlotContents( this, this.wirelessOut.slotNumber, this.wirelessOut.getStack() );
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	public int getPermissionMode()
+//	{
+//		return this.permissionMode;
+//	}
+//
+//	private void setPermissionMode( final int permissionMode )
+//	{
+//		this.permissionMode = permissionMode;
+//	}
 }

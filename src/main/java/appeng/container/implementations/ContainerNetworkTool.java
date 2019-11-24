@@ -32,78 +32,78 @@ import appeng.util.Platform;
 
 public class ContainerNetworkTool extends AEBaseContainer
 {
-
-	private final INetworkTool toolInv;
-
-	@GuiSync( 1 )
-	public boolean facadeMode;
-
+//
+//	private final INetworkTool toolInv;
+//
+//	@GuiSync( 1 )
+//	public boolean facadeMode;
+//
 	public ContainerNetworkTool( final PlayerInventory ip, final INetworkTool te )
 	{
 		super( ip, null, null );
-		this.toolInv = te;
-
-		this.lockPlayerInventorySlot( ip.currentItem );
-
-		for( int y = 0; y < 3; y++ )
-		{
-			for( int x = 0; x < 3; x++ )
-			{
-				this.addSlotToContainer( ( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, te
-						.getInventory(), y * 3 + x, 80 - 18 + x * 18, 37 - 18 + y * 18, this.getInventoryPlayer() ) ) );
-			}
-		}
-
-		this.bindPlayerInventory( ip, 0, 166 - /* height of player inventory */82 );
+//		this.toolInv = te;
+//
+//		this.lockPlayerInventorySlot( ip.currentItem );
+//
+//		for( int y = 0; y < 3; y++ )
+//		{
+//			for( int x = 0; x < 3; x++ )
+//			{
+//				this.addSlotToContainer( ( new SlotRestrictedInput( SlotRestrictedInput.PlacableItemType.UPGRADES, te
+//						.getInventory(), y * 3 + x, 80 - 18 + x * 18, 37 - 18 + y * 18, this.getInventoryPlayer() ) ) );
+//			}
+//		}
+//
+//		this.bindPlayerInventory( ip, 0, 166 - /* height of player inventory */82 );
 	}
-
-	public void toggleFacadeMode()
-	{
-		final CompoundNBT data = Platform.openNbtData( this.toolInv.getItemStack() );
-		data.setBoolean( "hideFacades", !data.getBoolean( "hideFacades" ) );
-		this.detectAndSendChanges();
-	}
-
-	@Override
-	public void detectAndSendChanges()
-	{
-		final ItemStack currentItem = this.getPlayerInv().getCurrentItem();
-
-		if( currentItem != this.toolInv.getItemStack() )
-		{
-			if( !currentItem.isEmpty() )
-			{
-				if( ItemStack.areItemsEqual( this.toolInv.getItemStack(), currentItem ) )
-				{
-					this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, this.toolInv.getItemStack() );
-				}
-				else
-				{
-					this.setValidContainer( false );
-				}
-			}
-			else
-			{
-				this.setValidContainer( false );
-			}
-		}
-
-		if( this.isValidContainer() )
-		{
-			final CompoundNBT data = Platform.openNbtData( currentItem );
-			this.setFacadeMode( data.getBoolean( "hideFacades" ) );
-		}
-
-		super.detectAndSendChanges();
-	}
-
-	public boolean isFacadeMode()
-	{
-		return this.facadeMode;
-	}
-
-	private void setFacadeMode( final boolean facadeMode )
-	{
-		this.facadeMode = facadeMode;
-	}
+//
+//	public void toggleFacadeMode()
+//	{
+//		final CompoundNBT data = Platform.openNbtData( this.toolInv.getItemStack() );
+//		data.setBoolean( "hideFacades", !data.getBoolean( "hideFacades" ) );
+//		this.detectAndSendChanges();
+//	}
+//
+//	@Override
+//	public void detectAndSendChanges()
+//	{
+//		final ItemStack currentItem = this.getPlayerInv().getCurrentItem();
+//
+//		if( currentItem != this.toolInv.getItemStack() )
+//		{
+//			if( !currentItem.isEmpty() )
+//			{
+//				if( ItemStack.areItemsEqual( this.toolInv.getItemStack(), currentItem ) )
+//				{
+//					this.getPlayerInv().setInventorySlotContents( this.getPlayerInv().currentItem, this.toolInv.getItemStack() );
+//				}
+//				else
+//				{
+//					this.setValidContainer( false );
+//				}
+//			}
+//			else
+//			{
+//				this.setValidContainer( false );
+//			}
+//		}
+//
+//		if( this.isValidContainer() )
+//		{
+//			final CompoundNBT data = Platform.openNbtData( currentItem );
+//			this.setFacadeMode( data.getBoolean( "hideFacades" ) );
+//		}
+//
+//		super.detectAndSendChanges();
+//	}
+//
+//	public boolean isFacadeMode()
+//	{
+//		return this.facadeMode;
+//	}
+//
+//	private void setFacadeMode( final boolean facadeMode )
+//	{
+//		this.facadeMode = facadeMode;
+//	}
 }

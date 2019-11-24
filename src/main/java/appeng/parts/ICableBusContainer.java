@@ -23,7 +23,7 @@ import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -31,8 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.parts.SelectedPart;
 import appeng.api.util.AEColor;
@@ -64,9 +64,9 @@ public interface ICableBusContainer
 
 	boolean recolourBlock( Direction side, AEColor colour, PlayerEntity who );
 
-	boolean isLadder( EntityLivingBase entity );
+	boolean isLadder( LivingEntity entity );
 
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	void randomDisplayTick( World world, BlockPos pos, Random r );
 
 	int getLightValue();

@@ -19,40 +19,40 @@
 package appeng.recipes.factories.conditions;
 
 
-import java.util.function.BooleanSupplier;
+//import java.util.function.BooleanSupplier;
+//
+//import com.google.gson.JsonObject;
+//
+//import net.minecraft.util.JSONUtils;
+//import net.minecraftforge.common.crafting.IConditionSerializer;
+//import net.minecraftforge.common.crafting.JsonContext;
+//
+//import appeng.core.Api;
+//import appeng.core.AppEng;
 
-import com.google.gson.JsonObject;
 
-import net.minecraft.util.JSONUtils;
-import net.minecraftforge.common.crafting.IConditionSerializer;
-import net.minecraftforge.common.crafting.JsonContext;
-
-import appeng.core.Api;
-import appeng.core.AppEng;
-
-
-public class MaterialExists implements IConditionSerializer
+public class MaterialExists// implements IConditionSerializer
 {
-	private static final String JSON_MATERIAL_KEY = "material";
-
-	@Override
-	public BooleanSupplier parse( JsonContext jsonContext, JsonObject jsonObject )
-	{
-		final boolean result;
-
-		if( JSONUtils.isString( jsonObject, JSON_MATERIAL_KEY ) )
-		{
-			final String material = JSONUtils.getString( jsonObject, JSON_MATERIAL_KEY );
-			final Object item = Api.INSTANCE.registries().recipes().resolveItem( AppEng.MOD_ID, material );
-
-			result = item != null;
-		}
-		else
-		{
-			result = false;
-		}
-
-		return () -> result;
-
-	}
+//	private static final String JSON_MATERIAL_KEY = "material";
+//
+//	@Override
+//	public BooleanSupplier parse( JsonContext jsonContext, JsonObject jsonObject )
+//	{
+//		final boolean result;
+//
+//		if( JSONUtils.isString( jsonObject, JSON_MATERIAL_KEY ) )
+//		{
+//			final String material = JSONUtils.getString( jsonObject, JSON_MATERIAL_KEY );
+//			final Object item = Api.INSTANCE.registries().recipes().resolveItem( AppEng.MOD_ID, material );
+//
+//			result = item != null;
+//		}
+//		else
+//		{
+//			result = false;
+//		}
+//
+//		return () -> result;
+//
+//	}
 }

@@ -25,7 +25,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -38,46 +37,46 @@ import appeng.tile.misc.TileInscriber;
 import appeng.util.Platform;
 
 
-public class BlockInscriber extends AEBaseTileBlock
+public class BlockInscriber //extends AEBaseTileBlock
 {
-
-	public BlockInscriber()
-	{
-		super( Material.IRON );
-
-		this.setLightOpacity( 2 );
-		this.setFullSize( this.setOpaque( false ) );
-	}
-
-	@Override
-	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
-	{
-		if( p.isSneaking() )
-		{
-			return false;
-		}
-
-		final TileInscriber tg = this.getTileEntity( w, pos );
-		if( tg != null )
-		{
-			if( Platform.isServer() )
-			{
-				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_INSCRIBER );
-			}
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public EnumBlockRenderType getRenderType( BlockState state )
-	{
-		return EnumBlockRenderType.MODEL;
-	}
-
-	@Override
-	public String getUnlocalizedName( final ItemStack is )
-	{
-		return super.getUnlocalizedName( is );
-	}
+//
+//	public BlockInscriber()
+//	{
+//		super( Material.IRON );
+//
+//		this.setLightOpacity( 2 );
+//		this.setFullSize( this.setOpaque( false ) );
+//	}
+//
+//	@Override
+//	public boolean onActivated( final World w, final BlockPos pos, final PlayerEntity p, final Hand hand, final @Nullable ItemStack heldItem, final Direction side, final float hitX, final float hitY, final float hitZ )
+//	{
+//		if( p.isSneaking() )
+//		{
+//			return false;
+//		}
+//
+//		final TileInscriber tg = this.getTileEntity( w, pos );
+//		if( tg != null )
+//		{
+//			if( Platform.isServer() )
+//			{
+//				Platform.openGUI( p, tg, AEPartLocation.fromFacing( side ), GuiBridge.GUI_INSCRIBER );
+//			}
+//			return true;
+//		}
+//		return false;
+//	}
+//
+//	@Override
+//	public EnumBlockRenderType getRenderType( BlockState state )
+//	{
+//		return EnumBlockRenderType.MODEL;
+//	}
+//
+//	@Override
+//	public String getUnlocalizedName( final ItemStack is )
+//	{
+//		return super.getUnlocalizedName( is );
+//	}
 }

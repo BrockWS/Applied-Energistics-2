@@ -19,263 +19,263 @@
 package appeng.tile.misc;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+//import java.io.IOException;
+//import java.util.ArrayList;
+//import java.util.Collection;
+//import java.util.Collections;
+//import java.util.Iterator;
+//import java.util.List;
+//
+//import io.netty.buffer.ByteBuf;
+//import io.netty.buffer.Unpooled;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.item.ItemStack;
+//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.util.math.Vec3d;
+//import net.minecraft.world.EnumSkyBlock;
+//
+//import appeng.api.util.AEColor;
+//import appeng.helpers.Splotch;
+//import appeng.items.misc.ItemPaintBall;
+//import appeng.tile.AEBaseTile;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumSkyBlock;
-
-import appeng.api.util.AEColor;
-import appeng.helpers.Splotch;
-import appeng.items.misc.ItemPaintBall;
-import appeng.tile.AEBaseTile;
-
-
-public class TilePaint extends AEBaseTile
+public class TilePaint //extends AEBaseTile
 {
-
-	private static final int LIGHT_PER_DOT = 12;
-
-	private int isLit = 0;
-	private List<Splotch> dots = null;
-
-	@Override
-	public boolean canBeRotated()
-	{
-		return false;
-	}
-
-	@Override
-	public CompoundNBT writeToNBT( final CompoundNBT data )
-	{
-		super.writeToNBT( data );
-		final ByteBuf myDat = Unpooled.buffer();
-		this.writeBuffer( myDat );
-		if( myDat.hasArray() )
-		{
-			data.setByteArray( "dots", myDat.array() );
-		}
-		return data;
-	}
-
-	private void writeBuffer( final ByteBuf out )
-	{
-		if( this.dots == null )
-		{
-			out.writeByte( 0 );
-			return;
-		}
-
-		out.writeByte( this.dots.size() );
-
-		for( final Splotch s : this.dots )
-		{
-			s.writeToStream( out );
-		}
-	}
-
-	@Override
-	public void readFromNBT( final CompoundNBT data )
-	{
-		super.readFromNBT( data );
-		if( data.hasKey( "dots" ) )
-		{
-			this.readBuffer( Unpooled.copiedBuffer( data.getByteArray( "dots" ) ) );
-		}
-	}
-
-	private void readBuffer( final ByteBuf in )
-	{
-		final byte howMany = in.readByte();
-
-		if( howMany == 0 )
-		{
-			this.isLit = 0;
-			this.dots = null;
-			return;
-		}
-
-		this.dots = new ArrayList( howMany );
-		for( int x = 0; x < howMany; x++ )
-		{
-			this.dots.add( new Splotch( in ) );
-		}
-
-		this.isLit = 0;
-		for( final Splotch s : this.dots )
-		{
-			if( s.isLumen() )
-			{
-				this.isLit += LIGHT_PER_DOT;
-			}
-		}
-
-		this.maxLit();
-	}
-
-	private void maxLit()
-	{
-		if( this.isLit > 14 )
-		{
-			this.isLit = 14;
-		}
-
-		if( this.world != null )
-		{
-			this.world.getLightFor( EnumSkyBlock.BLOCK, this.pos );
-		}
-	}
-
-	@Override
-	protected void writeToStream( final ByteBuf data ) throws IOException
-	{
-		super.writeToStream( data );
-		this.writeBuffer( data );
-	}
-
-	@Override
-	protected boolean readFromStream( final ByteBuf data ) throws IOException
-	{
-		super.readFromStream( data );
-		this.readBuffer( data );
-		return true;
-	}
-
-	public void neighborChanged()
-	{
-		if( this.dots == null )
-		{
-			return;
-		}
-
-		for( final Direction side : Direction.VALUES )
-		{
-			if( !this.isSideValid( side ) )
-			{
-				this.removeSide( side );
-			}
-		}
-
-		this.updateData();
-	}
-
-	public boolean isSideValid( final Direction side )
-	{
-		final BlockPos p = this.pos.offset( side );
-		final BlockState blk = this.world.getBlockState( p );
-		return blk.getBlock().isSideSolid( this.world.getBlockState( p ), this.world, p, side.getOpposite() );
-	}
-
-	private void removeSide( final Direction side )
-	{
-		final Iterator<Splotch> i = this.dots.iterator();
-		while( i.hasNext() )
-		{
-			final Splotch s = i.next();
-			if( s.getSide() == side )
-			{
-				i.remove();
-			}
-		}
-
-		this.markForUpdate();
-		this.saveChanges();
-	}
-
-	private void updateData()
-	{
-		this.isLit = 0;
-		for( final Splotch s : this.dots )
-		{
-			if( s.isLumen() )
-			{
-				this.isLit += LIGHT_PER_DOT;
-			}
-		}
-
-		this.maxLit();
-
-		if( this.dots.isEmpty() )
-		{
-			this.dots = null;
-		}
-
-		if( this.dots == null )
-		{
-			this.world.setBlockToAir( this.pos );
-		}
-	}
-
-	public void cleanSide( final Direction side )
-	{
-		if( this.dots == null )
-		{
-			return;
-		}
-
-		this.removeSide( side );
-
-		this.updateData();
-	}
-
-	public int getLightLevel()
-	{
-		return this.isLit;
-	}
-
-	public void addBlot( final ItemStack type, final Direction side, final Vec3d hitVec )
-	{
-		final BlockPos p = this.pos.offset( side );
-
-		final BlockState blk = this.world.getBlockState( p );
-		if( blk.getBlock().isSideSolid( this.world.getBlockState( p ), this.world, p, side.getOpposite() ) )
-		{
-			final ItemPaintBall ipb = (ItemPaintBall) type.getItem();
-
-			final AEColor col = ipb.getColor( type );
-			final boolean lit = ipb.isLumen( type );
-
-			if( this.dots == null )
-			{
-				this.dots = new ArrayList<>();
-			}
-
-			if( this.dots.size() > 20 )
-			{
-				this.dots.remove( 0 );
-			}
-
-			this.dots.add( new Splotch( col, lit, side, hitVec ) );
-			if( lit )
-			{
-				this.isLit += LIGHT_PER_DOT;
-			}
-
-			this.maxLit();
-			this.markForUpdate();
-			this.saveChanges();
-		}
-	}
-
-	public Collection<Splotch> getDots()
-	{
-		if( this.dots == null )
-		{
-			return Collections.emptyList();
-		}
-
-		return this.dots;
-	}
+//
+//	private static final int LIGHT_PER_DOT = 12;
+//
+//	private int isLit = 0;
+//	private List<Splotch> dots = null;
+//
+//	@Override
+//	public boolean canBeRotated()
+//	{
+//		return false;
+//	}
+//
+//	@Override
+//	public CompoundNBT writeToNBT( final CompoundNBT data )
+//	{
+//		super.writeToNBT( data );
+//		final ByteBuf myDat = Unpooled.buffer();
+//		this.writeBuffer( myDat );
+//		if( myDat.hasArray() )
+//		{
+//			data.setByteArray( "dots", myDat.array() );
+//		}
+//		return data;
+//	}
+//
+//	private void writeBuffer( final ByteBuf out )
+//	{
+//		if( this.dots == null )
+//		{
+//			out.writeByte( 0 );
+//			return;
+//		}
+//
+//		out.writeByte( this.dots.size() );
+//
+//		for( final Splotch s : this.dots )
+//		{
+//			s.writeToStream( out );
+//		}
+//	}
+//
+//	@Override
+//	public void readFromNBT( final CompoundNBT data )
+//	{
+//		super.readFromNBT( data );
+//		if( data.hasKey( "dots" ) )
+//		{
+//			this.readBuffer( Unpooled.copiedBuffer( data.getByteArray( "dots" ) ) );
+//		}
+//	}
+//
+//	private void readBuffer( final ByteBuf in )
+//	{
+//		final byte howMany = in.readByte();
+//
+//		if( howMany == 0 )
+//		{
+//			this.isLit = 0;
+//			this.dots = null;
+//			return;
+//		}
+//
+//		this.dots = new ArrayList( howMany );
+//		for( int x = 0; x < howMany; x++ )
+//		{
+//			this.dots.add( new Splotch( in ) );
+//		}
+//
+//		this.isLit = 0;
+//		for( final Splotch s : this.dots )
+//		{
+//			if( s.isLumen() )
+//			{
+//				this.isLit += LIGHT_PER_DOT;
+//			}
+//		}
+//
+//		this.maxLit();
+//	}
+//
+//	private void maxLit()
+//	{
+//		if( this.isLit > 14 )
+//		{
+//			this.isLit = 14;
+//		}
+//
+//		if( this.world != null )
+//		{
+//			this.world.getLightFor( EnumSkyBlock.BLOCK, this.pos );
+//		}
+//	}
+//
+//	@Override
+//	protected void writeToStream( final ByteBuf data ) throws IOException
+//	{
+//		super.writeToStream( data );
+//		this.writeBuffer( data );
+//	}
+//
+//	@Override
+//	protected boolean readFromStream( final ByteBuf data ) throws IOException
+//	{
+//		super.readFromStream( data );
+//		this.readBuffer( data );
+//		return true;
+//	}
+//
+//	public void neighborChanged()
+//	{
+//		if( this.dots == null )
+//		{
+//			return;
+//		}
+//
+//		for( final Direction side : Direction.VALUES )
+//		{
+//			if( !this.isSideValid( side ) )
+//			{
+//				this.removeSide( side );
+//			}
+//		}
+//
+//		this.updateData();
+//	}
+//
+//	public boolean isSideValid( final Direction side )
+//	{
+//		final BlockPos p = this.pos.offset( side );
+//		final BlockState blk = this.world.getBlockState( p );
+//		return blk.getBlock().isSideSolid( this.world.getBlockState( p ), this.world, p, side.getOpposite() );
+//	}
+//
+//	private void removeSide( final Direction side )
+//	{
+//		final Iterator<Splotch> i = this.dots.iterator();
+//		while( i.hasNext() )
+//		{
+//			final Splotch s = i.next();
+//			if( s.getSide() == side )
+//			{
+//				i.remove();
+//			}
+//		}
+//
+//		this.markForUpdate();
+//		this.saveChanges();
+//	}
+//
+//	private void updateData()
+//	{
+//		this.isLit = 0;
+//		for( final Splotch s : this.dots )
+//		{
+//			if( s.isLumen() )
+//			{
+//				this.isLit += LIGHT_PER_DOT;
+//			}
+//		}
+//
+//		this.maxLit();
+//
+//		if( this.dots.isEmpty() )
+//		{
+//			this.dots = null;
+//		}
+//
+//		if( this.dots == null )
+//		{
+//			this.world.setBlockToAir( this.pos );
+//		}
+//	}
+//
+//	public void cleanSide( final Direction side )
+//	{
+//		if( this.dots == null )
+//		{
+//			return;
+//		}
+//
+//		this.removeSide( side );
+//
+//		this.updateData();
+//	}
+//
+//	public int getLightLevel()
+//	{
+//		return this.isLit;
+//	}
+//
+//	public void addBlot( final ItemStack type, final Direction side, final Vec3d hitVec )
+//	{
+//		final BlockPos p = this.pos.offset( side );
+//
+//		final BlockState blk = this.world.getBlockState( p );
+//		if( blk.getBlock().isSideSolid( this.world.getBlockState( p ), this.world, p, side.getOpposite() ) )
+//		{
+//			final ItemPaintBall ipb = (ItemPaintBall) type.getItem();
+//
+//			final AEColor col = ipb.getColor( type );
+//			final boolean lit = ipb.isLumen( type );
+//
+//			if( this.dots == null )
+//			{
+//				this.dots = new ArrayList<>();
+//			}
+//
+//			if( this.dots.size() > 20 )
+//			{
+//				this.dots.remove( 0 );
+//			}
+//
+//			this.dots.add( new Splotch( col, lit, side, hitVec ) );
+//			if( lit )
+//			{
+//				this.isLit += LIGHT_PER_DOT;
+//			}
+//
+//			this.maxLit();
+//			this.markForUpdate();
+//			this.saveChanges();
+//		}
+//	}
+//
+//	public Collection<Splotch> getDots()
+//	{
+//		if( this.dots == null )
+//		{
+//			return Collections.emptyList();
+//		}
+//
+//		return this.dots;
+//	}
 }

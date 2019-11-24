@@ -21,36 +21,38 @@ package appeng.items.misc;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import appeng.api.util.AEColor;
 import appeng.bootstrap.IItemRendering;
 import appeng.bootstrap.ItemRenderingCustomizer;
+import appeng.core.AppEng;
 
 
 public class ItemPaintBallRendering extends ItemRenderingCustomizer
 {
 
-	private static final ModelResourceLocation MODEL_NORMAL = new ModelResourceLocation( "appliedenergistics2:paint_ball" );
-	private static final ModelResourceLocation MODEL_SHIMMER = new ModelResourceLocation( "appliedenergistics2:paint_ball_shimmer" );
+	private static final ResourceLocation MODEL_NORMAL = new ResourceLocation(AppEng.MOD_ID + ":item/paint_ball" );
+	private static final ResourceLocation MODEL_SHIMMER = new ResourceLocation( AppEng.MOD_ID + ":item/paint_ball_shimmer" );
 
 	@Override
 	public void customize( IItemRendering rendering )
 	{
 		rendering.color( ItemPaintBallRendering::getColorFromItemstack );
-		rendering.variants( MODEL_NORMAL, MODEL_SHIMMER );
-		rendering.meshDefinition( is -> ItemPaintBall.isLumen( is ) ? MODEL_SHIMMER : MODEL_NORMAL );
+		rendering.models(MODEL_NORMAL, MODEL_SHIMMER);
+		rendering.modelSelector( i -> ((ItemPaintBall)i).isLumen() ? MODEL_SHIMMER : MODEL_NORMAL );
 	}
 
 	private static int getColorFromItemstack( ItemStack stack, int tintIndex )
 	{
-		final AEColor col = ( (ItemPaintBall) stack.getItem() ).getColor( stack );
+		final AEColor col = ItemPaintBall.getColor(stack);
 
-		final int colorValue = stack.getItemDamage() >= 20 ? col.mediumVariant : col.mediumVariant;
+		final int colorValue = col.mediumVariant;
 		final int r = ( colorValue >> 16 ) & 0xff;
 		final int g = ( colorValue >> 8 ) & 0xff;
 		final int b = ( colorValue ) & 0xff;
 
-		if( stack.getItemDamage() >= 20 )
+		if(ItemPaintBall.isLumen(stack))
 		{
 			final float fail = 0.7f;
 			final int full = (int) ( 255 * 0.3 );

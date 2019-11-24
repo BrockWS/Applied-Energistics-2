@@ -47,7 +47,6 @@ repositories {
 sourceSets {
     api
     main {
-        
         compileClasspath += sourceSets.api.output
         runtimeClasspath += sourceSets.api.output
     }
@@ -77,10 +76,6 @@ archivesBaseName = aebasename
 
 // Add Coremod Manifest
 jar {
-    manifest {
-        attributes 'FMLAT': 'appeng_at.cfg'
-    }
-
     from sourceSets.api.output
     dependsOn apiClasses
 
@@ -117,8 +112,11 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            singleInstance true
+
             mods {
-                examplemod {
+                appliedenergistics2 {
+                    source sourceSets.api
                     source sourceSets.main
                 }
             }
@@ -133,8 +131,11 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            singleInstance true
+
             mods {
-                examplemod {
+                appliedenergistics2 {
+                    source sourceSets.api
                     source sourceSets.main
                 }
             }
@@ -149,10 +150,13 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            singleInstance true
+
+            args '--mod', 'appliedenergistics2', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                examplemod {
+                appliedenergistics2 {
+                    source sourceSets.api
                     source sourceSets.main
                 }
             }

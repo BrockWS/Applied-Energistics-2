@@ -19,12 +19,14 @@
 package appeng.integration;
 
 
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModAPIManager;
+
+
+import net.minecraftforge.fml.ModList;
 
 import appeng.api.exceptions.ModNotInstalledException;
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.core.AELog;
+import appeng.core.config.IntegrationStatus;
 
 
 final class IntegrationNode
@@ -74,19 +76,14 @@ final class IntegrationNode
 				switch( stage )
 				{
 					case PRE_INIT:
-						final ModAPIManager apiManager = ModAPIManager.INSTANCE;
-						boolean enabled = this.modID == null || Loader.isModLoaded( this.modID ) || apiManager.hasAPI( this.modID );
-
-						AEConfig.instance()
-								.addCustomCategoryComment( "ModIntegration",
-										"Valid Values are 'AUTO', 'ON', or 'OFF' - defaults to 'AUTO' ; Suggested that you leave this alone unless your experiencing an issue, or wish to disable the integration for a reason." );
-						final String mode = AEConfig.instance().get( "ModIntegration", this.displayName.replace( " ", "" ), "AUTO" ).getString();
-
-						if( mode.toUpperCase().equals( "ON" ) )
+//						final ModAPIManager apiManager = ModAPIManager.INSTANCE;
+						boolean enabled = this.modID == null || ModList.get().isLoaded( this.modID ) /*|| apiManager.hasAPI( this.modID )*/;
+                        final IntegrationStatus integrationStatus = AEConfig.instance().getIntegrationStatus(this.type);
+						if( integrationStatus == IntegrationStatus.ON)
 						{
 							enabled = true;
 						}
-						if( mode.toUpperCase().equals( "OFF" ) )
+						if( integrationStatus == IntegrationStatus.OFF )
 						{
 							enabled = false;
 						}

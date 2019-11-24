@@ -25,10 +25,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import appeng.api.util.AEColor;
-import appeng.api.util.AEColoredItemDefinition;
+import appeng.api.util.IColoredItemDefinition;
 
 
-public final class ColoredItemDefinition implements AEColoredItemDefinition
+public final class ColoredItemDefinition implements IColoredItemDefinition
 {
 
 	private final ItemStackSrc[] colors = new ItemStackSrc[17];
@@ -97,6 +97,6 @@ public final class ColoredItemDefinition implements AEColoredItemDefinition
 			return false;
 		}
 
-		return comparableItem.getItem() == is.getItem() && comparableItem.getItemDamage() == is.getDamage();
+		return comparableItem.getItem() == is.getItem();
 	}
 }

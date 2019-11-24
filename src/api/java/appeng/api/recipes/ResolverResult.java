@@ -31,9 +31,11 @@ public class ResolverResult
 {
 
 	public final String itemName;
-	public final int damageValue;
+	@Deprecated
+	public int damageValue;
 	public final CompoundNBT compound;
 
+	@Deprecated
 	public ResolverResult( final String name, final int damage )
 	{
 		this.itemName = name;
@@ -41,10 +43,23 @@ public class ResolverResult
 		this.compound = null;
 	}
 
+	@Deprecated
 	public ResolverResult( final String name, final int damage, final CompoundNBT data )
 	{
 		this.itemName = name;
 		this.damageValue = damage;
+		this.compound = data;
+	}
+
+	public ResolverResult( final String name )
+	{
+		this.itemName = name;
+		this.compound = null;
+	}
+
+	public ResolverResult( final String name, final CompoundNBT data )
+	{
+		this.itemName = name;
 		this.compound = data;
 	}
 }

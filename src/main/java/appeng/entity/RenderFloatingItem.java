@@ -19,54 +19,54 @@
 package appeng.entity;
 
 
-import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+//import net.minecraft.client.Minecraft;
+//import com.mojang.blaze3d.platform.GlStateManager;
+//import net.minecraft.client.renderer.entity.RenderEntityItem;
+//import net.minecraft.client.renderer.entity.RenderManager;
+//import net.minecraft.entity.item.ItemEntity;
+//import net.minecraft.item.BlockItem;
+//import net.minecraftforge.api.distmarker.Dist;
+//import net.minecraftforge.api.distmarker.OnlyIn;
 
 
-@SideOnly( Side.CLIENT )
-public class RenderFloatingItem extends RenderEntityItem
+//@OnlyIn( Dist.CLIENT )
+public class RenderFloatingItem //extends RenderEntityItem
 {
-
-	public RenderFloatingItem( final RenderManager manager )
-	{
-		super( manager, Minecraft.getMinecraft().getRenderItem() );
-		this.shadowOpaque = 0.0F;
-	}
-
-	@Override
-	public void doRender( final ItemEntity entityItem, final double x, final double y, final double z, final float yaw, final float partialTick )
-	{
-		if( entityItem instanceof EntityFloatingItem )
-		{
-			final EntityFloatingItem efi = (EntityFloatingItem) entityItem;
-			if( efi.getProgress() > 0.0 )
-			{
-				GlStateManager.pushMatrix();
-
-				if( !( efi.getItem().getItem() instanceof BlockItem ) )
-				{
-					GlStateManager.translate( 0, -0.3f, 0 );
-				}
-				else
-				{
-					GlStateManager.translate( 0, -0.2f, 0 );
-				}
-
-				super.doRender( efi, x, y, z, yaw, 0 );
-				GlStateManager.popMatrix();
-			}
-		}
-	}
-
-	@Override
-	public boolean shouldBob()
-	{
-		return false;
-	}
+//
+//	public RenderFloatingItem( final RenderManager manager )
+//	{
+//		super( manager, Minecraft.getMinecraft().getRenderItem() );
+//		this.shadowOpaque = 0.0F;
+//	}
+//
+//	@Override
+//	public void doRender( final ItemEntity entityItem, final double x, final double y, final double z, final float yaw, final float partialTick )
+//	{
+//		if( entityItem instanceof EntityFloatingItem )
+//		{
+//			final EntityFloatingItem efi = (EntityFloatingItem) entityItem;
+//			if( efi.getProgress() > 0.0 )
+//			{
+//				GlStateManager.pushMatrix();
+//
+//				if( !( efi.getItem().getItem() instanceof BlockItem ) )
+//				{
+//					GlStateManager.translate( 0, -0.3f, 0 );
+//				}
+//				else
+//				{
+//					GlStateManager.translate( 0, -0.2f, 0 );
+//				}
+//
+//				super.doRender( efi, x, y, z, yaw, 0 );
+//				GlStateManager.popMatrix();
+//			}
+//		}
+//	}
+//
+//	@Override
+//	public boolean shouldBob()
+//	{
+//		return false;
+//	}
 }

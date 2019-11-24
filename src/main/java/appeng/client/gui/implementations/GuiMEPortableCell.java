@@ -19,28 +19,28 @@
 package appeng.client.gui.implementations;
 
 
-import net.minecraft.entity.player.PlayerInventory;
+//import net.minecraft.entity.player.PlayerInventory;
+//
+//import appeng.api.implementations.guiobjects.IPortableCell;
+//import appeng.container.implementations.ContainerMEPortableCell;
 
-import appeng.api.implementations.guiobjects.IPortableCell;
-import appeng.container.implementations.ContainerMEPortableCell;
 
-
-public class GuiMEPortableCell extends GuiMEMonitorable
+public class GuiMEPortableCell //extends GuiMEMonitorable
 {
-
-	public GuiMEPortableCell( final PlayerInventory inventoryPlayer, final IPortableCell te )
-	{
-		super( inventoryPlayer, te, new ContainerMEPortableCell( inventoryPlayer, te ) );
-	}
-
-	int defaultGetMaxRows()
-	{
-		return super.getMaxRows();
-	}
-
-	@Override
-	int getMaxRows()
-	{
-		return 3;
-	}
+//
+//	public GuiMEPortableCell( final PlayerInventory inventoryPlayer, final IPortableCell te )
+//	{
+//		super( inventoryPlayer, te, new ContainerMEPortableCell( inventoryPlayer, te ) );
+//	}
+//
+//	int defaultGetMaxRows()
+//	{
+//		return super.getMaxRows();
+//	}
+//
+//	@Override
+//	int getMaxRows()
+//	{
+//		return 3;
+//	}
 }

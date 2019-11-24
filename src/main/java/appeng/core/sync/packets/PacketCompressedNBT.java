@@ -35,8 +35,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.client.gui.implementations.GuiInterfaceTerminal;
 import appeng.core.sync.AppEngPacket;
@@ -104,14 +105,14 @@ public class PacketCompressedNBT extends AppEngPacket
 	}
 
 	@Override
-	@SideOnly( Side.CLIENT )
+	@OnlyIn( Dist.CLIENT )
 	public void clientPacketData( final INetworkInfo network, final AppEngPacket packet, final PlayerEntity player )
 	{
 		final Screen gs = Minecraft.getInstance().currentScreen;
 
-		if( gs instanceof GuiInterfaceTerminal )
-		{
-			( (GuiInterfaceTerminal) gs ).postUpdate( this.in );
-		}
+//		if( gs instanceof GuiInterfaceTerminal )
+//		{
+//			( (GuiInterfaceTerminal) gs ).postUpdate( this.in );
+//		}
 	}
 }

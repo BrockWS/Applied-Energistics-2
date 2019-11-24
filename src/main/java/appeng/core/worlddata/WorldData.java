@@ -26,14 +26,15 @@ import java.util.concurrent.ThreadFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.config.Configuration;
 
-import appeng.core.AEConfig;
+import appeng.core.config.AEConfig;
 import appeng.services.CompassService;
 import appeng.services.compass.CompassThreadFactory;
 
@@ -71,7 +72,7 @@ public final class WorldData implements IWorldData
 	private final File spawnDirectory;
 	private final File compassDirectory;
 
-	private final Configuration sharedConfig;
+	private final CommentedFileConfig sharedConfig;
 
 	private WorldData( @Nonnull final File worldDirectory )
 	{
@@ -83,7 +84,12 @@ public final class WorldData implements IWorldData
 		this.compassDirectory = new File( this.ae2directory, COMPASS_DIR_NAME );
 
 		final File settingsFile = new File( this.ae2directory, SETTING_FILE_NAME );
-		this.sharedConfig = new Configuration( settingsFile, AEConfig.VERSION );
+
+		this.sharedConfig = CommentedFileConfig.builder(settingsFile)
+				.sync()
+				.autosave()
+				.writingMode(WritingMode.REPLACE)
+				.build();
 
 		final PlayerData playerData = new PlayerData( this.sharedConfig );
 		final StorageData storageData = new StorageData( this.sharedConfig );
@@ -124,10 +130,10 @@ public final class WorldData implements IWorldData
 	 */
 	public static void onServerAboutToStart( MinecraftServer server )
 	{
-		File worldDirectory = DimensionManager.getCurrentSaveRootDirectory();
+		File worldDirectory = null;//DimensionManager.getCurrentSaveRootDirectory();
 		if( worldDirectory == null )
 		{
-			worldDirectory = server.getActiveAnvilConverter().getSaveLoader( server.getFolderName(), false ).getWorldDirectory();
+			worldDirectory = server.getActiveAnvilConverter().getSaveLoader( server.getFolderName(), server ).getWorldDirectory();
 		}
 		final WorldData newInstance = new WorldData( worldDirectory );
 

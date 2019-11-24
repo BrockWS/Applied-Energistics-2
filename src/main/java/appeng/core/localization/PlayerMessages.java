@@ -20,8 +20,7 @@ package appeng.core.localization;
 
 
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-
+import net.minecraft.util.text.TranslationTextComponent;
 
 public enum PlayerMessages
 {
@@ -45,7 +44,7 @@ public enum PlayerMessages
 
 	public ITextComponent get()
 	{
-		return new TextComponentTranslation( this.getName() );
+		return new TranslationTextComponent( this.getName() );
 	}
 
 	String getName()

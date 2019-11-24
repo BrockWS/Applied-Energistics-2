@@ -162,8 +162,6 @@ public abstract class AEStack<StackType extends IAEStack<StackType>> implements 
 		}
 	}
 
-	protected abstract boolean hasTagCompound();
-
 	protected void putPacketValue( final ByteBuf tag, final long num )
 	{
 		if( num <= 255 )

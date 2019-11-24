@@ -70,7 +70,7 @@ public class AppEngInternalAEInventory implements IItemHandlerModifiable, Iterab
 	{
 		final CompoundNBT c = new CompoundNBT();
 		this.writeToNBT( c );
-		data.setTag( name, c );
+		data.put( name, c );
 	}
 
 	private void writeToNBT( final CompoundNBT target )
@@ -86,7 +86,7 @@ public class AppEngInternalAEInventory implements IItemHandlerModifiable, Iterab
 					this.inv[x].writeToNBT( c );
 				}
 
-				target.setTag( "#" + x, c );
+				target.put( "#" + x, c );
 			}
 			catch( final Exception ignored )
 			{
@@ -96,9 +96,9 @@ public class AppEngInternalAEInventory implements IItemHandlerModifiable, Iterab
 
 	public void readFromNBT( final CompoundNBT data, final String name )
 	{
-		final CompoundNBT c = data.getCompoundTag( name );
-		if( c != null )
+		if( data.contains(name) )
 		{
+			final CompoundNBT c = data.getCompound( name );
 			this.readFromNBT( c );
 		}
 	}
@@ -109,10 +109,9 @@ public class AppEngInternalAEInventory implements IItemHandlerModifiable, Iterab
 		{
 			try
 			{
-				final CompoundNBT c = target.getCompoundTag( "#" + x );
-
-				if( c != null )
+				if( target.contains("#" + x) )
 				{
+					final CompoundNBT c = target.getCompound( "#" + x );
 					this.inv[x] = AEItemStack.fromNBT( c );
 				}
 			}

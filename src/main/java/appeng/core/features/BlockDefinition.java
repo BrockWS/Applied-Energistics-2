@@ -51,7 +51,8 @@ public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 	@Override
 	public final Optional<BlockItem> maybeBlockItem()
 	{
-		return this.block.map( BlockItem::new );
+		//return this.block.map( BlockItem::new ); // Why was this creating a new blockitem every time
+		return Optional.ofNullable((BlockItem) this.maybeItem().orElse(null));
 	}
 
 	@Override

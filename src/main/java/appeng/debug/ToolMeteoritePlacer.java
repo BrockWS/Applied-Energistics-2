@@ -18,39 +18,39 @@
 
 package appeng.debug;
 
+//
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.util.ActionResultType;
+//import net.minecraft.util.Direction;
+//import net.minecraft.util.Hand;
+//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.util.text.TextComponentString;
+//import net.minecraft.world.World;
+//
+//import appeng.items.AEBaseItem;
+//import appeng.util.Platform;
+//import appeng.worldgen.MeteoritePlacer;
+//import appeng.worldgen.meteorite.StandardWorld;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.World;
 
-import appeng.items.AEBaseItem;
-import appeng.util.Platform;
-import appeng.worldgen.MeteoritePlacer;
-import appeng.worldgen.meteorite.StandardWorld;
-
-
-public class ToolMeteoritePlacer extends AEBaseItem
+public class ToolMeteoritePlacer //extends AEBaseItem
 {
-	@Override
-	public ActionResultType onItemUseFirst( final PlayerEntity player, final World world, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ, final Hand hand )
-	{
-		if( Platform.isClient() )
-		{
-			return ActionResultType.PASS;
-		}
-
-		final MeteoritePlacer mp = new MeteoritePlacer();
-		final boolean worked = mp.spawnMeteorite( new StandardWorld( world ), pos.getX(), pos.getY(), pos.getZ() );
-
-		if( !worked )
-		{
-			player.sendMessage( new TextComponentString( "Un-suitable Location." ) );
-		}
-
-		return ActionResultType.SUCCESS;
-	}
+//	@Override
+//	public ActionResultType onItemUseFirst( final PlayerEntity player, final World world, final BlockPos pos, final Direction side, final float hitX, final float hitY, final float hitZ, final Hand hand )
+//	{
+//		if( Platform.isClient() )
+//		{
+//			return ActionResultType.PASS;
+//		}
+//
+//		final MeteoritePlacer mp = new MeteoritePlacer();
+//		final boolean worked = mp.spawnMeteorite( new StandardWorld( world ), pos.getX(), pos.getY(), pos.getZ() );
+//
+//		if( !worked )
+//		{
+//			player.sendMessage( new TextComponentString( "Un-suitable Location." ) );
+//		}
+//
+//		return ActionResultType.SUCCESS;
+//	}
 }

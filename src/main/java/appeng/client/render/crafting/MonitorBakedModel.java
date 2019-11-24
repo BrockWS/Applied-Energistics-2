@@ -19,15 +19,15 @@
 package appeng.client.render.crafting;
 
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.property.IExtendedBlockState;
-
-import appeng.api.util.AEColor;
-import appeng.block.crafting.BlockCraftingMonitor;
-import appeng.client.render.cablebus.CubeBuilder;
+//import net.minecraft.block.BlockState;
+//import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+//import net.minecraft.client.renderer.vertex.VertexFormat;
+//import net.minecraft.util.Direction;
+//import net.minecraftforge.common.property.IExtendedBlockState;
+//
+//import appeng.api.util.AEColor;
+//import appeng.block.crafting.BlockCraftingMonitor;
+//import appeng.client.render.cablebus.CubeBuilder;
 
 
 /**
@@ -37,92 +37,92 @@ import appeng.client.render.cablebus.CubeBuilder;
  * color. The textures
  * are full-bright if the cube is powered.
  */
-class MonitorBakedModel extends CraftingCubeBakedModel
+class MonitorBakedModel //extends CraftingCubeBakedModel
 {
-
-	private final TextureAtlasSprite chassisTexture;
-
-	private final TextureAtlasSprite baseTexture;
-
-	private final TextureAtlasSprite lightDarkTexture;
-
-	private final TextureAtlasSprite lightMediumTexture;
-
-	private final TextureAtlasSprite lightBrightTexture;
-
-	MonitorBakedModel( VertexFormat format, TextureAtlasSprite ringCorner, TextureAtlasSprite ringHor, TextureAtlasSprite ringVer, TextureAtlasSprite chassisTexture, TextureAtlasSprite baseTexture, TextureAtlasSprite lightDarkTexture, TextureAtlasSprite lightMediumTexture, TextureAtlasSprite lightBrightTexture )
-	{
-		super( format, ringCorner, ringHor, ringVer );
-		this.chassisTexture = chassisTexture;
-		this.baseTexture = baseTexture;
-		this.lightDarkTexture = lightDarkTexture;
-		this.lightMediumTexture = lightMediumTexture;
-		this.lightBrightTexture = lightBrightTexture;
-	}
-
-	@Override
-	protected void addInnerCube( Direction side, BlockState state, CubeBuilder builder, float x1, float y1, float z1, float x2, float y2, float z2 )
-	{
-		Direction forward = getForward( state );
-
-		// For sides other than the front, use the chassis texture
-		if( side != forward )
-		{
-			builder.setTexture( this.chassisTexture );
-			builder.addCube( x1, y1, z1, x2, y2, z2 );
-			return;
-		}
-
-		builder.setTexture( this.baseTexture );
-		builder.addCube( x1, y1, z1, x2, y2, z2 );
-
-		// Now add the three layered light textures
-		AEColor color = getColor( state );
-		boolean powered = state.getValue( BlockCraftingMonitor.POWERED );
-
-		builder.setRenderFullBright( powered );
-
-		builder.setColorRGB( color.whiteVariant );
-		builder.setTexture( this.lightBrightTexture );
-		builder.addCube( x1, y1, z1, x2, y2, z2 );
-
-		builder.setColorRGB( color.mediumVariant );
-		builder.setTexture( this.lightMediumTexture );
-		builder.addCube( x1, y1, z1, x2, y2, z2 );
-
-		builder.setColorRGB( color.blackVariant );
-		builder.setTexture( this.lightDarkTexture );
-		builder.addCube( x1, y1, z1, x2, y2, z2 );
-
-	}
-
-	private static AEColor getColor( BlockState state )
-	{
-		if( state instanceof IExtendedBlockState )
-		{
-			IExtendedBlockState extState = (IExtendedBlockState) state;
-			AEColor color = extState.getValue( BlockCraftingMonitor.COLOR );
-			if( color != null )
-			{
-				return color;
-			}
-		}
-
-		return AEColor.TRANSPARENT;
-	}
-
-	private static Direction getForward( BlockState state )
-	{
-		if( state instanceof IExtendedBlockState )
-		{
-			IExtendedBlockState extState = (IExtendedBlockState) state;
-			Direction forward = extState.getValue( BlockCraftingMonitor.FORWARD );
-			if( forward != null )
-			{
-				return forward;
-			}
-		}
-
-		return Direction.NORTH;
-	}
+//
+//	private final TextureAtlasSprite chassisTexture;
+//
+//	private final TextureAtlasSprite baseTexture;
+//
+//	private final TextureAtlasSprite lightDarkTexture;
+//
+//	private final TextureAtlasSprite lightMediumTexture;
+//
+//	private final TextureAtlasSprite lightBrightTexture;
+//
+//	MonitorBakedModel( VertexFormat format, TextureAtlasSprite ringCorner, TextureAtlasSprite ringHor, TextureAtlasSprite ringVer, TextureAtlasSprite chassisTexture, TextureAtlasSprite baseTexture, TextureAtlasSprite lightDarkTexture, TextureAtlasSprite lightMediumTexture, TextureAtlasSprite lightBrightTexture )
+//	{
+//		super( format, ringCorner, ringHor, ringVer );
+//		this.chassisTexture = chassisTexture;
+//		this.baseTexture = baseTexture;
+//		this.lightDarkTexture = lightDarkTexture;
+//		this.lightMediumTexture = lightMediumTexture;
+//		this.lightBrightTexture = lightBrightTexture;
+//	}
+//
+//	@Override
+//	protected void addInnerCube( Direction side, BlockState state, CubeBuilder builder, float x1, float y1, float z1, float x2, float y2, float z2 )
+//	{
+//		Direction forward = getForward( state );
+//
+//		// For sides other than the front, use the chassis texture
+//		if( side != forward )
+//		{
+//			builder.setTexture( this.chassisTexture );
+//			builder.addCube( x1, y1, z1, x2, y2, z2 );
+//			return;
+//		}
+//
+//		builder.setTexture( this.baseTexture );
+//		builder.addCube( x1, y1, z1, x2, y2, z2 );
+//
+//		// Now add the three layered light textures
+//		AEColor color = getColor( state );
+//		boolean powered = state.getValue( BlockCraftingMonitor.POWERED );
+//
+//		builder.setRenderFullBright( powered );
+//
+//		builder.setColorRGB( color.whiteVariant );
+//		builder.setTexture( this.lightBrightTexture );
+//		builder.addCube( x1, y1, z1, x2, y2, z2 );
+//
+//		builder.setColorRGB( color.mediumVariant );
+//		builder.setTexture( this.lightMediumTexture );
+//		builder.addCube( x1, y1, z1, x2, y2, z2 );
+//
+//		builder.setColorRGB( color.blackVariant );
+//		builder.setTexture( this.lightDarkTexture );
+//		builder.addCube( x1, y1, z1, x2, y2, z2 );
+//
+//	}
+//
+//	private static AEColor getColor( BlockState state )
+//	{
+//		if( state instanceof IExtendedBlockState )
+//		{
+//			IExtendedBlockState extState = (IExtendedBlockState) state;
+//			AEColor color = extState.getValue( BlockCraftingMonitor.COLOR );
+//			if( color != null )
+//			{
+//				return color;
+//			}
+//		}
+//
+//		return AEColor.TRANSPARENT;
+//	}
+//
+//	private static Direction getForward( BlockState state )
+//	{
+//		if( state instanceof IExtendedBlockState )
+//		{
+//			IExtendedBlockState extState = (IExtendedBlockState) state;
+//			Direction forward = extState.getValue( BlockCraftingMonitor.FORWARD );
+//			if( forward != null )
+//			{
+//				return forward;
+//			}
+//		}
+//
+//		return Direction.NORTH;
+//	}
 }

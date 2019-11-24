@@ -18,19 +18,19 @@
 
 package appeng.fluids.items;
 
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-
-import appeng.api.AEApi;
-import appeng.api.storage.IStorageChannel;
-import appeng.api.storage.channels.IFluidStorageChannel;
-import appeng.api.storage.data.IAEFluidStack;
-import appeng.fluids.helper.FluidCellConfig;
-import appeng.items.materials.MaterialType;
-import appeng.items.storage.AbstractStorageCell;
-import appeng.util.InventoryAdaptor;
+//
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.item.ItemStack;
+//import net.minecraftforge.items.IItemHandler;
+//
+//import appeng.api.AEApi;
+//import appeng.api.storage.IStorageChannel;
+//import appeng.api.storage.channels.IFluidStorageChannel;
+//import appeng.api.storage.data.IAEFluidStack;
+//import appeng.fluids.helper.FluidCellConfig;
+//import appeng.items.materials.MaterialType;
+//import appeng.items.storage.AbstractStorageCell;
+//import appeng.util.InventoryAdaptor;
 
 
 /**
@@ -38,80 +38,80 @@ import appeng.util.InventoryAdaptor;
  * @version rv6 - 2018-01-17
  * @since rv6 2018-01-17
  */
-public final class BasicFluidStorageCell extends AbstractStorageCell<IAEFluidStack>
+public final class BasicFluidStorageCell //extends AbstractStorageCell<IAEFluidStack>
 {
-
-	private final int perType;
-	private final double idleDrain;
-
-	public BasicFluidStorageCell( final MaterialType whichCell, final int kilobytes )
-	{
-		super( whichCell, kilobytes );
-		switch( whichCell )
-		{
-			case FLUID_CELL1K_PART:
-				this.idleDrain = 0.5;
-				this.perType = 8;
-				break;
-			case FLUID_CELL4K_PART:
-				this.idleDrain = 1.0;
-				this.perType = 32;
-				break;
-			case FLUID_CELL16K_PART:
-				this.idleDrain = 1.5;
-				this.perType = 128;
-				break;
-			case FLUID_CELL64K_PART:
-				this.idleDrain = 2.0;
-				this.perType = 512;
-				break;
-			default:
-				this.idleDrain = 0.0;
-				this.perType = 8;
-		}
-
-	}
-
-	@Override
-	public int getBytesPerType( ItemStack cellItem )
-	{
-		return this.perType;
-	}
-
-	@Override
-	public double getIdleDrain()
-	{
-		return this.idleDrain;
-	}
-
-	@Override
-	public IStorageChannel<IAEFluidStack> getChannel()
-	{
-		return AEApi.instance().storage().getStorageChannel( IFluidStorageChannel.class );
-	}
-
-	@Override
-	public int getTotalTypes( final ItemStack cellItem )
-	{
-		return 5;
-	}
-
-	@Override
-	public IItemHandler getConfigInventory( final ItemStack is )
-	{
-		return new FluidCellConfig( is );
-	}
-
-	@Override
-	protected void dropEmptyStorageCellCase( final InventoryAdaptor ia, final PlayerEntity player )
-	{
-		AEApi.instance().definitions().materials().emptyStorageCell().maybeStack( 1 ).ifPresent( is ->
-		{
-			final ItemStack extraA = ia.addItems( is );
-			if( !extraA.isEmpty() )
-			{
-				player.dropItem( extraA, false );
-			}
-		} );
-	}
+//
+//	private final int perType;
+//	private final double idleDrain;
+//
+//	public BasicFluidStorageCell( final MaterialType whichCell, final int kilobytes )
+//	{
+//		super( whichCell, kilobytes );
+//		switch( whichCell )
+//		{
+//			case FLUID_CELL1K_PART:
+//				this.idleDrain = 0.5;
+//				this.perType = 8;
+//				break;
+//			case FLUID_CELL4K_PART:
+//				this.idleDrain = 1.0;
+//				this.perType = 32;
+//				break;
+//			case FLUID_CELL16K_PART:
+//				this.idleDrain = 1.5;
+//				this.perType = 128;
+//				break;
+//			case FLUID_CELL64K_PART:
+//				this.idleDrain = 2.0;
+//				this.perType = 512;
+//				break;
+//			default:
+//				this.idleDrain = 0.0;
+//				this.perType = 8;
+//		}
+//
+//	}
+//
+//	@Override
+//	public int getBytesPerType( ItemStack cellItem )
+//	{
+//		return this.perType;
+//	}
+//
+//	@Override
+//	public double getIdleDrain()
+//	{
+//		return this.idleDrain;
+//	}
+//
+//	@Override
+//	public IStorageChannel<IAEFluidStack> getChannel()
+//	{
+//		return AEApi.instance().storage().getStorageChannel( IFluidStorageChannel.class );
+//	}
+//
+//	@Override
+//	public int getTotalTypes( final ItemStack cellItem )
+//	{
+//		return 5;
+//	}
+//
+//	@Override
+//	public IItemHandler getConfigInventory( final ItemStack is )
+//	{
+//		return new FluidCellConfig( is );
+//	}
+//
+//	@Override
+//	protected void dropEmptyStorageCellCase( final InventoryAdaptor ia, final PlayerEntity player )
+//	{
+//		AEApi.instance().definitions().materials().emptyStorageCell().maybeStack( 1 ).ifPresent( is ->
+//		{
+//			final ItemStack extraA = ia.addItems( is );
+//			if( !extraA.isEmpty() )
+//			{
+//				player.dropItem( extraA, false );
+//			}
+//		} );
+//	}
 }

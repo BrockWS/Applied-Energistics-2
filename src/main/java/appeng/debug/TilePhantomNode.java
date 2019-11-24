@@ -18,49 +18,49 @@
 
 package appeng.debug;
 
+//
+//import java.util.EnumSet;
+//
+//import net.minecraft.util.Direction;
+//
+//import appeng.api.networking.IGridNode;
+//import appeng.api.util.AEPartLocation;
+//import appeng.me.helpers.AENetworkProxy;
+//import appeng.tile.grid.AENetworkTile;
 
-import java.util.EnumSet;
 
-import net.minecraft.util.Direction;
-
-import appeng.api.networking.IGridNode;
-import appeng.api.util.AEPartLocation;
-import appeng.me.helpers.AENetworkProxy;
-import appeng.tile.grid.AENetworkTile;
-
-
-public class TilePhantomNode extends AENetworkTile
+public class TilePhantomNode// extends AENetworkTile
 {
-
-	private AENetworkProxy proxy = null;
-	private boolean crashMode = false;
-
-	@Override
-	public IGridNode getGridNode( final AEPartLocation dir )
-	{
-		if( !this.crashMode )
-		{
-			return super.getGridNode( dir );
-		}
-
-		return this.proxy.getNode();
-	}
-
-	@Override
-	public void onReady()
-	{
-		super.onReady();
-		this.proxy = this.createProxy();
-		this.proxy.onReady();
-		this.crashMode = true;
-	}
-
-	void triggerCrashMode()
-	{
-		if( this.proxy != null )
-		{
-			this.crashMode = true;
-			this.proxy.setValidSides( EnumSet.allOf( Direction.class ) );
-		}
-	}
+//
+//	private AENetworkProxy proxy = null;
+//	private boolean crashMode = false;
+//
+//	@Override
+//	public IGridNode getGridNode( final AEPartLocation dir )
+//	{
+//		if( !this.crashMode )
+//		{
+//			return super.getGridNode( dir );
+//		}
+//
+//		return this.proxy.getNode();
+//	}
+//
+//	@Override
+//	public void onReady()
+//	{
+//		super.onReady();
+//		this.proxy = this.createProxy();
+//		this.proxy.onReady();
+//		this.crashMode = true;
+//	}
+//
+//	void triggerCrashMode()
+//	{
+//		if( this.proxy != null )
+//		{
+//			this.crashMode = true;
+//			this.proxy.setValidSides( EnumSet.allOf( Direction.class ) );
+//		}
+//	}
 }

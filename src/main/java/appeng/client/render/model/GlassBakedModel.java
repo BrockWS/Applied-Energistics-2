@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
@@ -41,14 +42,15 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
+import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import appeng.decorative.solid.BlockQuartzGlass;
 import appeng.decorative.solid.GlassState;
 
 
-class GlassBakedModel implements IBakedModel
+public class GlassBakedModel implements IBakedModel
 {
 
 	private static final byte[][][] OFFSETS = generateOffsets();
@@ -60,7 +62,7 @@ class GlassBakedModel implements IBakedModel
 	static final ResourceLocation TEXTURE_D = new ResourceLocation( "appliedenergistics2:blocks/glass/quartz_glass_d" );
 
 	// Frame texture
-	static final ResourceLocation[] TEXTURES_FRAME = generateTexturesFrame();
+	public static final ResourceLocation[] TEXTURES_FRAME = generateTexturesFrame();
 
 	// Generates the required textures for the frame
 	private static ResourceLocation[] generateTexturesFrame()
@@ -98,15 +100,13 @@ class GlassBakedModel implements IBakedModel
 	}
 
 	@Override
-	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, long rand )
+	public List<BakedQuad> getQuads( @Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData )
 	{
-		if( !( state instanceof IExtendedBlockState ) || side == null )
+		if( state == null || side == null )
 		{
 			return Collections.emptyList();
 		}
-
-		final IExtendedBlockState extState = (IExtendedBlockState) state;
-		final GlassState glassState = extState.getValue( BlockQuartzGlass.GLASS_STATE );
+		final GlassState glassState = extraData.getData(BlockQuartzGlass.GLASS_STATE);
 
 		if( glassState == null )
 		{
@@ -268,7 +268,12 @@ class GlassBakedModel implements IBakedModel
 	@Override
 	public ItemOverrideList getOverrides()
 	{
-		return ItemOverrideList.NONE;
+		return ItemOverrideList.EMPTY;
+	}
+
+	@Override
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -18,69 +18,69 @@
 
 package appeng.integration.modules.theoneprobe;
 
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//import com.google.common.collect.Lists;
+//
+//import net.minecraft.block.BlockState;
+//import net.minecraft.entity.player.PlayerEntity;
+//import net.minecraft.tileentity.TileEntity;
+//import net.minecraft.world.World;
+//
+//import mcjty.theoneprobe.api.IProbeHitData;
+//import mcjty.theoneprobe.api.IProbeInfo;
+//import mcjty.theoneprobe.api.IProbeInfoProvider;
+//import mcjty.theoneprobe.api.ProbeMode;
+//
+//import appeng.api.parts.IPart;
+//import appeng.core.AppEng;
+//import appeng.integration.modules.theoneprobe.part.ChannelInfoProvider;
+//import appeng.integration.modules.theoneprobe.part.IPartProbInfoProvider;
+//import appeng.integration.modules.theoneprobe.part.P2PStateInfoProvider;
+//import appeng.integration.modules.theoneprobe.part.PartAccessor;
+//import appeng.integration.modules.theoneprobe.part.PowerStateInfoProvider;
+//import appeng.integration.modules.theoneprobe.part.StorageMonitorInfoProvider;
 
-import java.util.List;
-import java.util.Optional;
 
-import com.google.common.collect.Lists;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoProvider;
-import mcjty.theoneprobe.api.ProbeMode;
-
-import appeng.api.parts.IPart;
-import appeng.core.AppEng;
-import appeng.integration.modules.theoneprobe.part.ChannelInfoProvider;
-import appeng.integration.modules.theoneprobe.part.IPartProbInfoProvider;
-import appeng.integration.modules.theoneprobe.part.P2PStateInfoProvider;
-import appeng.integration.modules.theoneprobe.part.PartAccessor;
-import appeng.integration.modules.theoneprobe.part.PowerStateInfoProvider;
-import appeng.integration.modules.theoneprobe.part.StorageMonitorInfoProvider;
-
-
-public final class PartInfoProvider implements IProbeInfoProvider
+public final class PartInfoProvider //implements IProbeInfoProvider
 {
-	private final List<IPartProbInfoProvider> providers;
-
-	private final PartAccessor accessor = new PartAccessor();
-
-	public PartInfoProvider()
-	{
-		final IPartProbInfoProvider channel = new ChannelInfoProvider();
-		final IPartProbInfoProvider power = new PowerStateInfoProvider();
-		final IPartProbInfoProvider storageMonitor = new StorageMonitorInfoProvider();
-		final IPartProbInfoProvider p2p = new P2PStateInfoProvider();
-
-		this.providers = Lists.newArrayList( channel, power, p2p, storageMonitor );
-	}
-
-	@Override
-	public String getID()
-	{
-		return AppEng.MOD_ID + ":PartInfoProvider";
-	}
-
-	@Override
-	public void addProbeInfo( ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
-	{
-		final TileEntity te = world.getTileEntity( data.getPos() );
-		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, data );
-
-		if( maybePart.isPresent() )
-		{
-			final IPart part = maybePart.get();
-
-			for( final IPartProbInfoProvider provider : this.providers )
-			{
-				provider.addProbeInfo( part, mode, probeInfo, player, world, blockState, data );
-			}
-		}
-
-	}
+//	private final List<IPartProbInfoProvider> providers;
+//
+//	private final PartAccessor accessor = new PartAccessor();
+//
+//	public PartInfoProvider()
+//	{
+//		final IPartProbInfoProvider channel = new ChannelInfoProvider();
+//		final IPartProbInfoProvider power = new PowerStateInfoProvider();
+//		final IPartProbInfoProvider storageMonitor = new StorageMonitorInfoProvider();
+//		final IPartProbInfoProvider p2p = new P2PStateInfoProvider();
+//
+//		this.providers = Lists.newArrayList( channel, power, p2p, storageMonitor );
+//	}
+//
+//	@Override
+//	public String getID()
+//	{
+//		return AppEng.MOD_ID + ":PartInfoProvider";
+//	}
+//
+//	@Override
+//	public void addProbeInfo( ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, BlockState blockState, IProbeHitData data )
+//	{
+//		final TileEntity te = world.getTileEntity( data.getPos() );
+//		final Optional<IPart> maybePart = this.accessor.getMaybePart( te, data );
+//
+//		if( maybePart.isPresent() )
+//		{
+//			final IPart part = maybePart.get();
+//
+//			for( final IPartProbInfoProvider provider : this.providers )
+//			{
+//				provider.addProbeInfo( part, mode, probeInfo, player, world, blockState, data );
+//			}
+//		}
+//
+//	}
 }
